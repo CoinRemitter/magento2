@@ -1,0 +1,204 @@
+<?php if ($block->getInvoice()->getInvoiceId()) { ?>
+<section class="admin__page-section order-view-account-information">
+   <div class="admin__page-section-title">
+      <span class="title"><?php echo __('Order Detail ( Coinremitter )') ?></span>
+   </div>
+   <div class="admin__table-wrapper">
+      <table class="data-table admin__table-primary edit-order-table">
+         <thead>
+            <tr class="headings">
+               <th class="col-inv-id"><span>Invoice Id</span></th>
+               <th class="col-inv-name"><span>Invoice Name</span></th>
+               <th class="col-create-on"><span>Created on</span></th>
+               <th class="col-exp-date"><span>Expiry Date</span></th>
+               <th class="col-base-cur"><span>Base Currency</span></th>
+               <th class="col-coin"><span>Coin</span></th>
+               <th class="col-status"><span>Status</span></th>
+            </tr>
+         </thead>
+         <tbody class="even">
+            <tr>
+               <td class="col-inv-id"><?php echo $block->getInvoice()->getInvoiceId(); ?></td>
+               <td class="col-inv-name"><?php echo $block->getInvoice()->getInvoiceName(); ?></td>
+               <td class="col-create-on">
+                  <?php echo $block->getInvoice()->getCreatedAt(); ?>
+               </td>
+               <td class="col-exp-date">
+                  <?php echo $block->getInvoice()->getExpireOn(); ?>
+               </td>
+               <td class="col-base-cur">
+                  <?php echo $block->getInvoice()->getBaseCurrancy(); ?>
+               </td>
+               <td class="col-base-cur">
+                  <?php echo $block->getInvoice()->getCoin(); ?>
+               </td>
+               <td class="col-base-cur">
+                  <?php echo $block->getInvoice()->getStatus(); ?>
+               </td>
+            </tr>
+         </tbody>
+      </table>
+   </div>
+   <?php 
+      $totalAmount = $block->getInvoice()->getTotalAmount();
+      $totalAmount = json_decode($totalAmount,true);
+      $paidAmount = $block->getInvoice()->getPaidAmount();
+      $paidAmount = $paidAmount ? json_decode($paidAmount,true) : [];
+      $crate = $block->getInvoice()->getConversionRate();
+      $crate = json_decode($crate,true);
+      $payhistory = $block->getInvoice()->getPaymentHistory();
+      $payhistory = $payhistory ? json_decode($payhistory,true) : [];
+
+      $paid = isset($paidAmount[$block->getInvoice()->getCoin()]) ? $paidAmount[$block->getInvoice()->getCoin()] : 0;
+      $pendingAmount = ($totalAmount[$block->getInvoice()->getCoin()] - $paid < 0) ? 0 : $totalAmount[$block->getInvoice()->getCoin()] - $paid;
+
+    ?>
+   <div class="admin-page-order-table">
+      <div class="fieldset-wrapper order-information admin__page-section-item">
+         <div class="admin__page-section-item-title">
+            <span class="title"><?php echo __('Total Amount') ?></span>
+         </div>
+         <table class="admin__table-secondary order-subtotal-table">
+            <tbody>
+               <?php 
+                  foreach ($totalAmount as $key => $value) { ?>
+               <tr>
+                  <th><?=$key?></th>
+                  <td><?=number_format($value,8)?></td>
+               </tr>
+               <?php        
+                  }
+                  ?>
+            </tbody>
+         </table>
+      </div>
+      <div class="fieldset-wrapper order-information admin__page-section-item data-table-description">
+         <div class="admin__page-section-item-title">
+            <span class="title"><?php echo __('Description') ?></span>
+         </div>
+         <div class="admin__table-secondary">
+            <p><?php echo $block->getInvoice()->getDescription(); ?></p>
+         </div>
+      </div>
+      <?php if ($paidAmount) { ?>
+      <div class="fieldset-wrapper order-information admin__page-section-item">
+         <div class="admin__page-section-item-title">
+            <span class="title"><?php echo __('Paid Amount') ?></span>
+         </div>
+         <table class="admin__table-secondary order-subtotal-table">
+            <tbody>
+               <?php 
+                  foreach ($paidAmount as $k => $v) { ?>
+               <tr>
+                  <th><?=$k?></th>
+                  <td><?=number_format($v,8)?></td>
+               </tr>
+               <?php        
+                  }
+                  ?>
+            </tbody>
+         </table>
+      </div>
+      <?php } ?>
+   </div>
+   <div class="admin-conversation-rate-box">
+      <div class="admin__page-section-title">
+         <span class="title">Conversation Rate</span>
+      </div>
+      <div class="admin__table-wrapper">
+         <table class="data-table admin__table-primary edit-order-table">
+            <thead>
+               <tr class="headings">
+                  <?php 
+                     foreach ($crate as $key => $value) { 
+                         $coinName = explode('_', $key);
+                     ?>
+                  <th><span><?=$coinName[0]?> To <?=$coinName[1]?></span></th>
+                  <?php                         
+                     }
+                     ?>
+               </tr>
+            </thead>
+            <tbody class="even">
+               <tr>
+                  <?php 
+                     foreach ($crate as $key => $value) { 
+                         $coinName = explode('_', $key);
+                     ?>
+                  <td><?=number_format($value,8)?> <?=$coinName[1]?></td>
+                  
+                  
+                  <?php                         
+                     }
+                     ?>
+               </tr>
+            </tbody>
+         </table>
+      </div>
+   </div>
+   <div class="admin-payment-history-box">
+      <div class="admin__page-section-title">
+         <span class="title">Payment History</span>
+      </div>
+      <div class="admin-payment-history-box-main">
+         <div class="admin-payment-history-left">
+            <table class="data-table admin__table-primary edit-order-table">
+               <thead>
+                  <tr class="headings">
+                     <th><span>Trx Id</span></th>
+                     <th><span>Amount</span></th>
+                     <th><span>Confirmation</span></th>
+                     <th><span>Date</span></th>
+                  </tr>
+               </thead>
+               <tbody class="even">
+                  <?php 
+                  if ($payhistory) {
+                     foreach ($payhistory as $pay) {
+                     $j = 20; ?>
+                  <tr>
+                     <td>
+                        <a target="_blank" href="<?=$pay['explorer_url']?>"><span class="sub sub-s2"><?php echo substr_replace($pay['txid'],"...",$j,(strlen($pay['txid'])-$j))?></span></a>
+                     </td>
+                     <td><?=number_format($pay['amount'],8)?> <?=$block->getInvoice()->getCoin()?></td>
+                     <td><?=$pay['confirmation']?></td>
+                     <td>
+                        <?=$pay['date']?>
+                     </td>
+                  </tr>
+                  <?php } }else{ ?>
+                     <tr>
+                        <td colspan="4" style="text-align: center;">
+                           <h3> Your Payment history will display here</h3>
+                        </td>
+                     </tr>
+                  <?php } ?>
+               </tbody>
+            </table>
+         </div>
+         <div class="admin-payment-history-right">
+            <div class="admin-panding-amount-box">
+               <h3>Pending Amount</h3>
+               <h2><?=number_format($pendingAmount,8)?> <?=$block->getInvoice()->getCoin()?></h2>
+            </div>
+         </div>
+      </div>
+   </div>
+</section>
+<section class="admin__page-section order-view-account-information information-invoice-url clearfix">
+    <div class="admin__page-section-title">
+      <span class="title"><?php echo __('URLs') ?></span>
+    </div>
+    <div class="admin__page-section-content">
+        <div class="admin__page-section-item order-payment-method order-payment-method-virtual">
+            <div class="admin__page-section-item-content">
+                <h3>Invoice URL: <a href="<?=$block->getInvoice()->getInvoiceUrl()?>" target="_blank"><?=$block->getInvoice()->getInvoiceUrl()?></a></h3>
+            </div>
+        </div>
+    </div>
+</section>
+<?php }else{ ?>
+<section class="admin__page-section order-view-account-information">
+   <h2 style="text-align: center;">Wait until payment processed..</h2>
+</section>
+<?php } ?>

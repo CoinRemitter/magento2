@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="admin-1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <update handle="editor"/>
+    <head>
+     	<css src="Coinremitter_Checkout::css/wallet.css" />
+   	</head>
+    <body>
+        <referenceContainer name="content">
+            <!-- <uiComponent name="coinremitter_wallets_form"/> -->
+            <block class="Coinremitter\Checkout\Block\Adminhtml\Wallets\Edit" name="block_name" />
+        </referenceContainer>
+    </body>
+</page>

@@ -1,0 +1,73 @@
+<?php 
+if ($block->getInvoice()->getInvoiceId() && $block->getOrder()->getPayment()->getMethod() == \Coinremitter\Checkout\Model\CoinremitterCheckout::PAYMENT_METHOD_WALLET_CODE) {
+	$totalAmount = json_decode($block->getInvoice()->getTotalAmount(),true);
+	$paidAmount = $block->getInvoice()->getPaidAmount() ? json_decode($block->getInvoice()->getPaidAmount(),true) : [];
+	$paymentHistory = $block->getInvoice()->getPaymentHistory() ? json_decode($block->getInvoice()->getPaymentHistory(),true) : [];
+
+	$paid = isset($paidAmount[$block->getInvoice()->getCoin()]) ? $paidAmount[$block->getInvoice()->getCoin()] : 0;
+	$pendingAmount = ($totalAmount[$block->getInvoice()->getCoin()] - $paid < 0) ? 0 : $totalAmount[$block->getInvoice()->getCoin()] - $paid;
+?>
+	<div class="block block-order-details-view">
+	   <div class="block-title">
+	      <strong>Payment Invoice</strong>
+	   </div>
+	   <div class="block-content">
+		   <div class="box">
+		      <strong class="box-title">
+		      <span>Invoice Id</span>
+		      </strong>
+		      <div class="box-content">
+		         <span><?=$block->getInvoice()->getInvoiceId()?> - <a href="<?=$block->getInvoice()->getInvoiceUrl()?>" target="_blank">View</a></span>
+		      </div>
+		   </div>
+		   <div class="box">
+		      <strong class="box-title">
+		      <span>Amount</span>
+		      </strong>
+		      <div class="box-content">
+		         <span><?=number_format($totalAmount[$block->getInvoice()->getCoin()],8)?> <?=$block->getInvoice()->getCoin()?></span>
+		      </div>
+		   </div>
+		   <div class="box">
+		      <strong class="box-title">
+		      <span>Pending Amount</span>
+		      </strong>
+		      <div class="box-content">
+		         <span><?=number_format($pendingAmount,8)?> <?=$block->getInvoice()->getCoin()?></span>
+		      </div>
+		   </div>
+		</div>
+		<div class="block-content">
+			<div class="box">
+		      <strong class="box-title">
+		      <span>Payment Status</span>
+		      </strong>
+		      <div class="box-content">
+		         <span><?=$block->getInvoice()->getStatus()?></span>
+		      </div>
+		   </div>
+		   <div class="box">
+		      <strong class="box-title">
+		      <span>Date</span>
+		      </strong>
+		      <div class="box-content">
+		         <span><?=date('Y-m-d h:i A',strtotime($block->getInvoice()->getCreatedAt()))?></span>
+		      </div>
+		   </div>
+		   <div class="box">
+		      <strong class="box-title">
+		      <span>Transaction Ids</span>
+		      </strong>
+		      <div class="box-content">
+		      	<?php if($paymentHistory){ 
+		      		foreach ($paymentHistory as $value) {
+		      	?>
+		      		<p><a href="<?=$value['explorer_url']?>" target="_blank"><?=$value['txid']?></a></p>	
+		      	<?php } }else{ ?>
+		      		<p>-</p>
+		      	<?php } ?>
+		      </div>
+		   </div>
+		</div>
+	</div>
+<?php } ?>

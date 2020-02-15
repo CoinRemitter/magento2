@@ -1,0 +1,79 @@
+.field-coin .control-value{
+	font-size: 18px;
+	padding-top: 5px;
+}
+.admin-page-order-table {
+    display: inline-block;
+    width: 100%;
+}
+.admin-page-order-table .admin__page-section-item {
+    width: 25%;
+    float: left;
+    margin: 0px 0px 10px;
+}
+.admin-page-order-table .data-table-description {
+    width: calc(50% - 30px);
+    float: left;
+    margin: 0px 15px;
+    padding: 0px 15px 10px;
+}
+.admin-page-order-table .data-table-description h3 {
+    padding: 1rem 1rem;
+    background-color: #f1f1f1;
+    border-bottom: 1px solid #e3e3e3;
+    margin: 0px -15px 15px;
+    font-size: 1.4rem;
+    font-weight: 400;
+}
+.admin-page-order-table .data-table-description p {
+    font-size: 14px;
+    color: #444;
+    line-height: 1.6;
+    margin: 0;
+    background-color: #f1f1f1;
+    padding: 9px;
+}
+.theme-box{
+	margin-bottom: 30px;
+}
+.theme-box tr th, .theme-box tr td {
+    padding: 1rem 1.5rem !important;
+}
+.admin-payment-history-box-main{
+	margin: 0px -15px;
+}
+.admin-payment-history-box-main .admin-payment-history-left {
+    width: calc(70% - 30px);
+    float: left;
+    margin: 0px 15px;
+}
+.admin-payment-history-box-main .admin-payment-history-left p {
+    font-size: 15px;
+    color: #444;
+    margin: 0px 0px 20px;
+}
+.admin-payment-history-box-main .admin-payment-history-right {
+    width: calc(30% - 30px);
+    margin: 0px 15px;
+    float: left;
+}
+.admin-panding-amount-box {
+    /*border: 1px solid #e3e3e3;*/
+    text-align: center;
+}
+.admin-payment-history-box-main .admin-payment-history-right .admin-panding-amount-box h3 {
+    padding: 1rem 1rem;
+    background-color: #f1f1f1;
+    /*border-bottom: 1px solid #e3e3e3;*/
+    font-size: 1.8rem;
+    font-weight: 400;
+}
+.admin-payment-history-box-main .admin-payment-history-right .admin-panding-amount-box h2 {
+    font-size: 24px;
+    font-weight: 600;
+}
+.information-invoice-url .title {
+    float: none;
+    display: inline-block;
+    width: 100%;
+}

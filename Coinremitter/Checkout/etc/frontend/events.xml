@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+<event name="checkout_onepage_controller_success_action">
+    <observer name="coinremitter_controller_success_action" instance="Coinremitter\Checkout\Observer\CoinremitterRedirect" />
+</event>
+
+<event name="checkout_onepage_controller_success_action">
+    <observer name="coinremitter_controller_payment_pending_action" instance="Coinremitter\Checkout\Observer\CoinremitterPendingPaymentRedirect" />
+</event>
+</config>

@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../Config/etc/system_file.xsd">
+    <system>
+        <tab id="checkout" translate="label" sortOrder="250">
+            <label>Coinremitter</label>
+        </tab>
+        <section id="payment">
+             <group id="coinremitter_checkout" translate="label" type="text" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Coinremitter CryptoPayment</label>
+                <field id="active" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Enabled</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="title" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Title</label>
+                    <comment>Payment method title that the customer will see on your checkout</comment>
+                </field>
+                <field id="description" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Description</label>
+                    <comment>Payment method description that the customer will see on your checkout</comment>
+                </field>
+                <field id="order_status" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Order Status - Cryptocoin Payment Received</label>
+                    <source_model>Coinremitter\Checkout\Model\Config\OrderStatus</source_model>
+                    <comment>Payment is received successfully from the customer. You will see the bitcoin/altcoin payment statistics in one common table 'All Payments' with details of all received payments. If you sell digital products / software downloads you can use the status 'Completed' showing that particular customer already has instant access to your digital products</comment>
+                </field>
+                <field id="ex_rate" translate="label" type="text" sortOrder="10" showInDefault="1"
+                    showInWebsite="1" showInStore="1">
+                    <label>Exchange Rate Multiplier</label>
+                    <comment>
+                        <![CDATA[The system will fetch LIVE cryptocurrency rates from coinremitter.com. Check here ( <a href="https://coinremitter.com/api/get-coin-rate" target="_blank">https://coinremitter.com/api/get-coin-rate</a> ) for current USD price Example: 1.05 - will add an extra 5% to the total price in bitcoin/altcoins, 0.85 - will be a 15% discount for the price in bitcoin/altcoins. Default: 1.00 ]]>
+                    </comment>
+                </field>
+                 <field id="invoice_expiry" translate="label" type="text" sortOrder="10" showInDefault="1"
+                    showInWebsite="1" showInStore="1">
+                    <label>Invoice expiry time in Minutes</label>
+                </field>
+            </group>
+        </section>
+
+    </system>
+</config>
