@@ -121,7 +121,8 @@ class Index extends \Magento\Framework\App\Action\Action
                             ],
                             $wherePay
                         );
-
+                        $this->_logger->info('Notify_Index : Invoice Paid');
+                        $this->_logger->info('Notify_Index : invoice data >>>'.json_encode($invoice_data));
                     }else{
                         $this->_logger->info('Notify_Index : Payment does not paid');
                         $this->_logger->info('Notify_Index : '.json_encode($invoice_data));
