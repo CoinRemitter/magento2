@@ -13,7 +13,7 @@ class Api
     {
         $this->_httpClient = $httpClient;
         $this->_logger = $logger;
-        $this->api_url = 'http://192.168.0.102/coinremitter/public/api';
+        $this->api_url = 'https://coinremitter.com/api';
     }
 
     public function apiCaller($url, $method, $param=[], $header = null) {
@@ -28,13 +28,14 @@ class Api
             'Accept: application/json',
             'Key: ' . $header,
         ]);
+        $apiCaller->setConfig(['timeout' => 120]);
         if ($param && !empty($param)) {
             $apiCaller->setParameterPost($param); //or parameter get   
         }
         $res = $apiCaller->request();
-        $res = json_decode($res->getBody(), true);
         $this->_logger->info('apiCaller Response: ');
-        $this->_logger->info(json_encode($res));
+        $this->_logger->info($res->getBody());
+        $res = json_decode($res->getBody(), true);
         return $res;
     }
     public function getApiUrl(){

@@ -235,6 +235,8 @@ class CoinremitterRedirect implements ObserverInterface
                 $sql = "SELECT * FROM coinremitter_wallets WHERE coin= '".$selectcoin."'";
                 $result = $connection->fetchAll($sql); 
 
+                $no_page_url = $this->getBaseUrl().'coinremitter/no-page';
+
                 if (!empty($result)) {
                     
                     $wallet_data =$result[0]; 
@@ -291,7 +293,7 @@ class CoinremitterRedirect implements ObserverInterface
                         $invoice_exchange_rate = 1;
                     }
                     $amount = $order['base_grand_total']*$invoice_exchange_rate;
-                    $notify_url = $this->getBaseUrl().'wallets/notify';
+                    $notify_url = $this->getBaseUrl().'coinremitter/notify';
                     
                     $invoice_data =[
                         'api_key' =>$api_key,
@@ -361,11 +363,13 @@ class CoinremitterRedirect implements ObserverInterface
                     }else{
                         $this->_logger->info('Coinremitter_redirect : Something went wrong while creating invoice');
                         $this->_logger->info('Coinremitter_redirect :'.json_encode($invoice));
+                        $this->_redirect->redirect($this->_response, $no_page_url);
                     }
 
                 }else{
                     $this->_logger->info('Coinremitter_redirect :Data not found on sql query');
                     $this->_logger->info('Coinremitter_redirect :'.json_encode($result));
+                    $this->_redirect->redirect($this->_response, $no_page_url);
                 }
                 
             }
