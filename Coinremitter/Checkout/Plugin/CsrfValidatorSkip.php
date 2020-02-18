@@ -14,7 +14,7 @@ class CsrfValidatorSkip
         $request,
         $action
     ) {
-        if ($request->getModuleName() == 'wallets') {
+        if ($request->getModuleName() == 'wallets' || $request->getModuleName() == 'coinremitter') {
             return; // Skip CSRF check
         }
         $proceed($request, $action); // Proceed Magento 2 core functionalities
