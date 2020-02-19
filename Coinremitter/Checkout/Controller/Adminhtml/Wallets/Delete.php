@@ -41,4 +41,3 @@ class Delete extends \Magento\Backend\App\Action
         return $resultRedirect->setPath('*/*/');
     }
 }
-?>

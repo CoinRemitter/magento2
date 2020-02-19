@@ -197,7 +197,7 @@ class CoinremitterRedirect implements ObserverInterface
     
     public function execute(\Magento\Framework\Event\Observer $observer)
     {       
-        //die('redirect');
+        
         $order_ids = $observer->getEvent()->getOrderIds();
         $order_id = $order_ids[0];
 
@@ -309,7 +309,7 @@ class CoinremitterRedirect implements ObserverInterface
                     ];
                     $invoice = $this->CR_createInvoice($invoice_data);
                     
-                    if(!empty($invoice) && $invoice['flag'] == 1){
+                    if(!empty($invoice) && isset($invoice['flag']) && $invoice['flag'] == 1){
                         
                         $invoice_data = $invoice['data'];
                         $resource = $objectManager->get('Magento\Framework\App\ResourceConnection');

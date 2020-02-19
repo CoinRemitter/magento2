@@ -128,7 +128,6 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
        // get the current form as html content.
         $html = parent::getFormHtml();
         //Append the phtml file after the form content.
-        $html .= $this->setTemplate('Coinremitter_Checkout::coinremitter_wallets_form.phtml')->toHtml(); 
         return $html;
     }
 

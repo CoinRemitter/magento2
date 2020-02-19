@@ -7,7 +7,6 @@
    	</head>
     <body>
         <referenceContainer name="content">
-            <!-- <uiComponent name="coinremitter_wallets_form"/> -->
             <block class="Coinremitter\Checkout\Block\Adminhtml\Wallets\Edit" name="block_name" />
         </referenceContainer>
     </body>

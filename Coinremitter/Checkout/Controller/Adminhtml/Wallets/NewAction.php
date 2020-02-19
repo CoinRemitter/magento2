@@ -54,4 +54,3 @@ class NewAction extends \Magento\Backend\App\Action
         // }
     }
 }
-?>

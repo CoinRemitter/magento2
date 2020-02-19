@@ -23,9 +23,9 @@ class Success extends \Magento\Framework\App\Action\Action
     }
     public function execute() {
 
-        if (isset($_GET['order_id']) && $_GET['order_id'] != '' && $_GET['order_id'] != 0 && is_numeric($_GET['order_id'])) {
+        if ($this->getRequest()->getParam('order_id') && is_numeric($this->getRequest()->getParam('order_id'))) {
             
-            $orderId = $_GET['order_id'];
+            $orderId = $this->getRequest()->getParam('order_id');
             $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
             $resource = $objectManager->get('Magento\Framework\App\ResourceConnection');
             $connection = $resource->getConnection();

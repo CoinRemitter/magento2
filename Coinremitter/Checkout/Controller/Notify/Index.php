@@ -32,13 +32,15 @@ class Index extends \Magento\Framework\App\Action\Action
         $post = $this->getRequest()->getPostValue();
         if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             $this->_logger->info('Notify_Index : Only Post request Allow');
-            die('Only Post request Allow');
+            $error_msg = 'Only POST requests are allowed';
+            return $this->getResponse()->setBody($error_msg);
         }
         $post = $this->getRequest()->getPostValue(); 
         if(!isset($post['coin'])){
             $this->_logger->info('Notify_Index : No coin Found');
             $this->_logger->info('Notify_Index : '.json_encode($post));
-            exit('not coin'); 
+            $error_msg = 'No coin found';
+            return $this->getResponse()->setBody($error_msg);
         }
   
         $coin = $post['coin'];
@@ -62,7 +64,10 @@ class Index extends \Magento\Framework\App\Action\Action
                 $coinremitter_order =  $result_invoice[0];
                 if($coinremitter_order['payment_status'] == 'paid' || $coinremitter_order['payment_status'] == 'over paid'){
                     $this->_logger->info('Notify_Index : All ready paid payment');
-                    die('All ready paid payment');
+
+                    $error_msg = 'Payment is already paid';
+                    return $this->getResponse()->setBody($error_msg);
+
                 }
                 $orderId = $coinremitter_order['order_id'];
                 $postData = [
@@ -126,13 +131,16 @@ class Index extends \Magento\Framework\App\Action\Action
                     }else{
                         $this->_logger->info('Notify_Index : Payment does not paid');
                         $this->_logger->info('Notify_Index : '.json_encode($invoice_data));
-                        die('not pay');
+                        $error_msg = 'Payment does not paid';
+                        return $this->getResponse()->setBody($error_msg);
                     }
 
                 }else{
                     $this->_logger->info('Notify_Index : Invoice not found or flog is not 1');
                     $this->_logger->info('Notify_Index : '.json_encode($invoice));
-                    die('invoice not paid');
+                    $error_msg = 'Invoice not found or flog is not 1';
+                    return $this->getResponse()->setBody($error_msg);
+
                 }
 
             }else{
