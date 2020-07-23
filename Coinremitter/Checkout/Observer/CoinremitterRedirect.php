@@ -21,6 +21,7 @@ class CoinremitterRedirect implements ObserverInterface
     public $api_base_url;
     protected $apiCall;
     protected $_logger;
+    protected $_appState;
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig, 
         \Magento\Framework\App\ResponseFactory $responseFactory,
@@ -38,7 +39,8 @@ class CoinremitterRedirect implements ObserverInterface
         \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
         \Magento\Checkout\Model\Cart $cart,
         \Coinremitter\Checkout\Model\Wallets\Api $apiCall,
-        \Coinremitter\Checkout\Logger\Logger $logger
+        \Coinremitter\Checkout\Logger\Logger $logger,
+        \Magento\Framework\App\State $appState
     ) {
 
         $this->coreRegistry = $registry;
@@ -57,6 +59,7 @@ class CoinremitterRedirect implements ObserverInterface
         $this->cart = $cart;
         $this->apiCall = $apiCall;
         $this->_logger = $logger;
+        $this->_appState = $appState;
     }
 
     function CR_Configuration($token,$network){
@@ -198,6 +201,8 @@ class CoinremitterRedirect implements ObserverInterface
     public function execute(\Magento\Framework\Event\Observer $observer)
     {       
         
+        $env_mode = $this->_appState->getMode();
+
         $order_ids = $observer->getEvent()->getOrderIds();
         $order_id = $order_ids[0];
 
@@ -278,6 +283,7 @@ class CoinremitterRedirect implements ObserverInterface
                     $params->orderId = trim($order_id_long);
 
                     $success_url = $this->getBaseUrl() . 'coinremitter/invoice/success?order_id='.$order_id;
+                    $fail_url = $this->getBaseUrl(). 'coinremitter/invoice/cancel?order_id='.$order_id;
                     
                     $params->extendedNotifications = true;
                     $params->acceptanceWindow = 1200000;
@@ -304,6 +310,7 @@ class CoinremitterRedirect implements ObserverInterface
                         'currency' => $currency_type,
                         'expire_time'=>$invoice_expiry,
                         'suceess_url' => $success_url,
+                        'fail_url' => $fail_url,
                         'currency' => $params->currancy_type,
                         'description' => 'Order Id #'.$params->orderId,    
                     ];
@@ -361,14 +368,19 @@ class CoinremitterRedirect implements ObserverInterface
                         $this->_redirect->redirect($this->_response, $invoice_data['url']);
                         
                     }else{
-                        $this->_logger->info('Coinremitter_redirect : Something went wrong while creating invoice');
-                        $this->_logger->info('Coinremitter_redirect :'.json_encode($invoice));
+                        if ($env_mode == 'developer') {
+                            $this->_logger->info('Coinremitter_redirect : Something went wrong while creating invoice');
+                            $this->_logger->info('Coinremitter_redirect :'.json_encode($invoice));    
+                        }
                         $this->_redirect->redirect($this->_response, $no_page_url);
                     }
 
                 }else{
-                    $this->_logger->info('Coinremitter_redirect :Data not found on sql query');
-                    $this->_logger->info('Coinremitter_redirect :'.json_encode($result));
+                    if($env_mode == 'developer'){
+                        $this->_logger->info('Coinremitter_redirect :Data not found on sql query');
+                        $this->_logger->info('Coinremitter_redirect :'.json_encode($result));
+                    }
+                    
                     $this->_redirect->redirect($this->_response, $no_page_url);
                 }
                 
@@ -380,7 +392,7 @@ class CoinremitterRedirect implements ObserverInterface
     } //end execute function
     public function getExtensionVersion()
     {
-        return 'Coinremitter_Checkout_Magento2_1.0.0';
+        return 'Coinremitter_Checkout_Magento2_1.0.2';
 
     }
      public function CR_createInvoice($param)

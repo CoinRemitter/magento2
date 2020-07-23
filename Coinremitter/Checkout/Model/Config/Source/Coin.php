@@ -10,21 +10,25 @@ use Magento\Framework\HTTP\ZendClientFactory;
 
 class Coin implements \Magento\Framework\Option\ArrayInterface
 {
-	protected $apiCall;
+    protected $apiCall;
+    protected $_debug_logger;
 
     public function __construct(
-        Api $apiCall
+        Api $apiCall, \Psr\Log\LoggerInterface $debug_logger
     ) {
         $this->apiCall = $apiCall;
         $this->api_base_url = $this->apiCall->getApiUrl();
+        $this->_debug_logger = $debug_logger;
     }
 
     public function toOptionArray($arr=[])
     {
-		$coin = [];
-    	$data = self::getCoin();
-		if ($data) {
-            foreach ($data as $key => $value) {
+        $this->_debug_logger->debug('toOptionArray() in coin : arr param : '. json_encode($arr));
+        $coin = [];
+        $data = self::getCoin();
+
+        if ($data['flag'] == 1) {
+            foreach ($data['data'] as $key => $value) {
                 $c['value'] = $value['symbol'];
                 $c['label'] = $value['symbol'];
                 if ($arr) {
@@ -34,20 +38,22 @@ class Coin implements \Magento\Framework\Option\ArrayInterface
                 }else{
                     array_push($coin, $c);
                 }
-            }    
+            }
+            $res = array('flag' => 1, 'data' => $coin);
+        }else{
+            $res = $data;
         }
-    	return $coin;
+        
+        $this->_debug_logger->debug('toOptionArray() in coin : return coin : '. json_encode($res));
+        return $res;
     }
 
     function getCoin()
     {
-        $data = [];
         $url = $this->api_base_url."/get-coin-rate";
-        $res = $this->apiCall->apiCaller($url, \Zend_Http_Client::GET);
+        $data = $this->apiCall->apiCaller($url, \Zend_Http_Client::GET);
 
-        if (isset($res['flag']) && $res['flag'] == 1) {
-            $data = $res['data'];
-        }
+        $this->_debug_logger->debug('getCoin() in coin : response of api : '. json_encode($data));
         return $data;
     }
 }

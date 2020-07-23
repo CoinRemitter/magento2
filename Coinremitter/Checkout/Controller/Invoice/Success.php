@@ -8,21 +8,26 @@ class Success extends \Magento\Framework\App\Action\Action
 	private $checkoutSession;
     protected $resultPageFactory;
     protected $_logger;
+    protected $_appState;
 
     public function __construct( 
     	\Magento\Framework\App\Action\Context $context,
     	\Magento\Framework\View\Result\PageFactory $resultPageFactory,
     	\Magento\Checkout\Model\Session $checkoutSession,
-        \Coinremitter\Checkout\Logger\Logger $logger
+        \Coinremitter\Checkout\Logger\Logger $logger,
+        \Magento\Framework\App\State $appState
     	)
     {
     	$this->resultPageFactory = $resultPageFactory;
     	$this->checkoutSession = $checkoutSession;
         $this->_logger = $logger;
+        $this->_appState = $appState;
         parent::__construct($context);
     }
     public function execute() {
 
+        $env_mode = $this->_appState->getMode();
+        
         if ($this->getRequest()->getParam('order_id') && is_numeric($this->getRequest()->getParam('order_id'))) {
             
             $orderId = $this->getRequest()->getParam('order_id');
@@ -50,8 +55,11 @@ class Success extends \Magento\Framework\App\Action\Action
                     $this->checkoutSession->setLastRealOrderId($realOrderId);
                 }
             }else{
-                $this->_logger->info('Invoice_Success : Invoice Not Found OR Error in getting invoice');
-                $this->_logger->info('Invoice_Success : '.json_encode($result_invoice));
+
+                if($env_mode == 'developer'){
+                    $this->_logger->info('Invoice_Success : Invoice Not Found OR Error in getting invoice');
+                    $this->_logger->info('Invoice_Success : '.json_encode($result_invoice));
+                }
             }
         }
 

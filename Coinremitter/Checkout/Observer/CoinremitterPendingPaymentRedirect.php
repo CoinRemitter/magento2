@@ -21,6 +21,7 @@ class CoinremitterPendingPaymentRedirect implements ObserverInterface
     public $api_base_url;
     protected $apiCall;
     protected $_logger;
+    protected $_appState;
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig, 
         \Magento\Framework\App\ResponseFactory $responseFactory,
@@ -38,7 +39,8 @@ class CoinremitterPendingPaymentRedirect implements ObserverInterface
         \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
         \Magento\Checkout\Model\Cart $cart,
         \Coinremitter\Checkout\Model\Wallets\Api $apiCall,
-        \Coinremitter\Checkout\Logger\Logger $logger
+        \Coinremitter\Checkout\Logger\Logger $logger,
+        \Magento\Framework\App\State $appState
     ) {
 
         $this->coreRegistry = $registry;
@@ -57,6 +59,7 @@ class CoinremitterPendingPaymentRedirect implements ObserverInterface
         $this->cart = $cart;
         $this->apiCall = $apiCall;
         $this->_logger = $logger;
+        $this->_appState = $appState;
     }
 
     public function CR_checkInvoiceStatus($orderID,$item)
@@ -87,7 +90,10 @@ class CoinremitterPendingPaymentRedirect implements ObserverInterface
     }
 
     public function execute(\Magento\Framework\Event\Observer $observer)
-    {       
+    {   
+
+        $env_mode = $this->_appState->getMode();
+
         $order_ids = $observer->getEvent()->getOrderIds();
         $order_id = $order_ids[0];
 
@@ -120,13 +126,17 @@ class CoinremitterPendingPaymentRedirect implements ObserverInterface
 
                 $this->_redirect->redirect($this->_response, $invoice['data']['url']);
             }else{
-                $this->_logger->info('Coinremitter_pending_payment_redirection : Data not found on sql query');
-                $this->_logger->info('Coinremitter_pending_payment_redirection : '.json_encode($result));
+
+                if($env_mode == 'developer'){
+
+                    $this->_logger->info('Coinremitter_pending_payment_redirection : Data not found on sql query');
+                    $this->_logger->info('Coinremitter_pending_payment_redirection : '.json_encode($result));
+
+                }
+
+                
             }
-        }/*else{
-            $this->_logger->info('Coinremitter_pending_payment_redirection : Invoice data Not Found OR payment_status is not pending');
-            $this->_logger->info('Coinremitter_pending_payment_redirection : '.json_encode($result_invoice));
-        }*/
+        }
         
         
     } //end execute function
