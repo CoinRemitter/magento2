@@ -16,7 +16,7 @@
                 </description>
                 <order_status>complete</order_status>
                 <ex_rate>1</ex_rate>
-                <invoice_expiry>30</invoice_expiry>
+                <invoice_expiry>60</invoice_expiry>
                 <model>Coinremitter\Checkout\Model\CoinremitterCheckout</model>
             </coinremitter_checkout>
             <!-- checkout_coinremitter-config -->

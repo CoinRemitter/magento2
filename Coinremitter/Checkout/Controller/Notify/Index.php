@@ -102,8 +102,11 @@ class Index extends \Magento\Framework\App\Action\Action
                         $order_status = $this->getStoreConfig('payment/coinremitter_checkout/order_status');
                         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
                         $order = $objectManager->create('Magento\Sales\Api\Data\OrderInterface')->load($orderId);
-                        $order->setStatus($order_status);
-                        $order->save();         
+                        $check_order_status = $order->getStatus();
+                        if(strtolower($check_order_status) != 'canceled'){
+                            $order->setStatus($order_status);
+                            $order->save();   
+                        }
 
                     
                         $data = ["payment_status"=>strtolower($invoice_data['status'])]; // Key_Value Pair
@@ -182,7 +185,6 @@ class Index extends \Magento\Framework\App\Action\Action
                             $this->_logger->info('Notify_Index : invoice_expired');
                             $this->_logger->info('Notify_Index : '.json_encode($invoice_data));
                         }
-                        
                     }else{
 
                         if($env_mode == 'developer'){
@@ -200,7 +202,7 @@ class Index extends \Magento\Framework\App\Action\Action
                         $this->_logger->info('Notify_Index : '.json_encode($invoice));    
                     }
                     
-                    $error_msg = 'Invoice not found or flog is not 1';
+                    $error_msg = 'Invoice not found or flag is not 1';
                     return $this->getResponse()->setBody($error_msg);
 
                 }
