@@ -56,7 +56,7 @@ class CoinremitterCheckout extends \Magento\Payment\Model\Method\AbstractMethod
         if(is_array($data->getData('additional_data')))
         {
             $additionalData = $data->getData('additional_data');
-            $pickPayLocation = $additionalData['transaction_result']?$additionalData['transaction_result']:"";
+            $pickPayLocation = isset($additionalData['transaction_result'])?$additionalData['transaction_result']:"";
             $infoInstance->setAdditionalInformation('transaction_result', $pickPayLocation);
             $data->setTransactionResult($pickPayLocation);
             $infoInstance->setTransactionResult($pickPayLocation);

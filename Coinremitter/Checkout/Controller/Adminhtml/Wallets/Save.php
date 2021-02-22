@@ -8,7 +8,7 @@ use Coinremitter\Checkout\Model\Wallets;
 use Magento\Framework\Exception\LocalizedException;
 use Coinremitter\Checkout\Model\Wallets\Api;
 use Magento\Framework\HTTP\ZendClientFactory;
-
+use Magento\Framework\Encryption\EncryptorInterface;
 class Save extends \Magento\Backend\App\Action
 {
     /**
@@ -32,12 +32,19 @@ class Save extends \Magento\Backend\App\Action
      * @param \Coinremitter\Checkout\Model\WalletsFactory $walletsFactory
      * @param \Coinremitter\Checkout\Api\WalletsRepositoryInterface $walletsRepository
      */
+
+    protected $encryptor;
+
+    protected $fileDriver;
+
     public function __construct(
         Action\Context $context,
         // DataPersistorInterface $dataPersistor,
         \Coinremitter\Checkout\Model\WalletsFactory $walletsFactory = null,
         \Coinremitter\Checkout\Api\WalletsRepositoryInterface $walletsRepository = null,
-        \Coinremitter\Checkout\Model\Wallets\Api $apiCall
+        \Coinremitter\Checkout\Model\Wallets\Api $apiCall,
+        \Magento\Framework\Filesystem\Driver\File $fileDriver,
+        EncryptorInterface $encryptor
     ) {
         // $this->dataPersistor = $dataPersistor;
         $this->walletsFactory = $walletsFactory
@@ -46,6 +53,8 @@ class Save extends \Magento\Backend\App\Action
             ?: \Magento\Framework\App\ObjectManager::getInstance()->get(\Coinremitter\Checkout\Api\WalletsRepositoryInterface::class);
         $this->apiCall = $apiCall;
         $this->api_base_url = $this->apiCall->getApiUrl();
+        $this->fileDriver = $fileDriver;
+        $this->encryptor = $encryptor;
         parent::__construct($context);
     }
 	
@@ -86,7 +95,7 @@ class Save extends \Magento\Backend\App\Action
                     $data['coin'] = $walletData['coin'];
                     
                 } catch (LocalizedException $e) {
-                    $this->messageManager->addErrorMessage(__('This news no longer exists.'));
+                    $this->messageManager->addErrorMessage(__('This wallet no longer exists.'));
                     return $resultRedirect->setPath('*/*/');
                 }
             }else{
@@ -102,7 +111,7 @@ class Save extends \Magento\Backend\App\Action
                     return $resultRedirect->setPath('*/*/');
                 }
             }
-
+            $data['password'] = $this->encryptor->encrypt($data['password']);
             $postData = [
                 'api_key'=>$data['api_key'],
                 'password'=>$data['password']
@@ -126,6 +135,17 @@ class Save extends \Magento\Backend\App\Action
 
             try {
                 $this->walletsRepository->save($model);
+
+                /*download coin image if not exists*/
+                $filename = strtolower($data['coin']).'.png';
+                $coin_image_path =  $this->getRootPath().'/app/code/Coinremitter/Checkout/view/adminhtml/web/images/'.$data['coin']."/".$filename;
+                if(!$this->fileDriver->isExists($coin_image_path)){                       
+                    mkdir($this->getRootPath().'/app/code/Coinremitter/Checkout/view/adminhtml/web/images/'.$data['coin'],0777);
+                    $url = "https://coinremitter.com/assets/img/home-coin/coin/".$filename;
+                    if (getimagesize($url)) {
+                        copy($url,$coin_image_path);
+                    }
+                }
                 $this->messageManager->addSuccessMessage(__('Wallet saved successfully done.'));
                 // $this->getDataPersistor()->clear('coinremitter_wallets');
                 if ($this->getRequest()->getParam('back')) {
@@ -134,11 +154,17 @@ class Save extends \Magento\Backend\App\Action
                 return $resultRedirect->setPath('*/*/');
             } catch (LocalizedException $e) {
                 $this->messageManager->addExceptionMessage($e->getPrevious() ?:$e);
-            } catch (\Exception $e) {
-                $this->messageManager->addExceptionMessage($e, __('Something went wrong while saving the news.'));
-            }
-            return $resultRedirect->setPath('*/*/edit', ['id' => $this->getRequest()->getParam('id')]);
+            } catch (\Exception $e) {}
+            $this->messageManager->addSuccessMessage(__('Wallet saved successfully done.'));
+            return $resultRedirect->setPath('*/*/');
         }
         return $resultRedirect->setPath('*/*/');
+    }
+
+    public function getRootPath()
+    {
+        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+        $directory = $objectManager->get('\Magento\Framework\Filesystem\DirectoryList');
+        return $directory->getRoot();
     }
 }

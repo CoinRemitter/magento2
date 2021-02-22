@@ -9,9 +9,11 @@ class Success extends \Magento\Framework\App\Action\Action
     protected $resultPageFactory;
     protected $_logger;
     protected $_appState;
+    protected $_scopeConfig;
 
     public function __construct( 
-    	\Magento\Framework\App\Action\Context $context,
+        \Magento\Framework\App\Action\Context $context,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
     	\Magento\Framework\View\Result\PageFactory $resultPageFactory,
     	\Magento\Checkout\Model\Session $checkoutSession,
         \Coinremitter\Checkout\Logger\Logger $logger,
@@ -22,6 +24,7 @@ class Success extends \Magento\Framework\App\Action\Action
     	$this->checkoutSession = $checkoutSession;
         $this->_logger = $logger;
         $this->_appState = $appState;
+        $this->_scopeConfig = $scopeConfig;
         parent::__construct($context);
     }
     public function execute() {
@@ -38,7 +41,7 @@ class Success extends \Magento\Framework\App\Action\Action
             $result_invoice = $connection->fetchAll($getOrderId); 
             $this->checkoutSession->clearQuote();  //remove qoute info from session
 
-            if(!empty($result_invoice)){
+            if(!empty($result_invoice) && ($result_invoice[0]['payment_status'] == 1 || $result_invoice[0]['payment_status'] == 'paid' || $result_invoice[0]['payment_status'] == 'over paid'  || $result_invoice[0]['payment_status'] == 3)){
 
                 $order = $objectManager->create('Magento\Sales\Api\Data\OrderInterface')->load($orderId);
 
@@ -53,6 +56,10 @@ class Success extends \Magento\Framework\App\Action\Action
                     $this->checkoutSession->setLastQuoteId($order->getQuoteId());
                     $this->checkoutSession->setLastSuccessQuoteId($order->getQuoteId());
                     $this->checkoutSession->setLastRealOrderId($realOrderId);
+
+                    $resultRedirect = $this->resultRedirectFactory->create();
+                    $resultRedirect->setPath('checkout/onepage/success');
+                    return $resultRedirect;
                 }
             }else{
 
@@ -62,11 +69,11 @@ class Success extends \Magento\Framework\App\Action\Action
                 }
             }
         }
-
-        $resultRedirect = $this->resultRedirectFactory->create();
-        $resultRedirect->setPath('checkout/onepage/success');
-        return $resultRedirect;
     }
-     
-    
+
+    public function getStoreConfig($_env){
+        $_val = $this->_scopeConfig->getValue(
+           $_env, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+        return $_val;
+    }
 }

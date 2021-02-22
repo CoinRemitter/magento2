@@ -47,7 +47,6 @@
                 <item name="config" xsi:type="array">
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/thumbnail</item>
                     <item name="sortable" xsi:type="boolean">false</item>
-                    <item name="has_preview" xsi:type="string">1</item>
                     <item name="label" xsi:type="string" translate="true">Logo</item>
                 </item>
             </argument>
@@ -74,19 +73,15 @@
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="filter" xsi:type="string">textRange</item>
-                    <item name="sorting" xsi:type="string">asc</item>
                     <item name="label" xsi:type="string" translate="true">Wallet Name</item>
                 </item>
             </argument>
         </column>
-        <column name="balance" class="Coinremitter\Checkout\Ui\Component\Listing\Column\WalletsFields">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="filter" xsi:type="string">text</item>
-                    <item name="sortable" xsi:type="boolean">false</item>
-                    <item name="label" xsi:type="string" translate="true">Balance</item>
-                </item>
-            </argument>
+        <column name="balance">
+            <settings>
+                <bodyTmpl>ui/grid/cells/html</bodyTmpl>
+                <label translate="true">Balance</label>
+            </settings>
         </column>
         <column name="created_at" class="Magento\Ui\Component\Listing\Columns\Date">
             <argument name="data" xsi:type="array">

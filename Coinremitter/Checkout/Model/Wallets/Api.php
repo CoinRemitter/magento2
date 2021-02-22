@@ -3,23 +3,27 @@
 namespace Coinremitter\Checkout\Model\Wallets;
 
 use Magento\Framework\HTTP\ZendClientFactory;
+use Magento\Framework\Encryption\EncryptorInterface;
 
 class Api
 {
     protected $_httpClient;
     protected $api_url ;
     protected $_debug_logger;
-    private   $version = 'v2';
+    protected $encryptor;
+    private   $version = 'v3';
     private   $url = 'https://coinremitter.com/api/';
 
     public function __construct(
         ZendClientFactory $httpClient,
-        \Psr\Log\LoggerInterface $debug_logger
+        \Psr\Log\LoggerInterface $debug_logger,
+        EncryptorInterface $encryptor
         )
     {
         $this->_httpClient = $httpClient;
         $this->api_url = $this->url.$this->version;
         $this->_debug_logger = $debug_logger;
+        $this->encryptor = $encryptor;
         
     }
 
@@ -42,6 +46,9 @@ class Api
         ]);
         $apiCaller->setConfig(['timeout' => 120]);
         if ($param && !empty($param)) {
+            if(isset($param['password'])){
+                $param['password'] = $this->encryptor->decrypt($param['password']);
+            }
             $apiCaller->setParameterPost($param); //or parameter get   
         }
         try {

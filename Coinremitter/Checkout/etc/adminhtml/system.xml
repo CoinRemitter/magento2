@@ -28,7 +28,7 @@
                 <field id="order_status" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Order Status - Cryptocoin Payment Received</label>
                     <source_model>Coinremitter\Checkout\Model\Config\OrderStatus</source_model>
-                    <comment>Payment is received successfully from the customer. You will see the bitcoin/altcoin payment statistics in one common table 'All Payments' with details of all received payments. If you sell digital products / software downloads you can use the status 'Completed' showing that particular customer already has instant access to your digital products</comment>
+                    <comment>When customer pay coinremitter invoice, What order status should be ? Set it here.</comment>
                 </field>
                 <field id="ex_rate" translate="label" type="text" sortOrder="10" showInDefault="1"
                     showInWebsite="1" showInStore="1">
@@ -36,10 +36,13 @@
                     <comment>
                         <![CDATA[The system will fetch LIVE cryptocurrency rates from coinremitter.com. Check here ( <a href="https://coinremitter.com/api/get-coin-rate" target="_blank">https://coinremitter.com/api/get-coin-rate</a> ) for current USD price Example: 1.05 - will add an extra 5% to the total price in bitcoin/altcoins, 0.85 - will be a 15% discount for the price in bitcoin/altcoins. Default: 1.00 ]]>
                     </comment>
+                    <validate>required-entry validate-number validate-exchange-rate-range</validate>
                 </field>
                  <field id="invoice_expiry" translate="label" type="text" sortOrder="10" showInDefault="1"
                     showInWebsite="1" showInStore="1">
                     <label>Invoice expiry time in Minutes</label>
+                    <comment>It indicates invoice validity. An invoice will not valid after expiry minutes. E.g if you set Invoice expiry time as minutes 30 then the invoice will expire after 30 minutes. Set 0 to avoid expiry</comment>
+                    <validate>required-entry validate-digits validate-zero-or-greater validate-invoice-expiry-max-value</validate>
                 </field>
             </group>
         </section>

@@ -30,8 +30,20 @@ class ConfigProvider implements ConfigProviderInterface
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
         $resource = $objectManager->get('Magento\Framework\App\ResourceConnection');
         $connection = $resource->getConnection();
-        $tableName = $resource->getTableName('coinremitter_wallets');       
-        $sql = "SELECT `coin`,`coin_name` FROM coinremitter_wallets";
+        $tableName = $resource->getTableName('coinremitter_wallets');      
+
+        if($connection->tableColumnExists($tableName, 'is_valid') === false){
+            $connection->addColumn('coinremitter_wallets', 'is_valid', array(
+                'type'      => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+                'nullable'  => false,
+                'length'    => 1,
+                'default'   => 1,
+                'after'     => 'password', // column name to insert new column after
+                'comment'   => '1 on valid wallet else 0'
+            ));  
+        }
+
+        $sql = "SELECT `coin`,`coin_name` FROM coinremitter_wallets WHERE `is_valid` = '1'";
         $result = $connection->fetchAll($sql);
 
         return [

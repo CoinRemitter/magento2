@@ -2,6 +2,7 @@
 
 namespace Coinremitter\Checkout\Block\Adminhtml\Wallets\Edit;
 use Coinremitter\Checkout\Model\WalletsFactory;
+use Magento\Framework\Encryption\EncryptorInterface;
 
     class Form extends \Magento\Backend\Block\Widget\Form\Generic
     {
@@ -10,6 +11,7 @@ use Coinremitter\Checkout\Model\WalletsFactory;
          */
         protected $_systemStore;
         
+        protected $encryptor;
         /**
          * Core registry
          *
@@ -31,6 +33,7 @@ use Coinremitter\Checkout\Model\WalletsFactory;
             \Magento\Framework\Data\FormFactory $formFactory,
             \Magento\Store\Model\System\Store $systemStore,
             \Coinremitter\Checkout\Model\WalletsFactory $walletsFactory,
+            EncryptorInterface $encryptor,
             array $data = []/*,\Psr\Log\LoggerInterface $debug_logger*/
         ) {
             $this->_systemStore = $systemStore;
@@ -38,6 +41,7 @@ use Coinremitter\Checkout\Model\WalletsFactory;
             //$this->_debug_logger = $debug_logger;
             parent::__construct($context, $registry, $formFactory, $data);
             $this->walletsFactory = $walletsFactory;
+            $this->encryptor = $encryptor;
             
         }
 
@@ -118,7 +122,7 @@ use Coinremitter\Checkout\Model\WalletsFactory;
 
                 $fieldset->addField(
                     'password',
-                    'text',
+                    'password',
                     ['name' => 'password', 'label' => __('Password'), 'title' => __('Password'), 'required' => true]
                 );
             }else{
@@ -152,7 +156,7 @@ use Coinremitter\Checkout\Model\WalletsFactory;
 
                     $fieldset->addField(
                         'password',
-                        'text',
+                        'password',
                         ['name' => 'password', 'label' => __('Password'), 'title' => __('Password'), 'required' => true]
                     );
 
@@ -167,10 +171,12 @@ use Coinremitter\Checkout\Model\WalletsFactory;
                 
             }
             //$this->_debug_logger->debug('after if in prepareForm');
-            
-            
+            $filled_data = $model->getData();
+            if($model->getId()){
+                $filled_data['password'] = $this->encryptor->decrypt($filled_data['password']);
+            }
             $form->setUseContainer(true);
-            $form->setValues($model->getData());
+            $form->setValues($filled_data);
             $this->setForm($form);
             return parent::_prepareForm();
         }
