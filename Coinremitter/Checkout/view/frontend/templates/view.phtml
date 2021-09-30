@@ -1,7 +1,7 @@
-<?php 
+<?php
 if ($block->getOrder()->getPayment()->getMethod() == \Coinremitter\Checkout\Model\CoinremitterCheckout::PAYMENT_METHOD_WALLET_CODE) {
-	$resultData = $block->getdetail();
-?>
+    $resultData = $block->getdetail();
+    ?>
 	<div class="block block-order-details-view">
 	   <div class="block-title">
 	      <strong>Payment Invoice</strong>
@@ -9,8 +9,8 @@ if ($block->getOrder()->getPayment()->getMethod() == \Coinremitter\Checkout\Mode
 	   <div class="block-content">
 		   <div class="box" style="width: 50%;">
 		   <?php
-		   	if(isset($resultData['invoice_id']) && $resultData['invoice_id']!=""){
-		   ?>
+if (isset($resultData['invoice_id']) && $resultData['invoice_id'] != "") {
+        ?>
 			      <strong class="box-title">
 			      <span>Invoice Id</span>
 			      </strong>
@@ -18,17 +18,17 @@ if ($block->getOrder()->getPayment()->getMethod() == \Coinremitter\Checkout\Mode
 			         <span><?php echo $resultData['invoice_id'] ?> - <a href="<?php echo $resultData['invoice_url']; ?>" target="_blank">View</a></span>
 			      </div>
 			<?php
-			   } else {
-			?>
+} else {
+        ?>
 					<strong class="box-title">
 			      <span>Address</span>
 			      </strong>
 			      <div class="box-content">
-			         <span><?php echo $resultData['address'];?></span>
+			         <span><?php echo $resultData['address']; ?></span>
 			      </div>
 			<?php
-				}
-			?>
+}
+    ?>
 		   </div>
 		   <div class="box">
 		      <strong class="box-title">
@@ -45,19 +45,21 @@ if ($block->getOrder()->getPayment()->getMethod() == \Coinremitter\Checkout\Mode
 		      <div class="box-content">
 		         <span>
 		         	<?php
-                     if($resultData['payment_status'] == '0' || $resultData['payment_status'] == "pending")
-                        echo "Pending";
-                     else if($resultData['payment_status'] == '1' || $resultData['payment_status'] == "paid")
-                        echo "Paid";
-                     else if($resultData['payment_status'] == '2' || $resultData['payment_status'] == "under paid")
-                        echo "Under Paid";
-                     else if($resultData['payment_status'] == '3' || $resultData['payment_status'] == "over paid")
-                        echo "Over Paid";
-                     else if($resultData['payment_status'] == '4' || $resultData['payment_status'] == "expired")
-                        echo "Expired";
-                     else if($resultData['payment_status'] == '5' || $resultData['payment_status'] == "canceled")
-                        echo "Canceled";
-                  ?>
+if ($resultData['payment_status'] == '0' || $resultData['payment_status'] == "pending") {
+        echo "Pending";
+    } else if ($resultData['payment_status'] == '1' || $resultData['payment_status'] == "paid") {
+        echo "Paid";
+    } else if ($resultData['payment_status'] == '2' || $resultData['payment_status'] == "under paid") {
+        echo "Under Paid";
+    } else if ($resultData['payment_status'] == '3' || $resultData['payment_status'] == "over paid") {
+        echo "Over Paid";
+    } else if ($resultData['payment_status'] == '4' || $resultData['payment_status'] == "expired") {
+        echo "Expired";
+    } else if ($resultData['payment_status'] == '5' || $resultData['payment_status'] == "canceled") {
+        echo "Canceled";
+    }
+
+    ?>
 		         </span>
 		      </div>
 		   </div>
@@ -68,7 +70,7 @@ if ($block->getOrder()->getPayment()->getMethod() == \Coinremitter\Checkout\Mode
 		      <span>Paid Amount</span>
 		      </strong>
 		      <div class="box-content">
-		         <span><?php echo number_format($resultData['total_paid'],8); ?> <?php echo $resultData['coin']; ?></span>
+		         <span><?php echo $resultData['total_paid']; ?> <?php echo $resultData['coin']; ?></span>
 		      </div>
 		   </div>
 		   <div class="box">
@@ -85,30 +87,30 @@ if ($block->getOrder()->getPayment()->getMethod() == \Coinremitter\Checkout\Mode
 		      </strong>
 		      <div class="box-content">
 		      <?php
-		      	if($resultData['transactions']){ 
-		      		foreach ($resultData['transactions'] as $transaction) {
-		      ?>
-		      		<p><a href="<?php echo $transaction['explorer_url']; ?>" target="_blank"><?php echo $transaction['transaction_id']; ?></a></p>	
+if ($resultData['transactions']) {
+        foreach ($resultData['transactions'] as $transaction) {
+            ?>
+		      		<p><a href="<?php echo $transaction['explorer_url']; ?>" target="_blank"><?php echo $transaction['transaction_id']; ?></a></p>
 		      <?php }
-		   		} else{
-		   	?>
+    } else {
+        ?>
 		      		<p>-</p>
 		      <?php
-		   		}
-		   	?>
+}
+    ?>
 		      </div>
 		   </div>
 		</div>
 		<?php
-			if($resultData['btnShow'] == 1){
-		?>
+if ($resultData['btnShow'] == 1) {
+        ?>
 		<div class="block-content">
 			<div class="box">
-				<a href="<?php echo $resultData['baseurl'];?>coinremitter/invoice/index/order/<?php echo $resultData['order_id'];?>" class="action primary">Pay Now</a>
+				<a href="<?php echo $resultData['baseurl']; ?>coinremitter/invoice/index/order/<?php echo $resultData['order_id']; ?>" class="action primary">Pay Now</a>
 			</div>
 		</div>
 		<?php
-			}
-		?>
+}
+    ?>
 	</div>
-<?php } ?>
+<?php }?>

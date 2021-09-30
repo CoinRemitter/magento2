@@ -1,11 +1,12 @@
 <?php
 namespace Coinremitter\Checkout\Setup;
-use Magento\Framework\Setup\UpgradeSchemaInterface;
+
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\SchemaSetupInterface;
+use Magento\Framework\Setup\UpgradeSchemaInterface;
 
 class UpgradeSchema implements UpgradeSchemaInterface
-{   
+{
 
     protected $_debug_logger;
 
@@ -28,42 +29,42 @@ class UpgradeSchema implements UpgradeSchemaInterface
         if (version_compare($context->getVersion(), '1.0.3', '<')) {
 
             $installer->getConnection()->addColumn(
-            $installer->getTable('coinremitter_order'),
+                $installer->getTable('coinremitter_order'),
                 'address',
                 [
                     'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
                     'length' => 255,
                     ['nullable' => true, 'default' => ''],
                     'comment' => 'Address',
-                    'after' => 'invoice_id'
+                    'after' => 'invoice_id',
                 ]
             );
             $this->_debug_logger->debug('Add Address Field!!!');
             $installer->getConnection()->addColumn(
-            $installer->getTable('coinremitter_order'),
+                $installer->getTable('coinremitter_order'),
                 'address_qrcode',
                 [
                     'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
                     'length' => 255,
                     ['nullable' => true, 'default' => ''],
                     'comment' => 'QR Code Image',
-                    'after' => 'address'
+                    'after' => 'address',
                 ]
             );
             $this->_debug_logger->debug('Add Qr Code Field!!!');
             $installer->getConnection()->addColumn(
-            $installer->getTable('coinremitter_payment'),
+                $installer->getTable('coinremitter_payment'),
                 'address',
                 [
                     'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
                     'length' => 255,
                     ['nullable' => true, 'default' => ''],
                     'comment' => 'Address',
-                    'after' => 'invoice_id'
+                    'after' => 'invoice_id',
                 ]
             );
             $installer->getConnection()->changeColumn(
-            $installer->getTable('coinremitter_payment'),
+                $installer->getTable('coinremitter_payment'),
                 'expire_on',
                 'expire_on',
                 [
@@ -71,11 +72,11 @@ class UpgradeSchema implements UpgradeSchemaInterface
                     'length' => 255,
                     ['nullable' => true, 'default' => ''],
                     'comment' => 'Expire Time',
-                    'after' => 'status'
+                    'after' => 'status',
                 ]
             );
             $installer->getConnection()->changeColumn(
-            $installer->getTable('coinremitter_payment'),
+                $installer->getTable('coinremitter_payment'),
                 'created_at',
                 'created_at',
                 [
@@ -83,20 +84,20 @@ class UpgradeSchema implements UpgradeSchemaInterface
                     'length' => '',
                     ['nullable' => true, 'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT_UPDATE],
                     'comment' => 'Invoice Created Date',
-                    'after' => 'expire_on'
+                    'after' => 'expire_on',
                 ]
             );
 
             $this->_debug_logger->debug('Add Webhook Start!!!');
             $table = $installer->getConnection()
-            ->newTable($installer->getTable('coinremitter_webhook'))
-            ->addColumn(
-                'id',
-                \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
-                null,
-                ['identity' => true, 'unsigned' => true, 'nullable' => false, 'primary' => true],
-                'ID'
-            )->addColumn(
+                ->newTable($installer->getTable('coinremitter_webhook'))
+                ->addColumn(
+                    'id',
+                    \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+                    null,
+                    ['identity' => true, 'unsigned' => true, 'nullable' => false, 'primary' => true],
+                    'ID'
+                )->addColumn(
                 'address',
                 \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
                 255,
@@ -128,13 +129,13 @@ class UpgradeSchema implements UpgradeSchemaInterface
                 'Paid Amount'
             )->addColumn(
                 'coin',
-                 \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+                \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
                 255,
                 ['nullable' => false, 'default' => ''],
                 'Coin'
             )->addColumn(
                 'confirmations',
-                 \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+                \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
                 255,
                 ['nullable' => false, 'default' => 0],
                 'Transaction confirmations'
@@ -148,13 +149,13 @@ class UpgradeSchema implements UpgradeSchemaInterface
                 'created_at',
                 \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
                 255,
-                ['nullable' => false,'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT_UPDATE],
+                ['nullable' => false, 'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT_UPDATE],
                 'Invoice Created Date'
             )->addColumn(
                 'updated_at',
                 \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
                 255,
-                ['nullable' => false,'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT_UPDATE],
+                ['nullable' => false, 'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT_UPDATE],
                 'Invoice Updated Date'
             );
 
@@ -168,7 +169,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
             [
                 'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
                 'length' => 255,
-                'comment' => 'Wallet Coin Name'
+                'comment' => 'Wallet Coin Name',
             ]
         );
         $installer->getConnection()->addColumn(
@@ -177,7 +178,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
             [
                 'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
                 'length' => 255,
-                'comment' => 'Wallet Coin Name'
+                'comment' => 'Wallet Coin Name',
             ]
         );
 

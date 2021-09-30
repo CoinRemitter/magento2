@@ -31,19 +31,19 @@ class CoinremitterCheckout extends \Magento\Payment\Model\Method\AbstractMethod
     /*protected $_formBlockType = 'Coinremitter\Checkout\Block\Form\Pickpay';
 
     protected $_infoBlockType = 'Coinremitter\Checkout\Block\Info\Pickpay';*/
-  
+
     /**
      * Assign data to info model instance
      *
      * @param \Magento\Framework\DataObject|mixed $data
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
-    */
+     */
     public function assignData(\Magento\Framework\DataObject $data)
     {
         /*$additionalData = $data->getData(PaymentInterface::KEY_ADDITIONAL_DATA);
         if (!is_object($additionalData)) {
-            $additionalData = new DataObject($additionalData ?: []);
+        $additionalData = new DataObject($additionalData ?: []);
         }
 
         $this->getInfoInstance()->setWalletCoin($additionalData->getWalletCoin());
@@ -51,12 +51,10 @@ class CoinremitterCheckout extends \Magento\Payment\Model\Method\AbstractMethod
 
         parent::assignData($data);
         $infoInstance = $this->getInfoInstance();
-       
-        
-        if(is_array($data->getData('additional_data')))
-        {
+
+        if (is_array($data->getData('additional_data'))) {
             $additionalData = $data->getData('additional_data');
-            $pickPayLocation = isset($additionalData['transaction_result'])?$additionalData['transaction_result']:"";
+            $pickPayLocation = isset($additionalData['transaction_result']) ? $additionalData['transaction_result'] : "";
             $infoInstance->setAdditionalInformation('transaction_result', $pickPayLocation);
             $data->setTransactionResult($pickPayLocation);
             $infoInstance->setTransactionResult($pickPayLocation);

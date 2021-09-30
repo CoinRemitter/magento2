@@ -7,7 +7,7 @@ class InstallSchema implements \Magento\Framework\Setup\InstallSchemaInterface
     {
         $installer = $setup;
         $installer->startSetup();
-          
+
         $table = $installer->getConnection()->newTable(
             $installer->getTable('coinremitter_wallets')
         )->addColumn(
@@ -50,34 +50,32 @@ class InstallSchema implements \Magento\Framework\Setup\InstallSchemaInterface
             'is_valid',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
             1,
-            ['nullable' => false,'default' => '1'],
+            ['nullable' => false, 'default' => '1'],
             '1 on valid wallet else 0'
         )->addColumn(
             'created_at',
             \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
             255,
-            ['nullable' => false,'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT_UPDATE],
+            ['nullable' => false, 'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT_UPDATE],
             'Created At Date'
         )->addColumn(
             'updated_at',
             \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
             255,
-            ['nullable' => false,'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT_UPDATE],
+            ['nullable' => false, 'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT_UPDATE],
             'Updated At Date'
         );
         $installer->getConnection()->createTable($table);
 
-
-
         $table = $installer->getConnection()
-        ->newTable($installer->getTable('coinremitter_order'))
-        ->addColumn(
-            'id',
-            \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
-            null,
-            ['identity' => true, 'unsigned' => true, 'nullable' => false, 'primary' => true],
-            'ID'
-        )->addColumn(
+            ->newTable($installer->getTable('coinremitter_order'))
+            ->addColumn(
+                'id',
+                \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+                null,
+                ['identity' => true, 'unsigned' => true, 'nullable' => false, 'primary' => true],
+                'ID'
+            )->addColumn(
             'order_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
             255,
@@ -123,27 +121,26 @@ class InstallSchema implements \Magento\Framework\Setup\InstallSchemaInterface
             'created_at',
             \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
             255,
-            ['nullable' => false,'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT_UPDATE],
+            ['nullable' => false, 'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT_UPDATE],
             'Created At Date'
         )->addColumn(
             'updated_at',
             \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
             255,
-            ['nullable' => false,'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT_UPDATE],
+            ['nullable' => false, 'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT_UPDATE],
             'Updated At Date'
         );
         $installer->getConnection()->createTable($table);
 
-
         $table = $installer->getConnection()
-        ->newTable($installer->getTable('coinremitter_payment'))
-        ->addColumn(
-            'id',
-            \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
-            null,
-            ['identity' => true, 'unsigned' => true, 'nullable' => false, 'primary' => true],
-            'ID'
-        )->addColumn(
+            ->newTable($installer->getTable('coinremitter_payment'))
+            ->addColumn(
+                'id',
+                \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+                null,
+                ['identity' => true, 'unsigned' => true, 'nullable' => false, 'primary' => true],
+                'ID'
+            )->addColumn(
             'order_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
             255,
@@ -187,37 +184,37 @@ class InstallSchema implements \Magento\Framework\Setup\InstallSchemaInterface
             'Paid Amount'
         )->addColumn(
             'base_currancy',
-           \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
             255,
             ['nullable' => false, 'default' => ''],
             'Base Currancy'
         )->addColumn(
             'description',
-           \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
             255,
             ['nullable' => false, 'default' => ''],
             'Description'
         )->addColumn(
             'coin',
-             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
             255,
             ['nullable' => false, 'default' => ''],
             'Coin'
         )->addColumn(
             'payment_history',
-             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
             '2M',
             ['nullable' => true, 'default' => ''],
             'Payment History'
         )->addColumn(
             'conversion_rate',
-             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
             '2M',
             ['nullable' => true, 'default' => ''],
             'Conversion Rate'
         )->addColumn(
             'invoice_url',
-              \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
             255,
             ['nullable' => false, 'default' => ''],
             'Invoice Url'
@@ -231,26 +228,26 @@ class InstallSchema implements \Magento\Framework\Setup\InstallSchemaInterface
             'expire_on',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
             255,
-            ['nullable' => true,'default' => ''],
+            ['nullable' => true, 'default' => ''],
             'Invoice Expire time'
         )->addColumn(
             'created_at',
             \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
             255,
-            ['nullable' => false,'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT_UPDATE],
+            ['nullable' => false, 'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT_UPDATE],
             'Invoice Created Date'
         );
         $installer->getConnection()->createTable($table);
 
         $table = $installer->getConnection()
-        ->newTable($installer->getTable('coinremitter_webhook'))
-        ->addColumn(
-            'id',
-            \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
-            null,
-            ['identity' => true, 'unsigned' => true, 'nullable' => false, 'primary' => true],
-            'ID'
-        )->addColumn(
+            ->newTable($installer->getTable('coinremitter_webhook'))
+            ->addColumn(
+                'id',
+                \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+                null,
+                ['identity' => true, 'unsigned' => true, 'nullable' => false, 'primary' => true],
+                'ID'
+            )->addColumn(
             'address',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
             255,
@@ -282,13 +279,13 @@ class InstallSchema implements \Magento\Framework\Setup\InstallSchemaInterface
             'Paid Amount'
         )->addColumn(
             'coin',
-             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
             255,
             ['nullable' => false, 'default' => ''],
             'Coin'
         )->addColumn(
             'confirmations',
-             \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+            \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
             255,
             ['nullable' => false, 'default' => 0],
             'Transaction confirmations'
@@ -302,16 +299,16 @@ class InstallSchema implements \Magento\Framework\Setup\InstallSchemaInterface
             'created_at',
             \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
             255,
-            ['nullable' => false,'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT_UPDATE],
+            ['nullable' => false, 'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT_UPDATE],
             'Invoice Created Date'
         )->addColumn(
             'updated_at',
             \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
             255,
-            ['nullable' => false,'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT_UPDATE],
+            ['nullable' => false, 'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT_UPDATE],
             'Invoice Updated Date'
         );
-        
+
         $installer->getConnection()->createTable($table);
 
         $installer->endSetup();

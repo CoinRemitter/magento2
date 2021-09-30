@@ -1,25 +1,37 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
- * See COPYING.txt for license details.
- */
+* Copyright © 2015 Magento. All rights reserved.
+* See COPYING.txt for license details.
+*/
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../Store/etc/config.xsd">
-    <default>
-        <payment>
-            <coinremitter_checkout>
-                <active>1</active>
-                <title>Pay Using Cryptocurrency</title>
-                <description>
-                    <![CDATA[Secure, anonymous payment with virtual currency. <a target="_blank" href="https://bitcoin.org/">What is bitcoin?</a> ]]>
-                </description>
-                <order_status>complete</order_status>
-                <ex_rate>1</ex_rate>
-                <invoice_expiry>60</invoice_expiry>
-                <model>Coinremitter\Checkout\Model\CoinremitterCheckout</model>
-            </coinremitter_checkout>
-            <!-- checkout_coinremitter-config -->
-        </payment>
-    </default>
+	<default>
+		<payment>
+			<coinremitter_checkout>
+				<active>
+					1
+				</active>
+				<title>
+					Pay Using Cryptocurrency
+				</title>
+				<description>
+					<![CDATA[Secure, anonymous payment with virtual currency. <a target="_blank" href="https://bitcoin.org/">What is bitcoin?</a> ]]>
+				</description>
+				<order_status>
+					complete
+				</order_status>
+				<ex_rate>
+					1
+				</ex_rate>
+				<invoice_expiry>
+					60
+				</invoice_expiry>
+				<model>
+					Coinremitter\Checkout\Model\CoinremitterCheckout
+				</model>
+			</coinremitter_checkout>
+			<!-- checkout_coinremitter-config -->
+		</payment>
+	</default>
 </config>

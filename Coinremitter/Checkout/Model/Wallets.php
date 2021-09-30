@@ -12,7 +12,7 @@ use Magento\Framework\Model\AbstractModel;
 /**
  * Pay In Store payment method model
  */
-class Wallets extends AbstractModel implements WalletsInterface,IdentityInterface
+class Wallets extends AbstractModel implements WalletsInterface, IdentityInterface
 {
 
     /**

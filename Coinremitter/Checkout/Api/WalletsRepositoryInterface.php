@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Coinremitter\Checkout\Api;
 
 interface WalletsRepositoryInterface
@@ -16,6 +15,6 @@ interface WalletsRepositoryInterface
     public function getById($walletId);
 
     public function delete(\Coinremitter\Checkout\Api\Data\WalletsInterface $crypto);
-    
+
     public function deleteById($walletId);
 }

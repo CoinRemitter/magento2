@@ -2,8 +2,6 @@
 
 namespace Coinremitter\Checkout\Model\ResourceModel;
 
-use Magento\Framework\Model\AbstractModel;
-
 class CoinremitterPayment extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**

@@ -2,7 +2,6 @@
 
 namespace Coinremitter\Checkout\Model\Wallets;
 
-use Magento\Framework\App\RequestInterface;
 class Api
 {
 
@@ -10,7 +9,8 @@ class Api
     {
     }
 
-    function get_order_data($orer_id){
+    public function get_order_data($orer_id)
+    {
 
     }
 }

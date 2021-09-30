@@ -5,9 +5,9 @@
  */
 namespace Coinremitter\Checkout\Model\ResourceModel\Wallets\Grid;
 
+use Coinremitter\Checkout\Model\ResourceModel\Wallets\Collection as WalletsCollection;
 use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\Search\AggregationInterface;
-use Coinremitter\Checkout\Model\ResourceModel\Wallets\Collection as WalletsCollection;
 
 /**
  * Collection for displaying grid of cms blocks
@@ -75,7 +75,6 @@ class Collection extends WalletsCollection implements SearchResultInterface
     {
         $this->aggregations = $aggregations;
     }
-
 
     /**
      * Retrieve all ids for collection

@@ -14,12 +14,12 @@ class WalletsActions extends Column
     const ROW_DELETE_URL = 'coinremitter/wallets/delete';
     /** @var UrlInterface */
     protected $_urlBuilder;
- 
+
     /**
      * @var string
      */
     private $_editUrl;
- 
+
     /**
      * @param ContextInterface   $context
      * @param UiComponentFactory $uiComponentFactory
@@ -35,13 +35,12 @@ class WalletsActions extends Column
         array $components = [],
         array $data = [],
         $editUrl = self::ROW_EDIT_URL
-    ) 
-    {
+    ) {
         $this->_urlBuilder = $urlBuilder;
         $this->_editUrl = $editUrl;
         parent::__construct($context, $uiComponentFactory, $components, $data);
     }
- 
+
     /**
      * Prepare Data Source.
      *
@@ -57,7 +56,7 @@ class WalletsActions extends Column
                 if (isset($item['id'])) {
                     $item[$name]['edit'] = [
                         'href' => $this->_urlBuilder->getUrl(
-                            $this->_editUrl, 
+                            $this->_editUrl,
                             ['id' => $item['id']]
                         ),
                         'label' => __('Edit'),
@@ -66,19 +65,19 @@ class WalletsActions extends Column
                     $title = $item['name'];
                     $item[$name]['delete'] = [
                         'href' => $this->_urlBuilder->getUrl(
-                            self::ROW_DELETE_URL, 
+                            self::ROW_DELETE_URL,
                             ['id' => $item['id']]
                         ),
                         'label' => __('Delete'),
-                        'confirm'=>[
-                            'title'=>__('Delete %1', $title),
-                            'message'=>__('Are you sure you want to delete a %1 wallet?', $title)
+                        'confirm' => [
+                            'title' => __('Delete %1', $title),
+                            'message' => __('Are you sure you want to delete a %1 wallet?', $title),
                         ],
                     ];
                 }
             }
         }
- 
+
         return $dataSource;
     }
 }

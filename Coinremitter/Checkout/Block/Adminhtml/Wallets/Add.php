@@ -20,8 +20,7 @@ class Add extends \Magento\Backend\Block\Widget\Form\Container
         \Magento\Backend\Block\Widget\Context $context,
         \Magento\Framework\Registry $registry,
         array $data = []
-    )
-    {
+    ) {
         $this->_coreRegistry = $registry;
         parent::__construct($context, $data);
     }

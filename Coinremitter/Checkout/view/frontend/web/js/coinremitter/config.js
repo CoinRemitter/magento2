@@ -72,13 +72,13 @@ if (window.location.pathname.indexOf('sales/guest/form') != -1) {
     //autofill form
     if (document.cookie.indexOf('oar_order_id') !== -1) {
         setTimeout(function () {
-                jQuery("#oar-order-id").val(getCookie("oar_order_id"))
-                jQuery("#oar-billing-lastname").val(getCookie("oar_billing_lastname"))
-                jQuery("#oar_email").val(getCookie("oar_email"))
-                deleteCookie("oar_order_id")
-                deleteCookie("oar_billing_lastname")
-                deleteCookie("oar_email")
-            },
+            jQuery("#oar-order-id").val(getCookie("oar_order_id"))
+            jQuery("#oar-billing-lastname").val(getCookie("oar_billing_lastname"))
+            jQuery("#oar_email").val(getCookie("oar_email"))
+            deleteCookie("oar_order_id")
+            deleteCookie("oar_billing_lastname")
+            deleteCookie("oar_email")
+        },
             1500);
     }
 }

@@ -16,8 +16,7 @@ class QuoteToOrderObserver implements ObserverInterface
 
     public function __construct(
         \Magento\Checkout\Model\Cart $cart
-    )
-    {
+    ) {
         $this->cart = $cart;
     }
 

@@ -43,44 +43,44 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
             $this->buttonList->add(
                 "save",
                 [
-                    'label'=>__('Update Wallet'),
+                    'label' => __('Update Wallet'),
                     'class' => 'save primary',
                     'data_attribute' => [
                         'mage-init' => ['button' => ['event' => 'save']],
                         'form-role' => 'save',
                     ],
                     'sort_order' => 90,
-                    'onclick'=>'newWallet()'
+                    'onclick' => 'newWallet()',
                 ],
                 10
             );
-        }else{
+        } else {
 
             $coins = \Magento\Framework\App\ObjectManager::getInstance()->get('Coinremitter\Checkout\Model\Config\Source\Coin');
 
             $values = $coins->toOptionArray();
 
-            if($values['flag'] == 1){
+            if ($values['flag'] == 1) {
                 // $this->buttonList->update("save", "label", __("Save Wallet"));
                 $this->buttonList->add(
                     "save",
                     [
-                        'label'=>__('Save Wallet'),
+                        'label' => __('Save Wallet'),
                         'class' => 'save primary',
                         'data_attribute' => [
                             'mage-init' => ['button' => ['event' => 'save']],
                             'form-role' => 'save',
                         ],
                         'sort_order' => 90,
-                        'onclick'=>'newWallet()'
+                        'onclick' => 'newWallet()',
                     ],
                     10
                 );
 
-            }else{
+            } else {
                 $this->buttonList->remove('reset');
             }
-            
+
         }
         $this->_formScripts[] = "
 
@@ -117,7 +117,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
     }
 
     /*public function _getSaveUrl(){
-        return $this->getUrl('coinremitter/wallets/save');
+    return $this->getUrl('coinremitter/wallets/save');
     }*/
 
     public function getFormActionUrl()
@@ -136,7 +136,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      */
     public function getFormHtml()
     {
-       // get the current form as html content.
+        // get the current form as html content.
         $html = parent::getFormHtml();
         //Append the phtml file after the form content.
         return $html;
@@ -151,14 +151,14 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
     {
 
         /*$this->_formScripts[] = "
-            require([
-                'jquery',
-                'mage/mage',
-                'knockout'
-            ], function ($){
-                
-            });
-               
+        require([
+        'jquery',
+        'mage/mage',
+        'knockout'
+        ], function ($){
+
+        });
+
         ";*/
         return parent::_prepareLayout();
     }

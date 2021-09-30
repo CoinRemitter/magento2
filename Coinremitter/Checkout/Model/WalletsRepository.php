@@ -73,7 +73,7 @@ class WalletsRepository implements WalletsRepositoryInterface
         }
         return $wallet;
     }
-    
+
     public function delete(\Coinremitter\Checkout\Api\Data\WalletsInterface $wallet)
     {
         try {

@@ -18,7 +18,7 @@ define(
             },
 
             /** Returns send check to info */
-            getMailingAddress: function() {
+            getMailingAddress: function () {
                 return window.checkoutConfig.payment.checkmo.mailingAddress;
             },
             initObservable: function () {
@@ -30,11 +30,11 @@ define(
                 return this;
             },
 
-            getCode: function() {
+            getCode: function () {
                 return 'coinremitter_checkout';
             },
 
-            getData: function() {
+            getData: function () {
                 return {
                     'method': this.item.method,
                     'additional_data': {
@@ -43,21 +43,21 @@ define(
                 };
             },
 
-            getTransactionResults: function() {
-               return _.map(window.checkoutConfig.payment.sample_gateway.transactionResults, function(value, key) {
+            getTransactionResults: function () {
+                return _.map(window.checkoutConfig.payment.sample_gateway.transactionResults, function (value, key) {
                     return {
                         'value': value.coin,
-                        'transaction_result': value.coin +' - '+value.coin_name
+                        'transaction_result': value.coin + ' - ' + value.coin_name
                     }
                 });
             },
 
-            getDescription: function() {
+            getDescription: function () {
                 return window.checkoutConfig.payment.sample_gateway.payment_description;
             },
 
-            isWallets: function(){
-                return window.checkoutConfig.payment.sample_gateway.isWallets;   
+            isWallets: function () {
+                return window.checkoutConfig.payment.sample_gateway.isWallets;
             }
         });
     }

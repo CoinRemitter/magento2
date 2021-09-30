@@ -33,8 +33,7 @@ class InstallData implements InstallDataInterface
     public function __construct(
         // CustomerSetupFactory $customerSetupFactory,
         \Magento\Framework\Stdlib\DateTime\DateTime $date
-    )
-    {
+    ) {
         // $this->customerSetupFactory = $customerSetupFactory;
         $this->date = $date;
     }
@@ -45,6 +44,6 @@ class InstallData implements InstallDataInterface
      */
     public function install(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
-        
+
     }
 }

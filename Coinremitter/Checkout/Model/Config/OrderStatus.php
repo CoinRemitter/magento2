@@ -17,7 +17,7 @@ class OrderStatus implements \Magento\Framework\Option\ArrayInterface
             ['value' => 'complete', 'label' => __('Complete')],
             ['value' => 'canceled', 'label' => __('Cancelled')],
             ['value' => 'refunded', 'label' => __('Refunded')],
-            ['value' => 'closed', 'label' => __('Closed')]
+            ['value' => 'closed', 'label' => __('Closed')],
         ];
     }
 }

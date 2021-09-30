@@ -2,8 +2,8 @@
 
 namespace Coinremitter\Checkout\Controller\Adminhtml\Wallets;
 
-use Magento\Backend\App\Action;
 use Coinremitter\Checkout\Model\Wallets;
+use Magento\Backend\App\Action;
 
 class Delete extends \Magento\Backend\App\Action
 {
@@ -15,7 +15,7 @@ class Delete extends \Magento\Backend\App\Action
         if ($id) {
             $title = "";
             try {
-                $model = $this->_objectManager->create(\Coinremitter\Checkout\Model\Wallets::class);        
+                $model = $this->_objectManager->create(\Coinremitter\Checkout\Model\Wallets::class);
                 $model->load($id);
                 $title = $model->getTitle();
                 $model->delete();
@@ -24,17 +24,17 @@ class Delete extends \Magento\Backend\App\Action
 
                 $this->_eventManager->dispatch(
                     'adminhtml_wallets_on_delete',
-                    ['title'=>$title, 'status'=>'success']
+                    ['title' => $title, 'status' => 'success']
                 );
                 return $resultRedirect->setPath('*/*/');
-            } catch (\Exception $e){
+            } catch (\Exception $e) {
                 $this->_eventManager->dispatch(
                     'adminhtml_wallets_on_delete',
-                    ['title'=>$title, 'status'=>'fail']
+                    ['title' => $title, 'status' => 'fail']
                 );
 
                 $this->messageManager->addErrorMessage($e->getMessage());
-                return $resultRedirect->setPath('*/*/edit', ['id'=>$id]);
+                return $resultRedirect->setPath('*/*/edit', ['id' => $id]);
             }
         }
         $this->messageManager->addErrorMessage(__('we can not find a wallet to delete'));

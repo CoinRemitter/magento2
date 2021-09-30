@@ -172,7 +172,7 @@ define([
         selectPaymentMethod: function () {
             selectPaymentMethodAction(this.getData());
             checkoutData.setSelectedPaymentMethod(this.item.method);
-            console.log('selectPaymentMethod');  
+            console.log('selectPaymentMethod');
             return true;
         },
 

@@ -7,7 +7,7 @@ var config = {
     shim: {
         //dependency third-party lib
         "select_coin": {
-             deps: [
+            deps: [
                 'jquery' //dependency jquery will load first
             ]
         }

@@ -2,11 +2,12 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
 	<head>
 		<css src="Coinremitter_Checkout::css/cr_plugin.css" />
-		<script src="Coinremitter_Checkout::js/invoice/paymenthistory.js"/>
+		<script src="Coinremitter_Checkout::js/invoice/paymenthistory.js" />
 	</head>
-    <body>
-        <referenceContainer name="content">
-            <block class="Coinremitter\Checkout\Block\Invoice" name="coinremitter_invoice" template="Coinremitter_Checkout::invoice.phtml" cacheable="false"></block>
-        </referenceContainer>
-    </body>
+	<body>
+		<referenceContainer name="content">
+			<block class="Coinremitter\Checkout\Block\Invoice" name="coinremitter_invoice" template="Coinremitter_Checkout::invoice.phtml" cacheable="false">
+			</block>
+		</referenceContainer>
+	</body>
 </page>

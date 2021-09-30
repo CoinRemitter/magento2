@@ -1,6 +1,6 @@
-define(["jquery"], function($){
+define(["jquery"], function ($) {
 	"user strict";
-	return function(config, element){
+	return function (config, element) {
 		alert(config.message);
 	}
 })

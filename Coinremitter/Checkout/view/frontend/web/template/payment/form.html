@@ -6,53 +6,52 @@
 -->
 <div class="payment-method" data-bind="css: {'_active': (getCode() == isChecked())}">
     <div class="payment-method-title field choice">
-        <input type="radio"
-               name="payment[method]"
-               class="radio"
-               data-bind="attr: {'id': getCode()}, value: getCode(), checked: isChecked, click: selectPaymentMethod, visible: isRadioButtonVisible()"/>
+        <input type="radio" name="payment[method]" class="radio"
+            data-bind="attr: {'id': getCode()}, value: getCode(), checked: isChecked, click: selectPaymentMethod, visible: isRadioButtonVisible()" />
         <label data-bind="attr: {'for': getCode()}" class="label"><span data-bind="text: getTitle()"></span></label>
     </div>
     <div class="payment-method-content">
         <!-- ko foreach: getRegion('messages') -->
-        <!-- ko template: getTemplate() --><!-- /ko -->
+        <!-- ko template: getTemplate() -->
+        <!-- /ko -->
         <!--/ko-->
         <form id="walletcoin-form" class="form form-walletcoin" data-role="walletcoin-form">
             <div class="control" style="margin-bottom: 20px;">
-                <label data-bind="attr: {'for': getCode()}" class="label"><span data-bind="html: getDescription()"></span></label>
+                <label data-bind="attr: {'for': getCode()}" class="label"><span
+                        data-bind="html: getDescription()"></span></label>
             </div>
 
             <div class="payment-method-billing-address">
                 <!-- ko foreach: $parent.getRegion(getBillingAddressFormName()) -->
-                <!-- ko template: getTemplate() --><!-- /ko -->
+                <!-- ko template: getTemplate() -->
+                <!-- /ko -->
                 <!--/ko-->
             </div>
-           <div class="control">
+            <div class="control">
                 <!-- ko if: isWallets() -->
-                    <select id="transaction_result" name="payment[transaction_result]"
-                            class="select"
-                            data-bind="
+                <select id="transaction_result" name="payment[transaction_result]" class="select" data-bind="
                                       options: getTransactionResults(),
                                       optionsValue: 'value',
                                       optionsText: 'transaction_result',
                                       value: transactionResult" style="width: 300px;">
-                    </select>
+                </select>
                 <!-- /ko -->
                 <!-- ko if: !isWallets() -->
-                    <label data-bind="attr: {'for': getCode()}" class="label" style="color: red;"><span>You haven't created wallet yet. Go to the admin panel and create wallet first to make Transaction.</span></label>
+                <label data-bind="attr: {'for': getCode()}" class="label" style="color: red;"><span>You haven't created
+                        wallet yet. Go to the admin panel and create wallet first to make Transaction.</span></label>
                 <!-- /ko -->
             </div>
         </form>
         <div class="checkout-agreements-block">
             <!-- ko foreach: $parent.getRegion('before-place-order') -->
-                <!-- ko template: getTemplate() --><!-- /ko -->
+            <!-- ko template: getTemplate() -->
+            <!-- /ko -->
             <!--/ko-->
         </div>
         <!-- ko if: isWallets() -->
         <div class="actions-toolbar">
             <div class="primary">
-                <button class="action primary checkout"
-                        type="submit"
-                        data-bind="
+                <button class="action primary checkout" type="submit" data-bind="
                         click: placeOrder,
                         attr: {title: $t('Place Order')},
                         css: {disabled: !isPlaceOrderActionAllowed()},
