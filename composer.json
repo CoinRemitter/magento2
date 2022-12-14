@@ -1,0 +1,28 @@
+{
+    "name": "coinremitter/magento2",
+    "description": "Official coinremitter checkout plugin for magento2",
+    "type": "magento2-module",
+    "license": [
+     "GPL-3.0",
+     "MIT"
+ ],
+    "version":"1.0.5",
+    "authors": [
+        {
+            "email": "support@coinremitter.com",
+            "name": "Coinremitter"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "php": ">=7.3"
+    },
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "Coinremitter\\Checkout\\": ""
+        }
+    }
+}
