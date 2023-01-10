@@ -142,16 +142,21 @@ class Save extends \Magento\Backend\App\Action
 
             $minimum_value = $data['minimum_value'];
 
+            $url = $this->api_base_url."/get-coin-rate";
+            $rate_ras = $this->apiCall->apiCaller($url, \Zend_Http_Client::GET);
+            $coin_price = $rate_ras['data'][$data['coin']]['price'];
+            $ten_usd_price = 10 / $coin_price;
+           
             if($minimum_value == ''){
                 $this->messageManager->addErrorMessage(__('Minimum value field is required'));
                 return $resultRedirect->setPath('*/*/');
                 
-            }else if(!preg_match('/^[0-9]+(\.[0-9]{1,2})?$/', $minimum_value)){
+            }else if(!preg_match('/^[0-9]+(\.[0-9]{1,8})?$/', $minimum_value)){
                 $this->messageManager->addErrorMessage(__('Invoice Minimum value field is invalid'));
                 return $resultRedirect->setPath('*/*/');
 
-            }else if($minimum_value < 0.01 || $minimum_value >= 1000000){
-                $this->messageManager->addErrorMessage(__('Invoice Minimum value should be between 0.01 to 1000000'));
+            }else if($minimum_value < $ten_usd_price){
+                $this->messageManager->addErrorMessage(__('Invoice Minimum value should be greater than '.$ten_usd_price));
                 return $resultRedirect->setPath('*/*/');
             }
 

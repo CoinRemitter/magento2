@@ -69,90 +69,85 @@ public function execute(\Magento\Framework\Event\Observer $observer)
 
          if (!empty($result)) {
             $wallet =$result[0];
-            $wallet_data = [
+            
+            $currencyCode = $order->getOrderCurrencyCode();
+            $grandTotal = $order->getGrandTotal();
+            $invoice_exchange_rate = $wallet['exchange_rate_multiplier'];
+            if($invoice_exchange_rate == 0 || $invoice_exchange_rate == ''){
+               $invoice_exchange_rate = 1;
+            }
+            $amount = $grandTotal*$invoice_exchange_rate;
+            $conversionAmount = [
                "api_key" => $wallet['api_key'],
                "password" => $wallet['password'],
                "coin" => $selectcoin,
+               "fiat_symbol" => $currencyCode,
+               "fiat_amount" => $amount
             ];
+            $currencyConversion = $this->CR_get_fiat_to_crypto_rate($conversionAmount);
 
-            $newAddress = $this->CR_get_new_address($wallet_data);
-
-            if($newAddress['flag'] == 1){
-               
-               $currencyCode = $order->getOrderCurrencyCode();
-               $grandTotal = $order->getGrandTotal();
-               $invoice_exchange_rate = $wallet['exchange_rate_multiplier'];
-               if($invoice_exchange_rate == 0 || $invoice_exchange_rate == ''){
-                  $invoice_exchange_rate = 1;
-               }
-               $amount = $grandTotal*$invoice_exchange_rate;
-               $conversionAmount = [
-                  "api_key" => $wallet['api_key'],
-                  "password" => $wallet['password'],
-                  "coin" => $selectcoin,
-                  "fiat_symbol" => $currencyCode,
-                  "fiat_amount" => $amount
-               ];
-
-               $currencyConversion = $this->CR_get_fiat_to_crypto_rate($conversionAmount);
-
-               if($currencyConversion['flag'] == 1){
-
-                  if($selectcoin == "DOGE"){
-                     $coinAmount = number_format($currencyConversion['data']['crypto_amount'],5,'.','');
-                  }else{
-                     $coinAmount = $currencyConversion['data']['crypto_amount'];
-                  }
-
-                  if($currencyConversion['data']['crypto_amount'] < $wallet['minimum_value']){
-                     $msg = 'Opps! Somethig went wrong!';
-                     $this->_messageManager->addError($msg);
-                     $cartUrl = $this->_url->getUrl('checkout/cart/index');
-                     $this->_redirect->redirect($this->_response, $cartUrl);
-                     
-                  }
+            if($currencyConversion['flag'] == 1){
+               if($currencyConversion['data']['crypto_amount'] >= $wallet['minimum_value']){
+                  $wallet_data = [
+                     "api_key" => $wallet['api_key'],
+                     "password" => $wallet['password'],
+                     "coin" => $selectcoin,
+                  ];
       
-                  $db_order = [
-                     'order_id' => $order_id,
-                     'address' => $newAddress['data']['address'],
-                     'crp_amount' => $coinAmount,
-                     'payment_status' => 0,
-                     'address_qrcode' => $newAddress['data']['qr_code'],
-                  ];
-                  $this->dataInsertDB('coinremitter_order',$db_order);
-
-                  $invoice_expire = $this->getStoreConfig('payment/coinremitter_checkout/invoice_expiry');
-                  if($invoice_expire == '' || $invoice_expire == null || $invoice_expire == 0){
-                     $expire_on ="";
-                  }else{
-                     $newtimestamp = strtotime(date('Y-m-d H:i:s').' + '.$invoice_expire.' minute');
-                     $expire_on = date('Y-m-d H:i:s', $newtimestamp);
+                  $newAddress = $this->CR_get_new_address($wallet_data);
+                  
+                  
+   
+                  if($newAddress['flag'] == 1){
+   
+                     if($selectcoin == "DOGE"){
+                        $coinAmount = number_format($currencyConversion['data']['crypto_amount'],5,'.','');
+                     }else{
+                        $coinAmount = $currencyConversion['data']['crypto_amount'];
+                     }
+         
+                     $db_order = [
+                        'order_id' => $order_id,
+                        'address' => $newAddress['data']['address'],
+                        'crp_amount' => $coinAmount,
+                        'payment_status' => 0,
+                        'address_qrcode' => $newAddress['data']['qr_code'],
+                     ];
+                     $this->dataInsertDB('coinremitter_order',$db_order);
+   
+                     $invoice_expire = $this->getStoreConfig('payment/coinremitter_checkout/invoice_expiry');
+                     if($invoice_expire == '' || $invoice_expire == null || $invoice_expire == 0){
+                        $expire_on ="";
+                     }else{
+                        $newtimestamp = strtotime(date('Y-m-d H:i:s').' + '.$invoice_expire.' minute');
+                        $expire_on = date('Y-m-d H:i:s', $newtimestamp);
+                     }
+                     $db_payment = [
+                        'order_id' => $order_id,
+                        'address' => $newAddress['data']['address'],
+                        'total_amount' => $amount,
+                        'base_currancy' => $currencyCode,
+                        'coin' => $selectcoin,
+                        'conversion_rate' => '',
+                        'status' => 0,
+                        'expire_on' => $expire_on,
+                        'invoice_name' => $wallet['name'],
+                        'description' => 'Order Id #'.$order->getIncrementId(),
+                        'created_at' => date('Y-m-d H:i:s')
+                     ];
+                     $this->dataInsertDB('coinremitter_payment',$db_payment);
+                     $redirectUrl = $this->getBaseUrl().'coinremitter/invoice/Index/order/'.$order_id;
+                     return $this->_redirect->redirect($this->_response, $redirectUrl);
+   
+                  } else {
+                     $msg=$newAddress['msg'];
                   }
-                  $db_payment = [
-                     'order_id' => $order_id,
-                     'address' => $newAddress['data']['address'],
-                     'total_amount' => $amount,
-                     'base_currancy' => $currencyCode,
-                     'coin' => $selectcoin,
-                     'conversion_rate' => '',
-                     'status' => 0,
-                     'expire_on' => $expire_on,
-                     'invoice_name' => $wallet['name'],
-                     'description' => 'Order Id #'.$order->getIncrementId(),
-                     'created_at' => date('Y-m-d H:i:s')
-                  ];
-                  $this->dataInsertDB('coinremitter_payment',$db_payment);
-                  $redirectUrl = $this->getBaseUrl().'coinremitter/invoice/Index/order/'.$order_id;
-                  return $this->_redirect->redirect($this->_response, $redirectUrl);
-
-               } else {
-                  $msg=$currencyConversion['msg'];
+               }else{
+                  $msg = 'Opps! Somethig went wrong!';
                }
-
             } else {
-               $msg=$newAddress['msg'];
+               $msg=$currencyConversion['msg'];
             }
-
          } else {
             $msg="No Wallet Found";
          }
@@ -163,7 +158,7 @@ public function execute(\Magento\Framework\Event\Observer $observer)
          $registry->unregister('isSecureArea');
          
          if(!isset($msg)){
-            $msg = 'Something went wrong';
+            $msg = 'Opps! Somethig went wrong!';
          }
          $this->_messageManager->addError($msg);
          $cartUrl = $this->_url->getUrl('checkout/cart/index');
