@@ -1,14 +1,11 @@
-CoinRemitter Crypto Payment Gateway
+CoinRemitter Crypto Payment Processor
 ===
 
-Coinremitter Official Bitcoin/Altcoin Payment Gateway for Magento2. Accept Bitcoin, BitcoinCash, Ethereum, Litecoin, Dogecoin, USDTERC20, Tether, Dash etc.
+Coinremitter is [crypto payments](http://coinremitter.com) service for magento. Accept Bitcoin, Tron, Binance (BEP20), BitcoinCash, Ethereum, Litecoin, Dogecoin, Tether, Dash, Monero etc.
 
-**What is Crypto Payment Gateway?**
+**What Is Crypto Payment Processor?**
 
-There are ample of Crypto Coins are available on crypto payment gateways. You can pick one of them and create a wallet of that coins and purchase things from individual’s websites who are accepting payment in crypto coins though. Regardless, All these websites have their own API in order to accept payment from buyers.
-
-Apart from centralized currencies this option creates a traffic for sellers who are willing to do payments in crypto coins. In contrast, doing a payment in crypto coins offer buyers a great market  reputation and has left a foremost impact on sellers and it will also benefit to buyers & sellers if they choose **Coinremitter: Crypto Payment Gateway** as their payment method in doing a business in crypto coins.
-
+Crypto Payment Processor acts as a bridge between the merchant’s website and the cryptocurrency network, allowing the merchant to receive payments in the form of cryptocurrency.
 
 
 Requirements for integration
@@ -19,14 +16,14 @@ Requirements for integration
 Installation of plugin
 ---
 1. Download coinremitter magento plugin (zip file).
-2. Login to your server and unzip it. 
-3. Navigate to magento installation root directory and make a folder in app with name 'code' (if not exist) then put the downloaded magento (Coinremitter) folder into the 'code' folder.
+2. Login to your server and unzip the file and rename it to ‘Checkout’.
+3. Navigate to Magento installation root directory. There You’ll find a folder named ‘code’ situated in the ‘app’ folder.
+In case of the absence of the folder, create a folder in the ‘app’ folder with the name 'code'. Then move the ‘Checkout’ folder into the 'Coinremitter' folder situated in the ‘code’ folder.
 4. Run following commands in terminal to install Coinremitter Plugin
 	* php bin/magento setup:upgrade 
 	* php bin/magento setup:di:compile
 	* php bin/magento setup:static-content:deploy -f
 	* php bin/magento cache:flush
-
 
 5. Plugin installed in your magento store, Follow below instructions to fully activate it.
 
