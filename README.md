@@ -18,7 +18,7 @@ Installation of plugin
 1. Download coinremitter magento plugin (zip file).
 2. Login to your server and unzip the file and rename it to ‘Checkout’.
 3. Navigate to Magento installation root directory. There You’ll find a folder named ‘code’ situated in the ‘app’ folder.
-In case of the absence of the folder, create a folder in the ‘app’ folder with the name 'code'. Then move the ‘Checkout’ folder into the 'Coinremitter' folder situated in the ‘code’ folder.
+In case of the absence of the folder, create a folder in the ‘app’ folder with the name 'code'. Now Create a 'coinremitter' folder into the 'code' folder, Then move the ‘Checkout’ folder into the 'coinremitter' folder.
 4. Run following commands in terminal to install Coinremitter Plugin
 	* php bin/magento setup:upgrade 
 	* php bin/magento setup:di:compile
