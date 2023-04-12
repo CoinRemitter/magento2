@@ -9,6 +9,7 @@ use Magento\Framework\HTTP\ZendClientFactory;
 
 use \Magento\Framework\App\Action\Action;
 use \Magento\Framework\App\Config\ScopeConfigInterface; 
+use Zend\Http\Request;
 class Index extends \Magento\Framework\App\Action\Action
 {
     protected $_scopeConfig;
@@ -229,7 +230,7 @@ class Index extends \Magento\Framework\App\Action\Action
         $api_base_url = $this->apiCall->getApiUrl();
         $data =$param;
         $url = $api_base_url."/".$data['coin']."/get-invoice";
-        $res = $this->apiCall->apiCaller($url, \Zend_Http_Client::POST,$data);
+        $res = $this->apiCall->apiCaller($url, Request::METHOD_POST,$data);
         return $res;
     }
     public function getOrder($_order_id)

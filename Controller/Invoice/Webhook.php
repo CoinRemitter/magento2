@@ -1,6 +1,7 @@
 <?php
 
 namespace Coinremitter\Checkout\Controller\Invoice;
+use Zend\Http\Request;
 
 
 class Webhook extends \Magento\Framework\App\Action\Action {
@@ -180,7 +181,7 @@ public function CR_get_transaction($param){
    $data = $param;
    $url =  $api_base_url."/".$data['coin']."/get-transaction";
    
-   $res = $this->apiCall->apiCaller($url, \Zend_Http_Client::POST,$data);
+   $res = $this->apiCall->apiCaller($url, Request::METHOD_POST,$data);
    return $res;
 }
 

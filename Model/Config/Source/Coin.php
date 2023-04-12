@@ -7,6 +7,7 @@ namespace Coinremitter\Checkout\Model\Config\Source;
 
 use Coinremitter\Checkout\Model\Wallets\Api;
 use Magento\Framework\HTTP\ZendClientFactory;
+use Zend\Http\Request;
 
 class Coin implements \Magento\Framework\Option\ArrayInterface
 {
@@ -51,7 +52,7 @@ class Coin implements \Magento\Framework\Option\ArrayInterface
     function getCoin()
     {
         $url = $this->api_base_url."/get-coin-rate";
-        $data = $this->apiCall->apiCaller($url, \Zend_Http_Client::GET);
+        $data = $this->apiCall->apiCaller($url, Request::METHOD_GET);
 
         $this->_debug_logger->debug('getCoin() in coin : response of api : '. json_encode($data));
         return $data;

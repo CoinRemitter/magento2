@@ -9,6 +9,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Coinremitter\Checkout\Model\Wallets\Api;
 use Magento\Framework\HTTP\ZendClientFactory;
 use Magento\Framework\Encryption\EncryptorInterface;
+use Zend\Http\Request;
 class Save extends \Magento\Backend\App\Action
 {
     /**
@@ -117,8 +118,7 @@ class Save extends \Magento\Backend\App\Action
                 'password'=>$data['password']
             ];
             $url = $this->api_base_url."/".$data['coin']."/get-balance";
-            $res = $this->apiCall->apiCaller($url, \Zend_Http_Client::POST,$postData);
-
+            $res = $this->apiCall->apiCaller($url, Request::METHOD_POST,$postData);
             if (isset($res['flag']) && $res['flag'] != 1) {
                 $this->messageManager->addErrorMessage(__('Invalid Api key or Password.'));
                 return $resultRedirect->setPath('*/*/');
@@ -143,7 +143,7 @@ class Save extends \Magento\Backend\App\Action
             $minimum_value = $data['minimum_value'];
 
             $url = $this->api_base_url."/get-coin-rate";
-            $rate_ras = $this->apiCall->apiCaller($url, \Zend_Http_Client::GET);
+            $rate_ras = $this->apiCall->apiCaller($url, Request::METHOD_GET);
             $coin_price = $rate_ras['data'][$data['coin']]['price'];
             $ten_usd_price = 10 / $coin_price;
            

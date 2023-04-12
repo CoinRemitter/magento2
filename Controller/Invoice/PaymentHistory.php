@@ -7,6 +7,7 @@ use Magento\Framework\App\Action\Context;
 use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Framework\View\Result\PageFactory;
 use Coinremitter\Checkout\Model\Wallets\Api;
+use Zend\Http\Request;
 
 class PaymentHistory extends Action {
 
@@ -191,7 +192,7 @@ class PaymentHistory extends Action {
       $data = $param;
       $url =  $api_base_url."/".$data['coin']."/get-transaction-by-address";
       
-      $res = $this->apiCall->apiCaller($url, \Zend_Http_Client::POST,$data);
+      $res = $this->apiCall->apiCaller($url, Request::METHOD_POST,$data);
       return $res;
    }
 

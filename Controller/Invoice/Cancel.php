@@ -2,6 +2,7 @@
 namespace Coinremitter\Checkout\Controller\Invoice;
 
 use \Magento\Framework\App\Action\Context;
+use Zend\Http\Request;
 
 class Cancel extends \Magento\Framework\App\Action\Action
 {
@@ -100,7 +101,7 @@ class Cancel extends \Magento\Framework\App\Action\Action
         $data = $param;
         $url =  $api_base_url."/".$data['coin']."/get-transaction-by-address";
         
-        $res = $this->apiCall->apiCaller($url, \Zend_Http_Client::POST,$data);
+        $res = $this->apiCall->apiCaller($url, Request::METHOD_POST,$data);
         return $res;
     }
 

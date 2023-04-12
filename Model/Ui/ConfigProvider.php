@@ -8,6 +8,7 @@ namespace Coinremitter\Checkout\Model\Ui;
 use \Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Checkout\Model\ConfigProviderInterface;
 use Magento\Framework\HTTP\ZendClientFactory;
+use Zend\Http\Request;
 
 
 /**
@@ -50,6 +51,7 @@ class ConfigProvider implements ConfigProviderInterface
         $sql = "SELECT * FROM coinremitter_wallets WHERE `is_valid` = '1'";
         $result = $connection->fetchAll($sql);
         $number_of_wallet = count($result);
+        
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
         $cart = $objectManager->get('\Magento\Checkout\Model\Cart');
 
@@ -76,11 +78,10 @@ class ConfigProvider implements ConfigProviderInterface
             $add_param['fiat_amount'] = $total * $result[$i]['exchange_rate_multiplier'];
             
             $url = $api_url."/".$result[$i]['coin']."/get-fiat-to-crypto-rate";
-            $currency_data = $api_call->apiCaller($url, \Zend_Http_Client::POST,$add_param);
-            // dd($res);
-            // echo '<pre>';
-            // print_r($currency_data);
-
+            $currency_data = $api_call->apiCaller($url, Request::METHOD_POST,$add_param);
+            if($currency_data['flag'] != 1){
+                continue;
+            }
             //if cart value is greater than minimum value of coin, than only that coin should display in dropdown
             if($currency_data['data']['crypto_amount'] >= $result[$i]['minimum_value']){
                 $validate_wallet[$i]['coin'] = $result[$i]['coin'];

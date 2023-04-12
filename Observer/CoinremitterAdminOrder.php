@@ -4,6 +4,7 @@ namespace Coinremitter\Checkout\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Coinremitter\Checkout\Model\Wallets\Api;
 use Magento\Framework\HTTP\ZendClientFactory;
+use Zend\Http\Request;
 
 class CoinremitterAdminOrder implements ObserverInterface
 {
@@ -214,7 +215,7 @@ public function execute(\Magento\Framework\Event\Observer $observer)
       $data = $param;
       $url =  $api_base_url."/".$data['coin']."/get-new-address";
       
-      $res = $this->apiCall->apiCaller($url, \Zend_Http_Client::POST,$data);
+      $res = $this->apiCall->apiCaller($url, Request::METHOD_POST,$data);
       return $res;
     }
    
@@ -224,7 +225,7 @@ public function execute(\Magento\Framework\Event\Observer $observer)
       $data = $param;
       $url =  $api_base_url."/".$data['coin']."/get-fiat-to-crypto-rate";
       
-      $res = $this->apiCall->apiCaller($url, \Zend_Http_Client::POST,$data);
+      $res = $this->apiCall->apiCaller($url, Request::METHOD_POST,$data);
       return $res;
    }   
 }

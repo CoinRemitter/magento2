@@ -6,6 +6,7 @@ use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Ui\Component\Listing\Columns\Column;
 use Coinremitter\Checkout\Model\Wallets\Api;
 use Magento\Framework\HTTP\ZendClientFactory;
+use Zend\Http\Request;
 
 class WalletsFields extends Column {
 
@@ -35,6 +36,7 @@ class WalletsFields extends Column {
     }
 
     public function prepareDataSource(array $dataSource) {
+
         if (isset($dataSource['data']['items'])) {
 
             //check if 'is_valid' field is not found, add field
@@ -58,8 +60,15 @@ class WalletsFields extends Column {
                     'api_key'      => $items['api_key'],
                     'password'   => $items['password'],
                 ];
-
-                $res = $this->apiCall->apiCaller($url, \Zend_Http_Client::POST, $params);
+                
+                $res = $this->apiCall->apiCaller($url, Request::METHOD_POST, $params);
+                
+                // $client = new Client();
+                // $client->setAdapter('Zend\Http\Client\Adapter\Curl');
+                // $response = $client->setUri('http://example.com')->send();
+                // echo $response->getBody();
+                // print_r($res);
+                // die;
                 if (isset($res['flag']) && $res['flag'] == 1) {
                     $items['balance'] = $res['data']['balance'];
                     $is_valid = 1;

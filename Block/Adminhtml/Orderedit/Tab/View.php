@@ -1,6 +1,6 @@
 <?php
 namespace Coinremitter\Checkout\Block\Adminhtml\Orderedit\Tab;
-
+use Zend\Http\Request;
 class View extends \Magento\Backend\Block\Template implements \Magento\Backend\Block\Widget\Tab\TabInterface
 {
   protected $_template = 'tab/view/myorderinfo.phtml';
@@ -294,7 +294,7 @@ public function CR_get_transactions_by_address($param){
    $data = $param;
    $url =  $api_base_url."/".$data['coin']."/get-transaction-by-address";
    
-   $res = $this->apiCall->apiCaller($url, \Zend_Http_Client::POST,$data);
+   $res = $this->apiCall->apiCaller($url, Request::METHOD_POST,$data);
    return $res;
 }
 

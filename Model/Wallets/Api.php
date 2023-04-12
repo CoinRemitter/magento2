@@ -4,6 +4,9 @@ namespace Coinremitter\Checkout\Model\Wallets;
 
 use Magento\Framework\HTTP\ZendClientFactory;
 use Magento\Framework\Encryption\EncryptorInterface;
+use Zend\Http\Client;
+use Zend\Http\Request;
+use Zend\Http\Response;
 
 class Api
 {
@@ -20,7 +23,7 @@ class Api
         EncryptorInterface $encryptor
     )
     {
-        $this->_httpClient = $httpClient;
+        $this->_httpClient = new Client();
         $this->api_url = $this->url.$this->version;
         $this->_debug_logger = $debug_logger;
         $this->encryptor = $encryptor;
@@ -35,39 +38,48 @@ class Api
         $this->_debug_logger->debug('Api Caller Called!!!');
         $moduleVersion = $moduleInfo['setup_version']; //extenstion version
         $userAgent = 'CR@' . $this->version . ',magento checkout@'.$moduleVersion;
-        $apiCaller = $this->_httpClient->create();
+        // $apiCaller = $this->_httpClient->create();
+        $apiCaller = new Request();
+        // echo "mee";
+        // die;
         $apiCaller->setUri($url);
         $apiCaller->setMethod($method);
-        $apiCaller->setHeaders([
-            'Content-Type: application/json',
-            'Accept: application/json',
-            'Key: ' . $header,
-            'User-Agent:'.$userAgent
-        ]);
-        $apiCaller->setConfig(['timeout' => 120]);
+        // $apiCaller->setHeaders("");
+        // $apiCaller->setConfig(['timeout' => 120]);
         if ($param && !empty($param)) {
             if(isset($param['password'])){
                 $param['password'] = $this->encryptor->decrypt($param['password']);
             }
-            $apiCaller->setParameterPost($param); //or parameter get   
+            $apiCaller->getPost()->fromArray($param);
+            // $apiCaller->setParameterPost($param); //or parameter get   
         }
         try {
             $this->_debug_logger->debug('api caller : in try');    
             $this->_debug_logger->debug('api caller : before api request');    
-            $res = $apiCaller->request();
+            // $res = $apiCaller->request();
+            $this->_httpClient->setRequest($apiCaller);
+            $this->_httpClient->setHeaders([
+                'Key: '. $header,
+                'User-Agent:'.$userAgent
+            ]);
+            $res = $this->_httpClient->send();
+            // $res = $response->getBody();
             $this->_debug_logger->debug('api caller : after api request');
 
-            if($res->getStatus() == 200){
+            if($res->getStatusCode() == 200){
                 $res = json_decode($res->getBody(), true);
+                $this->_debug_logger->debug('Api Response : '. json_encode($res));
+                if($res['flag'] != 1){
+                   $res = array('flag' => 0, 'msg' => 'Oops, something went wrong. Please contact admin.'); 
+                }
             }else{
-                $res = array('flag' => 0, 'msg' => $res->getMessage().'. Please check coinremitter.com API URL ');
+                $res = array('flag' => 0, 'msg' => 'Oops, something went wrong. Please contact admin.');
             }
             
         } catch (\Exception $e) {
             $this->_debug_logger->debug('api caller : error while api call, in catch now');    
             $res = array('flag' => 0, 'msg' => "Couldn't connect to coinremitter.com. Please check your internet connection");
         }
-        $this->_debug_logger->debug('Api Response : '. json_encode($res));
         return $res;
     }
     public function getApiUrl(){
