@@ -1,0 +1,80 @@
+{
+    "coinremitter_wallets": {
+        "column": {
+            "id": true,
+            "coin": true,
+            "coin_name": true,
+            "name": true,
+            "api_key": true,
+            "password": true,
+            "exchange_rate_multiplier": true,
+            "minimum_value": true,
+            "is_valid": true,
+            "created_at": true,
+            "updated_at": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    },
+    "coinremitter_order": {
+        "column": {
+            "id": true,
+            "order_id": true,
+            "invoice_id": true,
+            "address": true,
+            "amountusd": true,
+            "crp_amount": true,
+            "address_qrcode": true,
+            "payment_status": true,
+            "created_at": true,
+            "updated_at": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    },
+    "coinremitter_payment": {
+        "column": {
+            "id": true,
+            "order_id": true,
+            "invoice_id": true,
+            "address": true,
+            "invoice_name": true,
+            "marchant_name": true,
+            "total_amount": true,
+            "paid_amount": true,
+            "base_currancy": true,
+            "description": true,
+            "coin": true,
+            "payment_history": true,
+            "conversion_rate": true,
+            "invoice_url": true,
+            "status": true,
+            "expire_on": true,
+            "created_at": true,
+            "updated_at": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    },
+    "coinremitter_webhook": {
+        "column": {
+            "id": true,
+            "address": true,
+            "transaction_id": true,
+            "txId": true,
+            "explorer_url": true,
+            "paid_amount": true,
+            "coin": true,
+            "confirmations": true,
+            "paid_date": true,
+            "created_at": true,
+            "updated_at": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    }
+}

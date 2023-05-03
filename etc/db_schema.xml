@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/schema.xsd">
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
    <table name="coinremitter_wallets" resource="default" engine="innodb" comment="Coinremitter Wallets">
-      <column xsi:type="smallint" name="id" padding="6" unsigned="false" nullable="false" identity="true" comment="ID" />
+      <column xsi:type="int" name="id" padding="6" unsigned="false" nullable="false" identity="true" comment="ID" />
       <column xsi:type="varchar" name="coin" nullable="false" length="255" comment="Coin Short Name" />
       <column xsi:type="varchar" name="coin_name" nullable="false" length="100" comment="Coin Full Name" />
       <column xsi:type="varchar" name="name" nullable="false" length="255" comment="Wallet Name" />
@@ -20,7 +20,7 @@
 
 
    <table name="coinremitter_order" resource="default" engine="innodb" comment="Coinremitter orders">
-      <column xsi:type="smallint" name="id" padding="6" unsigned="false" nullable="false" identity="true" comment="ID" />
+      <column xsi:type="int" name="id" padding="6" unsigned="false" nullable="false" identity="true" comment="ID" />
       <column xsi:type="varchar" name="order_id" nullable="false" length="255" comment="magento orderid" />
       <column xsi:type="varchar" name="invoice_id" nullable="true" length="255" comment="Invocie orderid" />
       <column xsi:type="varchar" name="address" nullable="true" length="255" comment="Invocie Address" />
@@ -36,7 +36,7 @@
    </table>
 
    <table name="coinremitter_payment" resource="default" engine="innodb" comment="Coinremitter payment">
-      <column xsi:type="smallint" name="id" padding="6" unsigned="false" nullable="false" identity="true" comment="ID" />
+      <column xsi:type="int" name="id" padding="6" unsigned="false" nullable="false" identity="true" comment="ID" />
       <column xsi:type="varchar" name="order_id" nullable="false" length="255" comment="magento orderid" />
       <column xsi:type="varchar" name="invoice_id" nullable="true" length="255" comment="Invocie orderid" />
       <column xsi:type="varchar" name="address" nullable="true" length="255" comment="Invocie Address" />
@@ -60,7 +60,7 @@
    </table>
 
    <table name="coinremitter_webhook" resource="default" engine="innodb" comment="Coinremitter webhook">
-      <column xsi:type="smallint" name="id" padding="6" unsigned="false" nullable="false" identity="true" comment="ID" />
+      <column xsi:type="int" name="id" padding="6" unsigned="false" nullable="false" identity="true" comment="ID" />
       <column xsi:type="varchar" name="address" nullable="false" length="255" comment="wallet address" />
       <column xsi:type="varchar" name="transaction_id" nullable="false" length="255" comment="transaction id" />
       <column xsi:type="varchar" name="txId" nullable="false" length="255" comment="Blockchain id" />

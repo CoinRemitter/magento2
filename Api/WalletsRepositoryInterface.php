@@ -1,5 +1,6 @@
 <?php
 namespace Coinremitter\Checkout\Api;
+
 interface WalletsRepositoryInterface
 {
 /**
