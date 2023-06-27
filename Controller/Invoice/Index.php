@@ -55,7 +55,7 @@ class Index extends \Magento\Framework\App\Action\Action{
                }
             }
          }
-      }catch(Exception $e){}
+      }catch(\Exception $e){}
       $resultRedirect = $this->resultRedirectFactory->create();
       $resultRedirect->setPath('/');
       return $resultRedirect;  
