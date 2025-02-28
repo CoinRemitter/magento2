@@ -39,13 +39,15 @@ class Invoice extends \Magento\Framework\View\Element\Template
          $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
          $resource = $objectManager->get('Magento\Framework\App\ResourceConnection');
          $connection = $resource->getConnection();
-         $sql = "SELECT co.address, co.address_qrcode, co.crp_amount, cp.expire_on FROM coinremitter_order as co, coinremitter_payment as cp WHERE co.address = cp.address AND co.order_id= '".$order_id."'";
+         $sql = "SELECT * FROM coinremitter_orders WHERE `order_id`= '".$order_id."'";
          $result = $connection->fetchAll($sql);
 
          if (!empty($result)) {
 
          	$orderData = $result[0];
-
+            if($order->getDiscountAmount() != 0){
+               $resultData['order_discount'] = $order->getDiscountAmount();
+            }
             // Get Order Information
             $resultData['order_id'] = $order_id;
             $resultData['entityID'] = $order->getEntityId();
@@ -61,10 +63,10 @@ class Invoice extends \Magento\Framework\View\Element\Template
             $resultData['orderCurrencyCode'] = $order->getOrderCurrencyCode();
             $resultData['orderCurrencySymbol'] = $this->getCurrencySymbol($order->getOrderCurrencyCode());
 
-            $resultData['expire_on'] = $orderData['expire_on'];
-            $resultData['order_address'] = $orderData['address'];
-            $resultData['qr_code'] = $orderData['address_qrcode'];
-            $resultData['totalAmount'] = $orderData['crp_amount'];
+            $resultData['expire_on'] = $orderData['expiry_date'];
+            $resultData['order_address'] = $orderData['payment_address'];
+            $resultData['qr_code'] = $orderData['qr_code'];
+            $resultData['totalAmount'] = $orderData['crypto_amount'];
             $resultData['coin'] = $selectcoin;
 
             // get customer details

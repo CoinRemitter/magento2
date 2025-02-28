@@ -56,30 +56,20 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
             );
         }else{
 
-            $coins = \Magento\Framework\App\ObjectManager::getInstance()->get('Coinremitter\Checkout\Model\Config\Source\Coin');
-
-            $values = $coins->toOptionArray();
-
-            if($values['flag'] == 1){
-                // $this->buttonList->update("save", "label", __("Save Wallet"));
-                $this->buttonList->add(
-                    "save",
-                    [
-                        'label'=>__('Save Wallet'),
-                        'class' => 'save primary',
-                        'data_attribute' => [
-                            'mage-init' => ['button' => ['event' => 'save']],
-                            'form-role' => 'save',
-                        ],
-                        'sort_order' => 90,
-                        'onclick'=>'newWallet()'
+            $this->buttonList->add(
+                "save",
+                [
+                    'label'=>__('Save Wallet'),
+                    'class' => 'save primary',
+                    'data_attribute' => [
+                        'mage-init' => ['button' => ['event' => 'save']],
+                        'form-role' => 'save',
                     ],
-                    10
-                );
-
-            }else{
-                $this->buttonList->remove('reset');
-            }
+                    'sort_order' => 90,
+                    'onclick'=>'newWallet()'
+                ],
+                10
+            );
             
         }
         $this->_formScripts[] = "

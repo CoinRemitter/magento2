@@ -23,7 +23,7 @@ class Cancel extends \Magento\Framework\View\Element\Template
 			$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
 			$resource = $objectManager->get('Magento\Framework\App\ResourceConnection');
 			$connection = $resource->getConnection();
-			$sql="UPDATE coinremitter_order SET payment_status=4 WHERE order_id=".$order_id;
+			$sql="UPDATE coinremitter_orders SET order_status=4 WHERE order_id=".$order_id;
 			$resultTransaction = $connection->query($sql);
 			
 			$path = $this->getBaseUrl()."sales/order/view/order_id/".$order_id."/";

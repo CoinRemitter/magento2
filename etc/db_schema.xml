@@ -3,14 +3,15 @@
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
    <table name="coinremitter_wallets" resource="default" engine="innodb" comment="Coinremitter Wallets">
       <column xsi:type="int" name="id" padding="6" unsigned="false" nullable="false" identity="true" comment="ID" />
-      <column xsi:type="varchar" name="coin" nullable="false" length="255" comment="Coin Short Name" />
+      <column xsi:type="varchar" name="wallet_name" nullable="false" length="255" comment="Wallet Name" />
+      <column xsi:type="varchar" name="coin_symbol" nullable="false" length="255" comment="Coin Short Name" />
       <column xsi:type="varchar" name="coin_name" nullable="false" length="100" comment="Coin Full Name" />
-      <column xsi:type="varchar" name="name" nullable="false" length="255" comment="Wallet Name" />
       <column xsi:type="varchar" name="api_key" nullable="false" length="255" comment="API Key" />
       <column xsi:type="varchar" name="password" nullable="false" length="255" comment="Wallet Password" />
-      <column xsi:type="varchar" name="exchange_rate_multiplier" nullable="false" default="1" length="255" comment="between 0 to 101" />
-      <column xsi:type="varchar" name="minimum_value" nullable="false" length="255" default="0.5" comment="between 0.01 to 1000000" />
-      <column xsi:type="varchar" name="is_valid" nullable="false" length="1" default="1" comment="1 on valid wallet else 0" />
+      <column xsi:type="decimal" name="exchange_rate_multiplier" nullable="false" default="1" precision="10" scale="2" comment="multiply order amount with this value" />
+      <column xsi:type="decimal" name="minimum_invoice_amount" nullable="false" precision="10" scale="2" default="0" comment="in fiat currency" />
+      <column xsi:type="decimal" name="unit_fiat_amount" nullable="false" precision="10" scale="2" default="0" comment="crypto amount per fiat currency" />
+      <column xsi:type="varchar" name="base_fiat_symbol" nullable="false" length="10" comment="Website base currency" />
       <column xsi:type="timestamp" name="created_at" nullable="false" default="CURRENT_TIMESTAMP" comment="Created At Date" />
       <column xsi:type="timestamp" name="updated_at" nullable="false" default="CURRENT_TIMESTAMP" comment="Updated At Date" />
       <constraint xsi:type="primary" referenceId="PRIMARY">
@@ -19,56 +20,22 @@
    </table>
 
 
-   <table name="coinremitter_order" resource="default" engine="innodb" comment="Coinremitter orders">
+   <table name="coinremitter_orders" resource="default" engine="innodb" comment="Coinremitter orders">
       <column xsi:type="int" name="id" padding="6" unsigned="false" nullable="false" identity="true" comment="ID" />
       <column xsi:type="varchar" name="order_id" nullable="false" length="255" comment="magento orderid" />
-      <column xsi:type="varchar" name="invoice_id" nullable="true" length="255" comment="Invocie orderid" />
-      <column xsi:type="varchar" name="address" nullable="true" length="255" comment="Invocie Address" />
-      <column xsi:type="varchar" name="amountusd" nullable="true" length="255" comment="amount in usd" />
-      <column xsi:type="varchar" name="crp_amount" nullable="false" length="255" comment="crp amount" />
-      <column xsi:type="varchar" name="address_qrcode" nullable="true" length="255" comment="address qrcode" />
-      <column xsi:type="varchar" name="payment_status" nullable="false" length="255" comment="payment status" />
-      <column xsi:type="timestamp" name="created_at" nullable="false" default="CURRENT_TIMESTAMP" comment="Created At Date" />
-      <column xsi:type="timestamp" name="updated_at" nullable="false" default="CURRENT_TIMESTAMP" comment="Updated At Date" />
-      <constraint xsi:type="primary" referenceId="PRIMARY">
-         <column name="id" />
-      </constraint>
-   </table>
-
-   <table name="coinremitter_payment" resource="default" engine="innodb" comment="Coinremitter payment">
-      <column xsi:type="int" name="id" padding="6" unsigned="false" nullable="false" identity="true" comment="ID" />
-      <column xsi:type="varchar" name="order_id" nullable="false" length="255" comment="magento orderid" />
-      <column xsi:type="varchar" name="invoice_id" nullable="true" length="255" comment="Invocie orderid" />
-      <column xsi:type="varchar" name="address" nullable="true" length="255" comment="Invocie Address" />
-      <column xsi:type="varchar" name="invoice_name" nullable="true" length="255" comment="Invoce Name" />
-      <column xsi:type="varchar" name="marchant_name" nullable="true" length="255" comment="Marchant Name" />
-      <column xsi:type="varchar" name="total_amount" nullable="true" length="255" comment="Total Amount" />
-      <column xsi:type="varchar" name="paid_amount" nullable="true" length="255" comment="Paid Amount" />
-      <column xsi:type="varchar" name="base_currancy" nullable="false" length="255" comment="Base Currancy" />
-      <column xsi:type="varchar" name="description" nullable="false" length="255" comment="Description" />
-      <column xsi:type="varchar" name="coin" nullable="false" length="255" comment="coin" />
-      <column xsi:type="varchar" name="payment_history" nullable="true" length="255" comment="Payment History" />
-      <column xsi:type="varchar" name="conversion_rate" nullable="true" length="255" comment="Conversion Rate" />
-      <column xsi:type="varchar" name="invoice_url" nullable="false" length="255" comment="Invoice Url" />
-      <column xsi:type="varchar" name="status" nullable="false" length="100" comment="Invoice Status" />
-      <column xsi:type="varchar" name="expire_on" nullable="true" length="255" comment="Invoice Expire time" />
-      <column xsi:type="timestamp" name="created_at" nullable="false" default="CURRENT_TIMESTAMP" comment="Created At Date" />
-      <column xsi:type="timestamp" name="updated_at" nullable="false" default="CURRENT_TIMESTAMP" comment="Updated At Date" />
-      <constraint xsi:type="primary" referenceId="PRIMARY">
-         <column name="id" />
-      </constraint>
-   </table>
-
-   <table name="coinremitter_webhook" resource="default" engine="innodb" comment="Coinremitter webhook">
-      <column xsi:type="int" name="id" padding="6" unsigned="false" nullable="false" identity="true" comment="ID" />
-      <column xsi:type="varchar" name="address" nullable="false" length="255" comment="wallet address" />
-      <column xsi:type="varchar" name="transaction_id" nullable="false" length="255" comment="transaction id" />
-      <column xsi:type="varchar" name="txId" nullable="false" length="255" comment="Blockchain id" />
-      <column xsi:type="varchar" name="explorer_url" nullable="false" length="255" comment="Explorer Url" />
-      <column xsi:type="varchar" name="paid_amount" nullable="false" length="255" comment="Paid Amount" />
-      <column xsi:type="varchar" name="coin" nullable="false" length="255" comment="coin" />
-      <column xsi:type="varchar" name="confirmations" nullable="false" default="0" length="255" comment="Transaction confirmations" />
-      <column xsi:type="varchar" name="paid_date" nullable="false" default="0" length="255" comment="Payment Paid Date" />
+      <column xsi:type="varchar" name="user_id" nullable="false" length="255" comment="magento userid" />
+      <column xsi:type="varchar" name="coin_symbol" nullable="false" length="10" comment="Coin symbol" />
+      <column xsi:type="varchar" name="coin_name" nullable="false" length="100" comment="Coin full name" />
+      <column xsi:type="decimal" name="crypto_amount" nullable="false" precision="20" scale="8" comment="Order total crypto amount" />
+      <column xsi:type="varchar" name="fiat_symbol" nullable="false" length="10" comment="Fiat symbol" />
+      <column xsi:type="decimal" name="fiat_amount" nullable="false" precision="10" scale="2" comment="Order amount in fiat currency" />
+      <column xsi:type="decimal" name="paid_crypto_amount" nullable="false" precision="20" scale="8" comment="Order paid crypto amount" />
+      <column xsi:type="decimal" name="paid_fiat_amount" nullable="false" precision="10" scale="2" comment="Order paid fiat amount" />
+      <column xsi:type="varchar" name="payment_address" nullable="false" length="255" comment="Payment address" />
+      <column xsi:type="text" name="qr_code" nullable="false" comment="QR code" />
+      <column xsi:type="int" name="order_status" nullable="false" default="0"  comment="Order status; 0: pending, 1: paid, 2: under paid, 3: over paid, 4: expired, 5: cancelled" />
+      <column xsi:type="text" name="transaction_meta" nullable="true" comment="Order transactions" />
+      <column xsi:type="timestamp" name="expiry_date" nullable="true" comment="Order expiry date" />
       <column xsi:type="timestamp" name="created_at" nullable="false" default="CURRENT_TIMESTAMP" comment="Created At Date" />
       <column xsi:type="timestamp" name="updated_at" nullable="false" default="CURRENT_TIMESTAMP" comment="Updated At Date" />
       <constraint xsi:type="primary" referenceId="PRIMARY">

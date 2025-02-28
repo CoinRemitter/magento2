@@ -1,31 +1,34 @@
-CoinRemitter Crypto Payment Processor
+CoinRemitter Plugin For Prestashop
 ===
 
-Coinremitter is [crypto payments](http://coinremitter.com) service for magento. Accept Bitcoin, Tron, Binance (BEP20), BitcoinCash, Ethereum, Litecoin, Dogecoin, Tether, Dash, Monero etc.
-
-**What Is Crypto Payment Processor?**
-
-Crypto Payment Processor acts as a bridge between the merchant’s website and the cryptocurrency network, allowing the merchant to receive payments in the form of cryptocurrency.
+Coinremitter is a [crypto payment processor](http://coinremitter.com). Accept Bitcoin, Bitcoin Cash, Litecoin, Dogecoin, Dash, Tron, Binance ,Tether USD ERC20,Tether USD TRC20 etc.View all supported currency [here](http://coinremitter.com/supported-currencies).
 
 
-Requirements for integration
+**What Is Crypto Payment Gateway?**
+
+There are ample of Crypto Coins available on crypto payment gateways. You can pick one of them and create a wallet of that coins and purchase things from individual’s websites who are accepting payment in crypto coins though. Regardless, All these websites have their own API in order to accept payment from buyers.
+
+Apart from centralized currencies this option creates a traffic for sellers who are willing to do payments in crypto coins. In contrast, doing a payment in crypto coins offer buyers a great market  reputation and has left a foremost impact on sellers and it will also benefit to buyers & sellers if they choose **Coinremitter: Crypto Payment Gateway** as their payment method in doing a business in crypto coins.
+
+
+
+Prerequisites
 ---
 * For the Integration process with Coinremitter, users must require to have  Magento version 2.x
-* If you don’t have an account on Coinremitter, then make sure to make it one
+* If you don't have a Coinremitter account then please consider making it one.  [Create Account ](https://coinremitter.com/signup)
 
-Installation of plugin
+Installation Of Plugin:
 ---
-1. Download coinremitter magento plugin (zip file).
+1. Download CoinRemitter magento plugin (zip file).
 2. Login to your server and unzip the file and rename it to ‘Checkout’.
-3. Navigate to Magento installation root directory. There You’ll find a folder named ‘code’ situated in the ‘app’ folder.
-In case of the absence of the folder, create a folder in the ‘app’ folder with the name 'code'. Now Create a 'coinremitter' folder into the 'code' folder, Then move the ‘Checkout’ folder into the 'coinremitter' folder.
+3. Navigate to Magento installation root directory. Go to `app/code/` (If code/ does not exist, create it).Inside `app/code/` , create a folder named **Coinremitter**.Move the Checkout folder into `app/code/CoinRemitter/`.
 4. Run following commands in terminal to install Coinremitter Plugin
 	* php bin/magento setup:upgrade 
 	* php bin/magento setup:di:compile
 	* php bin/magento setup:static-content:deploy -f
 	* php bin/magento cache:flush
 
-5. Plugin installed in your magento store, Follow below instructions to fully activate it.
+5. **Done!** The plugin is now installed. Follow the plugin's documentation to activate it.
 
 Plugin Configuration
 ---
@@ -45,19 +48,17 @@ Go to the menu on your left side and you’ll see the **Coinremitter Checkout** 
 
 * Now you are on the **Wallet - coinremitter** page.
 * You’ll find the **Add Wallet** button on the top of the page. Click on it.
-* After clicking on the add wallet a new page will appear where you’ll see multiple options like **Coin, API key, Password**.
-* In the first option of **Coin** select your coin from which you want to create your crypto wallet. 
+* After clicking on the add wallet a new page will appear where you’ll see multiple options like **API key, Password**.
 * Now go to coinremitter website and login to your account and get your API key from there. If you find any trouble to get your api then [**click here**](https://blog.coinremitter.com/how-to-get-api-key-and-password-of-coinremitter-wallet/) to get the idea.
 * Get back to the Magento coinremitter page and select one of your coins. Paste API key in the box and fill your Password in the box.
 * Don’t forget to add the exchange rate multiplier.
 * The default price multiplier is set to 1. For instance, if you set it to 1.10, then prices for cryptocurrencies will be increased by 10%, and you can set it to 0.95 in this text box for a 5% discount.
-* Setting the minimum invoice limit is necessary, The generated invoice won’t be less than the minimum invoice limit.
+* Setting the minimum invoice limit is necessary, The generated invoice won’t be less than the minimum invoice limit.Set this amount in default fiat currency of your website.
 * Click on the **Save wallet** on top of the page.
 
 ![Coinremitter-Plugin-Save-wallet](https://coinremitter.com/assets/img/screenshots/magento2/add-wallet.png)
 
 * Congratulations! You have now successfully created your wallet.
-
 
 > **Note:**
 

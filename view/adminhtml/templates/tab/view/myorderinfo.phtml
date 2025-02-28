@@ -1,7 +1,7 @@
 <?php
-if ($block->getInvoice()->getInvoiceId() || $this->getInvoice()->getAddress()) { 
+if ($block->getOrder()->getPayment()->getMethod() == \Coinremitter\Checkout\Model\CoinremitterCheckout::PAYMENT_METHOD_WALLET_CODE) {
    $resultData = $block->getDetail();
-   ?>
+?>
    <section class="admin__page-section order-view-account-information">
       <div class="admin__page-section-title">
          <span class="title"><?php echo __('Order Detail ( Coinremitter )') ?></span>
@@ -11,22 +11,22 @@ if ($block->getInvoice()->getInvoiceId() || $this->getInvoice()->getAddress()) {
             <thead>
                <tr class="headings">
                   <?php
-                  if(isset($resultData['invoice_id']) && $resultData['invoice_id']!=""){
-                     ?>
+                  if (isset($resultData['invoice_id']) && $resultData['invoice_id'] != "") {
+                  ?>
                      <th class="col-inv-id"><span>Invoice Id</span></th>
-                     <?php
+                  <?php
                   } else {
-                     ?>
+                  ?>
                      <th class="col-inv-id"><span>Address</span></th>
-                     <?php
+                  <?php
                   }
                   ?>
                   <th class="col-base-cur"><span>Base Currency</span></th>
                   <th class="col-coin"><span>Coin</span></th>
                   <th class="col-status"><span>Status</span></th>
                   <?php
-                  if(isset($resultData['address']) && $resultData['address']!=""){
-                     ?>
+                  if (isset($resultData['address']) && $resultData['address'] != "") {
+                  ?>
                      <th class="col-status"><span>Created Date</span></th>
                      <th class="col-status"><span>Expired On</span></th>
                   <?php } ?>
@@ -35,49 +35,31 @@ if ($block->getInvoice()->getInvoiceId() || $this->getInvoice()->getAddress()) {
             <tbody class="even">
                <tr>
                   <?php
-                  if(isset($resultData['invoice_id']) && $resultData['invoice_id']!=""){
-                     ?>
+                  if (isset($resultData['invoice_id']) && $resultData['invoice_id'] != "") {
+                  ?>
                      <td class="col-inv-id"><?php echo $resultData['invoice_id'] ?></td>
-                     <?php
+                  <?php
                   } else {
-                     ?>
+                  ?>
                      <td class="col-inv-id"><?php echo $resultData['address'] ?></td>
-                     <?php
+                  <?php
                   }
                   ?>
                   <td class="col-base-cur">
-                     <?php echo $resultData['base_currancy'] ?>
+                     <?php echo $resultData['base_currency'] ?>
                   </td>
                   <td class="col-base-cur">
                      <?php echo $resultData['coin'] ?>
                   </td>
                   <td class="col-base-cur">
-                     <?php
-                     
-                     if($resultData['payment_status'] == '0' || $resultData['payment_status'] == "pending")
-                        echo "Pending";
-                     else if($resultData['payment_status'] == '1' || $resultData['payment_status'] == "paid")
-                        echo "Paid";
-                     else if($resultData['payment_status'] == '2' || $resultData['payment_status'] == "under paid")
-                        echo "Under Paid";
-                     else if($resultData['payment_status'] == '3' || $resultData['payment_status'] == "over paid")
-                        echo "Over Paid";
-                     else if($resultData['payment_status'] == '4' || $resultData['payment_status'] == "expired")
-                        echo "Expired";
-                     else if($resultData['payment_status'] == '5' || $resultData['payment_status'] == "canceled")
-                        echo "Canceled";
-                     ?>
+                     <?php echo $resultData['payment_status']; ?>
                   </td>
-                  <?php
-                  if(isset($resultData['address']) && $resultData['address']!=""){
-                     ?>
-                     <td class="col-base-cur" id="curr_date">
-                        <?php echo $resultData['created_at'] ?>
-                     </td>
-                     <td class="col-base-cur">
-                        <?php echo $resultData['expire_on'] ?>
-                     </td>
-                  <?php } ?>
+                  <td class="col-base-cur" id="curr_date">
+                     <?php echo $resultData['created_at'] . ' UTC' ?>
+                  </td>
+                  <td class="col-base-cur">
+                     <?php echo $resultData['expiry_date'] . ' UTC' ?> 
+                  </td>
                </tr>
             </tbody>
          </table>
@@ -98,74 +80,55 @@ if ($block->getInvoice()->getInvoiceId() || $this->getInvoice()->getAddress()) {
                      </tr>
                   </thead>
                   <tbody class="even">
-                     <?php 
+                     <?php
                      if ($resultData['transactions']) {
                         foreach ($resultData['transactions'] as $transaction) {
                            $j = 20; ?>
                            <tr>
                               <td>
-                                 <a target="_blank" href="<?php echo $transaction['explorer_url']; ?>"><span class="sub sub-s2"><?php echo substr_replace($transaction['transaction_id'],"...",$j,(strlen($transaction['transaction_id'])-$j))?></span></a>
+                                 <a target="_blank" href="<?php echo $transaction['explorer_url']; ?>"><span class="sub sub-s2"><?php echo substr_replace($transaction['txid'], "...", $j, (strlen($transaction['txid']) - $j)) ?></span></a>
                               </td>
-                              <td><?php echo number_format($transaction['amount'],8); ?> <?php echo $resultData['coin'] ?></td>
-                              <td><?=$transaction['confirmations']?></td>
+                              <td><?php echo number_format($transaction['amount'], 8); ?> <?php echo $resultData['coin'] ?></td>
+                              <td><?= $transaction['confirmations'] ?></td>
                               <td>
-                                 <?=$transaction['paid_date']?>
+                                 <?= $transaction['date'] . ' UTC' ?>
                               </td>
                            </tr>
-                        <?php } }else{ ?>
-                           <tr>
-                              <td colspan="4" style="text-align: center;">
-                                 <h3> Your Payment history will display here</h3>
-                              </td>
-                           </tr>
-                        <?php } ?>
-                     </tbody>
-                  </table>
+                        <?php }
+                     } else { ?>
+                        <tr>
+                           <td colspan="4" style="text-align: center;">
+                              <h3> Your Payment history will display here</h3>
+                           </td>
+                        </tr>
+                     <?php } ?>
+                  </tbody>
+               </table>
+            </div>
+            <div class="admin-payment-history-right">
+               <div class="admin-panding-amount-box">
+                  <h3>Order Amount</h3>
+                  <h2><?php echo $resultData['crp_amount']; ?> <?php echo $resultData['coin'] ?></h2>
                </div>
-               <div class="admin-payment-history-right">
-                  <div class="admin-panding-amount-box">
-                     <h3>Order Amount</h3>
-                     <h2><?php echo $resultData['crp_amount'];?> <?php echo $resultData['coin'] ?></h2>
-                  </div>
-                  <div class="admin-panding-amount-box">
-                     <h3>Paid Amount</h3>
-                     <h2><?php echo $resultData['total_paid'];?> <?php echo $resultData['coin'] ?></h2>
-                  </div>
-                  <div class="admin-panding-amount-box">
-                     <h3>Pending Amount</h3>
-                     <h2><?php echo $resultData['total_pending'];?> <?php echo $resultData['coin'] ?></h2>
-                  </div>
+               <div class="admin-panding-amount-box">
+                  <h3>Paid Amount</h3>
+                  <h2><?php echo $resultData['total_paid']; ?> <?php echo $resultData['coin'] ?></h2>
+               </div>
+               <div class="admin-panding-amount-box">
+                  <h3>Pending Amount</h3>
+                  <h2><?php echo $resultData['total_pending']; ?> <?php echo $resultData['coin'] ?></h2>
                </div>
             </div>
          </div>
-      </section>
-      <?php
-      if(isset($resultData['invoice_id']) && $resultData['invoice_id']!=""){
-         ?>
-         <script>
-            require(['jquery'], function ($) {
-               $(document).ready(function () {
-                  var tmLoc = new Date($("#curr_date").text().trim());
-                  var utc =  new Date(tmLoc.getTime() - tmLoc.getTimezoneOffset() * 60000);
-                  var year = utc.getFullYear();
-                  var month = ('0' + (utc.getMonth()+1)).slice(-2);
-                  var date = ('0' + utc.getDate()).slice(-2);
-                  var hour = ('0' + utc.getHours()).slice(-2);
-                  var min = ('0' + utc.getMinutes()).slice(-2);
-                  var sec = ('0' + utc.getSeconds()).slice(-2);
-                  $("#curr_date").text((year+"-"+month+"-"+date+" "+hour+":"+min+":"+sec) + " (UTC)");
-               });
-            }); 
-         </script>
-         <?php
-      }
-      ?>
-      <?php
-   } else { 
-      ?>
-      <section class="admin__page-section order-view-account-information">
-         <h2 style="text-align: center;">Wait until payment processed..</h2>
-      </section>
-      <?php
-   }
+      </div>
+   </section>
+   
+<?php
+} else {
+?>
+   <section class="admin__page-section order-view-account-information">
+      <h2 style="text-align: center;">Wait until payment processed..</h2>
+   </section>
+<?php
+}
 ?>

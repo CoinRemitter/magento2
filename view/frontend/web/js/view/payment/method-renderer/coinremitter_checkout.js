@@ -45,9 +45,10 @@
 
             getTransactionResults: function() {
              return _.map(window.checkoutConfig.payment.sample_gateway.transactionResults, function(value, key) {
+                console.log(value);
                 return {
-                    'value': value.coin,
-                    'transaction_result': value.coin +' - '+value.coin_name
+                    'value': value.coin_symbol,
+                    'transaction_result': value.coin_symbol +' - '+value.coin_name
                 }
             });
          },

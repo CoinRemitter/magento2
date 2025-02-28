@@ -85,6 +85,10 @@ $customParameter = $block->getDetail();
                         <ul>
                            <li>Total <span><?php echo $customParameter['orderCurrencySymbol'];?> <?php echo $customParameter['subTotal'];?></span></li>
                            <li>Shipping  Fee <span><?php echo $customParameter['orderCurrencySymbol'];?> <?php echo $customParameter['shippingAmount'];?></span></li>
+                           <?php 
+                           if(isset($customParameter['order_discount'])){ ?>
+                              <li>Discount <span><?php echo $customParameter['orderCurrencySymbol'];?> <?php echo $customParameter['order_discount'];?></span></li>
+                           <?php }?>
                            <li>Total Taxes <span><?php echo $customParameter['orderCurrencySymbol'];?> <?php echo $customParameter['taxAmount'];?></span></li>
                         </ul>
                         <ul class="cr-plugin-payment-grand">
@@ -135,7 +139,7 @@ $customParameter = $block->getDetail();
                   <div class="cr-plugin-brand">
                      <span>Secured by</span>
                      <a href="https://coinremitter.com" target="_blank">
-                        <img src="<?php echo $this->getViewFileUrl('Coinremitter_Checkout::images/logo.png'); ?>">
+                        <img src="<?php echo $this->getViewFileUrl('Coinremitter_Checkout::images/logo.svg'); ?>">
                      </a>
                   </div>
                </div>

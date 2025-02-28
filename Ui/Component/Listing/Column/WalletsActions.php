@@ -63,7 +63,7 @@ class WalletsActions extends Column
                         'label' => __('Edit'),
                     ];
 
-                    $title = $item['name'];
+                    $title = $item['wallet_name'];
                     $item[$name]['delete'] = [
                         'href' => $this->_urlBuilder->getUrl(
                             self::ROW_DELETE_URL, 
