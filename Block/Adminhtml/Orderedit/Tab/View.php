@@ -19,7 +19,6 @@ class View extends \Magento\Backend\Block\Template implements \Magento\Backend\B
       \Magento\Framework\Registry $registry,
       \Coinremitter\Checkout\Model\Wallets\Api $apiCall,
       \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
-      \Magento\Sales\Model\Service\InvoiceService $invoiceService,
       \Magento\Sales\Api\OrderManagementInterface $orderManagement,
       \Magento\Checkout\Model\Session $checkoutSession,
       array $data = []
@@ -29,7 +28,6 @@ class View extends \Magento\Backend\Block\Template implements \Magento\Backend\B
       $this->_scopeConfig = $scopeConfig;
       parent::__construct($context, $data);
       $this->productRepository = $productRepository;
-      $this->_invoiceService = $invoiceService;
       $this->checkoutSession = $checkoutSession;
       $this->orderManagement = $orderManagement;
    }

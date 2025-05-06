@@ -7,6 +7,8 @@ use Magento\Framework\Event\ObserverInterface;
 
 class CoinremitterPaymentMethodAvailable implements ObserverInterface
 {
+
+    protected $_scopeConfig;
     /**
      * payment_method_is_active event handler.
      *

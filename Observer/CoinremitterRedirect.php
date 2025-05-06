@@ -15,6 +15,7 @@ class CoinremitterRedirect implements ObserverInterface
    protected $_scopeConfig;
    protected $request;
    protected $_messageManager;
+   protected $productRepository;
    protected $_url;
 
    public function __construct(
@@ -25,8 +26,7 @@ class CoinremitterRedirect implements ObserverInterface
       \Coinremitter\Checkout\Model\Wallets\Api $apiCall,
       \Magento\Framework\App\RequestInterface $request,
       \Magento\Framework\Message\ManagerInterface $messageManager,
-      \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
-      \Magento\Sales\Model\Service\InvoiceService $invoiceService
+      \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
    ) {
 
       $this->_redirect = $redirect;
@@ -37,7 +37,6 @@ class CoinremitterRedirect implements ObserverInterface
       $this->request = $request;
       $this->_messageManager = $messageManager;
       $this->productRepository = $productRepository;
-      $this->_invoiceService = $invoiceService;
    }
 
    public function execute(\Magento\Framework\Event\Observer $observer)

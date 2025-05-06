@@ -1,6 +1,7 @@
 <?php
 if ($block->getOrder()->getPayment()->getMethod() == \Coinremitter\Checkout\Model\CoinremitterCheckout::PAYMENT_METHOD_WALLET_CODE) {
    $resultData = $block->getDetail();
+   if(!empty($resultData)) {
 ?>
    <section class="admin__page-section order-view-account-information">
       <div class="admin__page-section-title">
@@ -124,7 +125,7 @@ if ($block->getOrder()->getPayment()->getMethod() == \Coinremitter\Checkout\Mode
    </section>
    
 <?php
-} else {
+}} else {
 ?>
    <section class="admin__page-section order-view-account-information">
       <h2 style="text-align: center;">Wait until payment processed..</h2>

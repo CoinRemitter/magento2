@@ -10,6 +10,7 @@ class Webhook extends \Magento\Framework\App\Action\Action
 
    protected $apiCall;
    protected $orderManagement;
+   protected $productRepository;
    protected $_scopeConfig;
 
    public function __construct(
@@ -17,8 +18,7 @@ class Webhook extends \Magento\Framework\App\Action\Action
       \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
       \Coinremitter\Checkout\Model\Wallets\Api $apiCall,
       \Magento\Sales\Api\OrderManagementInterface $orderManagement,
-      \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
-      \Magento\Sales\Model\Service\InvoiceService $invoiceService
+      \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
    ) {
 
       $this->apiCall = $apiCall;
@@ -26,7 +26,6 @@ class Webhook extends \Magento\Framework\App\Action\Action
       $this->_scopeConfig = $scopeConfig;
       parent::__construct($context);
       $this->productRepository = $productRepository;
-      $this->_invoiceService = $invoiceService;
    }
 
    public function execute()

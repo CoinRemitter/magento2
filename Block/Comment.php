@@ -20,7 +20,6 @@ class Comment extends \Magento\Framework\View\Element\Template
       \Coinremitter\Checkout\Model\Wallets\Api $apiCall,
       \Coinremitter\Checkout\Model\ResourceModel\CoinremitterPayment\CollectionFactory $coinremitterPaymentModel,
       \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
-      \Magento\Sales\Model\Service\InvoiceService $invoiceService,
       \Magento\Sales\Api\OrderManagementInterface $orderManagement,
       \Magento\Checkout\Model\Session $checkoutSession,
       array $data = []
@@ -33,7 +32,6 @@ class Comment extends \Magento\Framework\View\Element\Template
       $this->orderManagement = $orderManagement;
       $this->coinremitterPaymentModel = $coinremitterPaymentModel;
       $this->productRepository = $productRepository;
-      $this->_invoiceService = $invoiceService;
    }
 
    public function getOrder()
@@ -49,10 +47,10 @@ class Comment extends \Magento\Framework\View\Element\Template
       $orderId = $this->getOrderId();
       $collection = $this->coinremitterPaymentModel->create();
       $collection->addFieldToFilter('order_id', $orderId);
-
+      
       return $collection->getFirstItem();
    }
-
+   
    public function getDetail()
    {
       $order = $this->getorder();

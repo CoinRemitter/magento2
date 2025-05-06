@@ -6,8 +6,6 @@ use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Ui\Component\Listing\Columns\Column;
 use Coinremitter\Checkout\Model\Wallets\Api;
-use Magento\Framework\HTTP\ZendClientFactory;
-use Zend\Http\Request;
 
 class WalletsFields extends Column
 {
@@ -55,12 +53,6 @@ class WalletsFields extends Column
 
                 $walletData = $this->apiCall->getWalletBalance([], $credencials);
 
-                // $client = new Client();
-                // $client->setAdapter('Zend\Http\Client\Adapter\Curl');
-                // $walletDataponse = $client->setUri('http://example.com')->send();
-                // echo $walletDataponse->getBody();
-                // print_r($items);
-                // die;
                 $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
                 $currencysymbol = $objectManager->get('Magento\Store\Model\StoreManagerInterface');
                 $baseFiatCurrency = $currencysymbol->getStore()->getCurrentCurrencyCode();

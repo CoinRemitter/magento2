@@ -4,8 +4,8 @@ namespace Coinremitter\Checkout\Model\Wallets;
 
 use Magento\Framework\HTTP\ZendClientFactory;
 use Magento\Framework\Encryption\EncryptorInterface;
-use Zend\Http\Client;
-use Zend\Http\Request;
+use Laminas\Http\Client;
+use Laminas\Http\Request;
 use Magento\Framework\App\ProductMetadataInterface;
 
 
@@ -17,7 +17,7 @@ class Api
     protected $encryptor;
     protected $pluginVersion;
     private   $apiVersion = 'v1';
-    private $storeManager;
+    protected $storeManager;
     private $currencyFactory;
     protected $magentoVersion;
     private   $url = 'https://api.coinremitter.com/';

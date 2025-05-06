@@ -108,7 +108,7 @@ if ($block->getOrder()->getPayment()->getMethod() == \Coinremitter\Checkout\Mode
 				</div>
 			</div>
 			<?php
-			if ($resultData['btnShow'] == 1) {
+			if ($resultData['payment_status'] == 'Under Paid' || $resultData['payment_status'] == 'Pending') {
 			?>
 				<div class="block-content">
 					<div class="box">
