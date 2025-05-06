@@ -6,6 +6,7 @@ use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Ui\Component\Listing\Columns\Column;
 use Coinremitter\Checkout\Model\Wallets\Api;
+use Magento\Framework\Module\Dir\Reader;
 
 class WalletsFields extends Column
 {
@@ -24,6 +25,7 @@ class WalletsFields extends Column
         \Magento\Framework\App\ResourceConnection $resource,
         \Magento\Framework\Filesystem\Driver\File $fileDriver,
         Api $apiCall,
+        Reader $moduleDirReader,
         array $components = [],
         array $data = []
     ) {
@@ -33,6 +35,7 @@ class WalletsFields extends Column
         $this->api_base_url = $this->apiCall->getApiUrl();
         $this->resource = $resource;
         $this->fileDriver = $fileDriver;
+        $this->moduleDirReader = $moduleDirReader;
     }
 
     public function prepareDataSource(array $dataSource)
@@ -93,7 +96,7 @@ class WalletsFields extends Column
                 }
 
                 $filename = strtoupper($items['coin_symbol']) . '.png';
-                $coin_image_path =  $this->getRootPath() . '/app/code/Coinremitter/Checkout/view/adminhtml/web/images/'. $filename;
+                $coin_image_path =  $this->getRootPath() . '/view/adminhtml/web/images/'. $filename;
                 if (!$this->fileDriver->isExists($coin_image_path)) {
                     $items['logo_src'] = $this->_assetRepo->getUrl("Coinremitter_Checkout::images/wallet_default.png");
                     $items['logo_orig_src'] = $this->_assetRepo->getUrl("Coinremitter_Checkout::images/wallet_default.png");
@@ -119,7 +122,7 @@ class WalletsFields extends Column
     public function getRootPath()
     {
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-        $directory = $objectManager->get('\Magento\Framework\Filesystem\DirectoryList');
-        return $directory->getRoot();
+        $directory = $objectManager->get('\Magento\Framework\Module\Dir\Reader');
+        return $directory->getModuleDir('', 'Coinremitter_Checkout');
     }
 }

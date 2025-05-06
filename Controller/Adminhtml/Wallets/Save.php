@@ -236,8 +236,7 @@ class Save extends \Magento\Backend\App\Action
                 
                 /*download coin image if not exists*/
                 $filename = strtoupper($walletData['coin_symbol']) . '.png';
-                $coin_image_path =  $this->getRootPath() . '/app/code/Coinremitter/Checkout/view/adminhtml/web/images/'. $filename;
-                
+                $coin_image_path =  $this->getRootPath() . '/view/adminhtml/web/images/'. $filename;
                 if (!$this->fileDriver->isExists($coin_image_path)) {
                     $url = "https://coinremitter.com/assets/img/coins/32x32/" . $walletData['coin_symbol'] . '.png';
                     if (getimagesize($url)) {
@@ -265,8 +264,9 @@ class Save extends \Magento\Backend\App\Action
 
     public function getRootPath()
     {
+        
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-        $directory = $objectManager->get('\Magento\Framework\Filesystem\DirectoryList');
-        return $directory->getRoot();
+        $directory = $objectManager->get('\Magento\Framework\Module\Dir\Reader');
+        return $directory->getModuleDir('', 'Coinremitter_Checkout');
     }
 }
