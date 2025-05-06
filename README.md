@@ -1,4 +1,4 @@
-CoinRemitter Plugin For Prestashop
+CoinRemitter Plugin For Magento
 ===
 
 Coinremitter is a [crypto payment processor](http://coinremitter.com). Accept Bitcoin, Bitcoin Cash, Litecoin, Dogecoin, Dash, Tron, Binance ,Tether USD ERC20,Tether USD TRC20 etc.View all supported currency [here](http://coinremitter.com/supported-currencies).
