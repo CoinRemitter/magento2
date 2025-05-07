@@ -3,9 +3,10 @@
     "description": "Official coinremitter checkout plugin for magento2",
     "type": "magento2-module",
     "license": [
-        "GPL-3.0",
-        "MIT"
-    ],
+     "GPL-3.0",
+     "MIT"
+ ],
+    "version":"1.0.8",
     "authors": [
         {
             "email": "support@coinremitter.com",

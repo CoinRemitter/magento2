@@ -21,8 +21,11 @@ class CoinremitterCheckout extends \Magento\Payment\Model\Method\AbstractMethod
      */
     protected $_code = self::PAYMENT_METHOD_WALLET_CODE;
 
+
     protected $_canCapture = true;
+    protected $_canCapturePartial = true;
     protected $_canRefund = true;
+    protected $_canRefundInvoicePartial = true;
     /**
      * Availability option
      *
@@ -68,15 +71,11 @@ class CoinremitterCheckout extends \Magento\Payment\Model\Method\AbstractMethod
 
     public function capture(\Magento\Payment\Model\InfoInterface $payment, $amount)
     {
-        throw new \Magento\Framework\Exception\LocalizedException(
-            __('This payment method does not support automatic capture.')
-        );
+        return true;
     }
 
     public function refund(\Magento\Payment\Model\InfoInterface $payment, $amount)
     {
-        throw new \Magento\Framework\Exception\LocalizedException(
-            __('Refunds are not supported by this payment method.')
-        );
+        return true;
     }
 }
