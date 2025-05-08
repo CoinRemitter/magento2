@@ -48,7 +48,7 @@ class Index extends \Magento\Framework\App\Action\Action{
                if ($order->getPayment()->getMethodInstance()->getCode() == 'coinremitter_checkout' && $order->getStatus() == "pending") {
 
                   $resultPage = $this->resultPageFactory->create();
-                  $resultPage->getConfig()->getTitle()->prepend(__('Order Invoice #'.$order->getIncrementId()));
+                  $resultPage->getConfig()->getTitle()->prepend(__('Order Invoice #%1', $order->getIncrementId()));
                   $block = $resultPage->getLayout()->getBlock('coinremitter_invoice');
                   $block->setData('order_id', $order_id);
                   return $resultPage;
