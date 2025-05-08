@@ -3,6 +3,10 @@
     <preference for="Coinremitter\Checkout\Api\Data\WalletsInterface" type="Coinremitter\Checkout\Model\Wallets" />
     <preference for="Coinremitter\Checkout\Api\WalletsRepositoryInterface" type="Coinremitter\Checkout\Model\WalletsRepository" />
 
+    <type name="Magento\Sales\Model\AdminOrder\Create">
+        <plugin name="coinremitter_default_admin_payment"
+                type="Coinremitter\Checkout\Plugin\SetDefaultPaymentMethod"/>
+    </type>
     <virtualType name="WalletsGridDataProvider" type="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider">
         <arguments>
             <argument name="collection" xsi:type="object" shared="false">Coinremitter\Checkout\Model\ResourceModel\Wallets\Collection</argument>
