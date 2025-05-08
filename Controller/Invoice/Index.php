@@ -45,7 +45,7 @@ class Index extends \Magento\Framework\App\Action\Action{
       try{
          if($order->getId()){
             if($order->getCustomerId() == $this->getCustomer()){
-               if ($order->getPayment()->getMethodInstance()->getCode() == 'coinremitter_checkout' && $order->getStatus() == "pending") {
+               if ($order->getPayment()->getMethodInstance()->getCode() == 'coinremitter_checkout' && $order->getState() == "new") {
 
                   $resultPage = $this->resultPageFactory->create();
                   $resultPage->getConfig()->getTitle()->prepend(__('Order Invoice #'.$order->getIncrementId()));
