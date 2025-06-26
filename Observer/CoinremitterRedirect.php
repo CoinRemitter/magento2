@@ -136,7 +136,7 @@ class CoinremitterRedirect implements ObserverInterface
                         }
                         $db_order = [
                            'order_id' => $order_id,
-                           'user_id' => $order->getCustomerId(),
+                           'user_id' => $order->getCustomerId() ? $order->getCustomerId() : 0, // For guest user, it will be 0
                            'coin_symbol' => $wallet['coin_symbol'],
                            'coin_name' => $wallet['coin_name'],
                            'crypto_amount' => $cryptoAmount,
