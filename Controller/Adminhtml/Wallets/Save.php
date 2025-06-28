@@ -3,13 +3,8 @@
 namespace Coinremitter\Checkout\Controller\Adminhtml\Wallets;
 
 use Magento\Backend\App\Action;
-use Coinremitter\Checkout\Model\Wallets;
-// use Magento\Framework\App\Request\DataPersistorInterface;
 use Magento\Framework\Exception\LocalizedException;
-use Coinremitter\Checkout\Model\Wallets\Api;
-use Magento\Framework\HTTP\ZendClientFactory;
 use Magento\Framework\Encryption\EncryptorInterface;
-use Zend\Http\Request;
 
 class Save extends \Magento\Backend\App\Action
 {
@@ -41,18 +36,14 @@ class Save extends \Magento\Backend\App\Action
 
     public function __construct(
         Action\Context $context,
-        // DataPersistorInterface $dataPersistor,
-        \Coinremitter\Checkout\Model\WalletsFactory $walletsFactory = null,
-        \Coinremitter\Checkout\Api\WalletsRepositoryInterface $walletsRepository = null,
         \Coinremitter\Checkout\Model\Wallets\Api $apiCall,
         \Magento\Framework\Filesystem\Driver\File $fileDriver,
-        EncryptorInterface $encryptor
+        EncryptorInterface $encryptor,
+        \Coinremitter\Checkout\Model\WalletsFactory $walletsFactory,
+        \Coinremitter\Checkout\Api\WalletsRepositoryInterface $walletsRepository
     ) {
-        // $this->dataPersistor = $dataPersistor;
-        $this->walletsFactory = $walletsFactory
-            ?: \Magento\Framework\App\ObjectManager::getInstance()->get(\Coinremitter\Checkout\Model\WalletsFactory::class);
-        $this->walletsRepository = $walletsRepository
-            ?: \Magento\Framework\App\ObjectManager::getInstance()->get(\Coinremitter\Checkout\Api\WalletsRepositoryInterface::class);
+        $this->walletsFactory = $walletsFactory;
+        $this->walletsRepository = $walletsRepository;
         $this->apiCall = $apiCall;
         $this->fileDriver = $fileDriver;
         $this->encryptor = $encryptor;
@@ -61,10 +52,8 @@ class Save extends \Magento\Backend\App\Action
 
     /**
      * Authorization level
-     *
-     * @see _isAllowed()
      */
-    protected function _isAllowed()
+    protected function isAllowed()
     {
         return $this->_authorization->isAllowed('Coinremitter_Checkout::save');
     }
@@ -81,7 +70,6 @@ class Save extends \Magento\Backend\App\Action
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultRedirectFactory->create();
         if ($data) {
-
             if (empty($data['id'])) {
                 $data['id'] = null;
             }
@@ -130,7 +118,8 @@ class Save extends \Magento\Backend\App\Action
             $sql = "SELECT * FROM `coinremitter_wallets` WHERE `coin_symbol`= '" . $walletData['coin_symbol'] . "'";
 
             if ($data['id'] != null) {
-                $sql = "SELECT * FROM `coinremitter_wallets` WHERE `coin_symbol`= '" . $walletData['coin_symbol'] . "' AND `id` != '" . $data['id'] . "'";
+                $sql = "SELECT * FROM `coinremitter_wallets` WHERE `coin_symbol`= '"
+                    . $walletData['coin_symbol'] . "' AND `id` != '" . $data['id'] . "'";
             }
 
             $checkDuplicateWallet = $connection->fetchAll($sql);
@@ -143,15 +132,14 @@ class Save extends \Magento\Backend\App\Action
             $coinremitter_ex_rate_value = $data['exchange_rate_multiplier'];
 
             if ($coinremitter_ex_rate_value == '') {
-
                 $this->messageManager->addErrorMessage(__('Exchange rate multiplier field is required'));
                 $resultRedirect->setRefererUrl('*/*/');
                 return $resultRedirect;
-            } else if (!preg_match('/^[0-9]+(\.[0-9]{1,2})?$/', $coinremitter_ex_rate_value)) {
+            } elseif (!preg_match('/^[0-9]+(\.[0-9]{1,2})?$/', $coinremitter_ex_rate_value)) {
                 $this->messageManager->addErrorMessage(__('Exchange rate multiplier field is invalid'));
                 $resultRedirect->setRefererUrl('*/*/');
                 return $resultRedirect;
-            } else if ($coinremitter_ex_rate_value <= 0 || $coinremitter_ex_rate_value >= 101) {
+            } elseif ($coinremitter_ex_rate_value <= 0 || $coinremitter_ex_rate_value >= 101) {
                 $this->messageManager->addErrorMessage(__('Exchange rate multiplier field should be between 0 to 101'));
                 $resultRedirect->setRefererUrl('*/*/');
                 return $resultRedirect;
@@ -163,7 +151,7 @@ class Save extends \Magento\Backend\App\Action
                 $this->messageManager->addErrorMessage(__('Minimum value field is required'));
                 $resultRedirect->setRefererUrl('*/*/');
                 return $resultRedirect;
-            } else if (!preg_match('/^[0-9]+(\.[0-9]{1,8})?$/', $minimum_value)) {
+            } elseif (!preg_match('/^[0-9]+(\.[0-9]{1,8})?$/', $minimum_value)) {
                 $this->messageManager->addErrorMessage(__('Invoice Minimum value field is invalid'));
                 $resultRedirect->setRefererUrl('*/*/');
                 return $resultRedirect;
@@ -194,7 +182,7 @@ class Save extends \Magento\Backend\App\Action
                 if (!$convertionRes['success']) {
                     $this->messageManager->addErrorMessage(__('Opps, something might wrong!'));
                     $resultRedirect->setRefererUrl('*/*/');
-                return $resultRedirect;
+                    return $resultRedirect;
                 }
 
                 $unit_fiat_amount = $convertionRes['data'][0]['amount'];
@@ -204,7 +192,12 @@ class Save extends \Magento\Backend\App\Action
             $minimumInvAmountInFiat = number_format($minimumInvAmountInFiat, 2, '.', '');
 
             if ($minimum_value < $minimumInvAmountInFiat) {
-                $this->messageManager->addErrorMessage(__('Minimum value should be greater than or equal to ' . $minimumInvAmountInFiat . ' ' . $baseFiatCurrency));
+                $this->messageManager->addErrorMessage(
+                    __(
+                        'Minimum value should be greater than or equal to '
+                        . $minimumInvAmountInFiat . ' ' . $baseFiatCurrency
+                    )
+                );
                 $resultRedirect->setRefererUrl('*/*/');
                 return $resultRedirect;
             }
@@ -236,7 +229,7 @@ class Save extends \Magento\Backend\App\Action
                 
                 /*download coin image if not exists*/
                 $filename = strtoupper($walletData['coin_symbol']) . '.png';
-                $coin_image_path =  $this->getRootPath() . '/view/adminhtml/web/images/'. $filename;
+                $coin_image_path =  $this->getRootPath() . '/view/adminhtml/web/images/' . $filename;
                 if (!$this->fileDriver->isExists($coin_image_path)) {
                     $url = "https://coinremitter.com/assets/img/coins/32x32/" . $walletData['coin_symbol'] . '.png';
                     if (getimagesize($url)) {
@@ -252,7 +245,6 @@ class Save extends \Magento\Backend\App\Action
             } catch (LocalizedException $e) {
                 $this->messageManager->addExceptionMessage($e->getPrevious() ?: $e);
             } catch (\Exception $e) {
-
                 $this->messageManager->addExceptionMessage($e, __('Something went wrong while saving the wallet.'));
                 return $resultRedirect->setPath('*/*/');
             }

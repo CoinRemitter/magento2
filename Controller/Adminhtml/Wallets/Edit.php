@@ -3,6 +3,7 @@
 namespace Coinremitter\Checkout\Controller\Adminhtml\Wallets;
 
 use Magento\Backend\App\Action;
+
 // use Coinremitter\Checkout\Model\Wallets;
 
 class Edit extends \Magento\Backend\App\Action
@@ -30,17 +31,17 @@ class Edit extends \Magento\Backend\App\Action
         parent::__construct($context);
     }
     
-	/**
+    /**
      * Authorization level
      *
      * @see _isAllowed()
      */
-	protected function _initAction()
-	{
-		$resultPage = $this->resultPageFactory->create();
+    protected function _initAction()
+    {
+        $resultPage = $this->resultPageFactory->create();
         $resultPage->setActiveMenu('Coinremitter_Checkout::coinremitter_wallets')
-        ->addBreadcrumb(__('Coinremitter'),__('Coinremitter'))
-        ->addBreadcrumb(__('Manage All Wallets'),__('Manage All Wallets'));
+        ->addBreadcrumb(__('Coinremitter'), __('Coinremitter'))
+        ->addBreadcrumb(__('Manage All Wallets'), __('Manage All Wallets'));
         return $resultPage;
     }
 
@@ -64,7 +65,7 @@ class Edit extends \Magento\Backend\App\Action
                 return $resultRedirect->setPath('*/*/');
             }
         }
-        $this->_coreRegistry->register('coinremitter_wallets',$model);
+        $this->_coreRegistry->register('coinremitter_wallets', $model);
 
         $resultPage = $this->_initAction();
         $resultPage->addBreadcrumb(

@@ -1,122 +1,117 @@
 <?php
 if ($block->getOrder()->getPayment()->getMethod() == \Coinremitter\Checkout\Model\CoinremitterCheckout::PAYMENT_METHOD_WALLET_CODE) {
+    $resultData = $block->getdetail();
+    if (!empty($resultData)) {
+        ?>
+        <div class="block block-order-details-view">
+            <div class="block-title">
+                <strong>Payment Invoice</strong>
+            </div>
+            <div class="block-content">
+                <div class="box" style="width: 50%;">
+                    <strong class="box-title">
+                        <span>Address</span>
+                    </strong>
+                    <div class="box-content">
+                        <span><?= $escaper->escapeHtml($resultData['address']) ?></span>
+                    </div>
+                </div>
+                <div class="box">
+                    <strong class="box-title">
+                        <span>Created At</span>
+                    </strong>
+                    <div class="box-content">
+                        <span><?= $escaper->escapeHtml($resultData['created_at']) ?></span>
+                    </div>
+                </div>
+                <?php if ($resultData['payment_status'] == 'Pending' || $resultData['payment_status'] == 'Expired') { ?>
+                    <div class="box">
+                        <strong class="box-title">
+                            <span>Expire At</span>
+                        </strong>
+                        <div class="box-content">
+                            <span><?= $escaper->escapeHtml($resultData['expiry_date']) ?></span>
+                        </div>
+                    </div>
+                <?php } ?>
 
-		$resultData = $block->getdetail();
-		if(!empty($resultData)){
+                <div class="box">
+                    <strong class="box-title">
+                        <span>Payment Status</span>
+                    </strong>
+                    <div class="box-content">
+                        <span><?= $escaper->escapeHtml($resultData['payment_status']) ?></span>
+                    </div>
+                </div>
+                <div class="box">
+                    <strong class="box-title">
+                        <span>Amount</span>
+                    </strong>
+                    <div class="box-content">
+                        <span><?= $escaper->escapeHtml($resultData['crp_amount']) ?> 
+                        <?= $escaper->escapeHtml($resultData['coin']) ?></span>
+                    </div>
+                </div>
+                <div class="box">
+                    <strong class="box-title">
+                        <span>Paid Amount</span>
+                    </strong>
+                    <div class="box-content">
+                        <span><?= $escaper->escapeHtml($resultData['total_paid']) ?> 
+                        <?= $escaper->escapeHtml($resultData['coin']) ?></span>
+                    </div>
+                </div>
+                <div class="box">
+                    <strong class="box-title">
+                        <span>Pending Amount</span>
+                    </strong>
+                    <div class="box-content">
+                        <span><?= $escaper->escapeHtml($resultData['total_pending'] . ' ' . $resultData['coin']) ?></span>
+                    </div>
+                </div>
+            </div>
+            <div class="block-content">
+                <div class="box" style="width: 100%;">
+                    <strong class="box-title">
+                        <span>Transaction History</span>
+                    </strong>
+                    <table class="table">
+                        <tr>
+                            <td>ID</td>
+                            <td>Amount</td>
+                            <td>Date</td>
+                        </tr>
+                        <?php if ($resultData['transactions']) {
+                            foreach ($resultData['transactions'] as $transaction) { ?>
+                                <tr>
+                                    <td>
+                                        <a href="<?= $escaper->escapeUrl($transaction['explorer_url']) ?>" target="_blank">
+                                        <?= $escaper->escapeHtml($transaction['txid']) ?>
+                                        </a>
+                                    </td>
+                                    <td><?= $escaper->escapeHtml($transaction['amount']) ?> 
+                                    <b><?= $escaper->escapeHtml($resultData['coin']) ?></b></td>
+                                    <td><?= $escaper->escapeHtml($transaction['date']) ?> UTC</td>
+                                </tr>
+                            <?php }
+                        } else { ?>
+                            <tr>
+                                <td colspan='3' style="text-align: center;">No transaction history</td>
+                            </tr>
+                        <?php } ?>
+                    </table>
+                </div>
+            </div>
+            <?php if ($resultData['payment_status'] == 'Under Paid' || $resultData['payment_status'] == 'Pending') { ?>
+                <div class="block-content">
+                    <div class="box">
+                        <a href="<?= $escaper->escapeUrl($resultData['baseurl'] . 'coinremitter/invoice/index/order/' . $resultData['order_id']) ?>" 
+                        class="action primary">Pay Now</a>
+                    </div>
+                </div>
+            <?php } ?>
+        </div>
+        <?php
+    }
+}
 ?>
-		<div class="block block-order-details-view">
-			<div class="block-title">
-				<strong>Payment Invoice</strong>
-			</div>
-			<div class="block-content">
-				<div class="box" style="width: 50%;">
-					<strong class="box-title">
-						<span>Address</span>
-					</strong>
-					<div class="box-content">
-						<span><?php echo $resultData['address']; ?></span>
-					</div>
-				</div>
-				<div class="box">
-					<strong class="box-title">
-						<span>Created At</span>
-					</strong>
-					<div class="box-content">
-						<span>
-							<?php echo $resultData['created_at']; ?>
-						</span>
-					</div>
-				</div>
-				<?php if($resultData['payment_status'] == 'Pending' || $resultData['payment_status'] == 'Expired'){ ?>
-				<div class="box">
-					<strong class="box-title">
-						<span>Expire At</span>
-					</strong>
-					<div class="box-content">
-						<span>
-							<?php echo $resultData['expiry_date']; ?>
-						</span>
-					</div>
-				</div>
-				<?php } ?>
-
-				<div class="box">
-					<strong class="box-title">
-						<span>Payment Status</span>
-					</strong>
-					<div class="box-content">
-						<span>
-							<?php echo $resultData['payment_status']; ?>
-						</span>
-					</div>
-				</div>
-				<div class="box">
-					<strong class="box-title">
-						<span>Amount</span>
-					</strong>
-					<div class="box-content">
-						<span><?php echo $resultData['crp_amount']; ?> <?php echo $resultData['coin']; ?></span>
-					</div>
-				</div>
-				<div class="box">
-					<strong class="box-title">
-						<span>Paid Amount</span>
-					</strong>
-					<div class="box-content">
-						<span><?php echo $resultData['total_paid']; ?> <?php echo $resultData['coin']; ?></span>
-					</div>
-				</div>
-				<div class="box">
-					<strong class="box-title">
-						<span>Pending Amount</span>
-					</strong>
-					<div class="box-content">
-						<span><?php echo $resultData['total_pending'] . ' ' . $resultData['coin']  ?></span>
-					</div>
-				</div>
-			</div>
-			<div class="block-content">				
-				<div class="box" style="width: 100%;">
-					<strong class="box-title">
-						<span>Transaction History</span>
-					</strong>
-					<table class="table">
-						<tr>
-							<td>ID</td>
-							<td>Amount</td>
-							<td>Date</td>
-						</tr>
-						<?php
-						if ($resultData['transactions']) {
-							foreach ($resultData['transactions'] as $transaction) {
-						?>
-						<tr>
-							<td><a href="<?php echo $transaction['explorer_url']; ?>" target="_blank"><?php echo $transaction['txid']; ?></a></td>
-							<td><?php echo $transaction['amount'] ?> <b><?php $resultData['coin'] ?></b></td>
-							<td><?php echo $transaction['date']; ?> UTC</td>
-						</tr>
-						<?php }
-						} else {
-							?>
-							<tr>
-								<td colspan='3' style="text-align: center;">No transaction history</td>
-							</tr>
-						<?php
-						}
-						?>
-					</table>
-				</div>
-			</div>
-			<?php
-			if ($resultData['payment_status'] == 'Under Paid' || $resultData['payment_status'] == 'Pending') {
-			?>
-				<div class="block-content">
-					<div class="box">
-						<a href="<?php echo $resultData['baseurl']; ?>coinremitter/invoice/index/order/<?php echo $resultData['order_id']; ?>" class="action primary">Pay Now</a>
-					</div>
-				</div>
-			<?php
-			}
-			?>
-		</div>
-<?php }} ?>

@@ -1,6 +1,6 @@
 .field-coin .control-value{
-	font-size: 18px;
-	padding-top: 5px;
+    font-size: 18px;
+    padding-top: 5px;
 }
 .admin-page-order-table {
     display: inline-block;
@@ -34,13 +34,13 @@
     padding: 9px;
 }
 .theme-box{
-	margin-bottom: 30px;
+    margin-bottom: 30px;
 }
 .theme-box tr th, .theme-box tr td {
     padding: 1rem 1.5rem !important;
 }
 .admin-payment-history-box-main{
-	margin: 0px -15px;
+    margin: 0px -15px;
 }
 .admin-payment-history-box-main .admin-payment-history-left {
     width: calc(70% - 30px);

@@ -1,8 +1,10 @@
 <?php
+
 /**
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Coinremitter\Checkout\Client;
 
 use Magento\Payment\Gateway\Http\ClientInterface;
@@ -11,8 +13,8 @@ use Magento\Payment\Model\Method\Logger;
 
 class ClientMock implements ClientInterface
 {
-    const SUCCESS = 1;
-    const FAILURE = 0;
+    public const SUCCESS = 1;
+    public const FAILURE = 0;
 
     /**
      * @var array
@@ -82,7 +84,7 @@ class ClientMock implements ClientInterface
      */
     protected function generateTxnId()
     {
-        return hash("sha512",random_int(0, 1000));
+        return hash("sha512", random_int(0, 1000));
     }
 
     /**
@@ -112,12 +114,12 @@ class ClientMock implements ClientInterface
     {
         switch ($resultCode) {
             case self::FAILURE:
-            return [
+                return [
                 'FRAUD_MSG_LIST' => [
                     'Stolen card',
                     'Customer location differs'
                 ]
-            ];
+                ];
         }
 
         return [];

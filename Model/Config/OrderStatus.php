@@ -1,4 +1,5 @@
 <?php
+
 namespace Coinremitter\Checkout\Model\Config;
 
 class OrderStatus implements \Magento\Framework\Option\ArrayInterface

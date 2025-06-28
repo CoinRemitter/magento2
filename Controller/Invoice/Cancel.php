@@ -2,9 +2,8 @@
 
 namespace Coinremitter\Checkout\Controller\Invoice;
 
-use \Magento\Framework\App\Action\Context;
+use Magento\Framework\App\Action\Context;
 use Zend\Http\Request;
-
 
 class Cancel extends \Magento\Framework\App\Action\Action
 {

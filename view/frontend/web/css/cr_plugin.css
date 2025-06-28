@@ -1,10 +1,10 @@
 body{
-	/*font-family: 'Roboto', sans-serif;*/
-	margin: 0px;
+    /*font-family: 'Roboto', sans-serif;*/
+    margin: 0px;
     
 }
 ul, li {
-	list-style: none;
+    list-style: none;
     padding: 0px;
     margin: 0px;
 }
@@ -384,7 +384,7 @@ img {
     .cr-plugin-history > .cr-plugin-history-des.cr-plugin-no-history {
         margin-left: -60px;
     }
-    .cr-plugin-billing-main .cr-plugin-timer, 
+    .cr-plugin-billing-main .cr-plugin-timer,
     .cr-plugin-payment-history .cr-plugin-timer {
         position: static;
         margin-top: 5px;
@@ -423,7 +423,7 @@ img {
     .cr-plugin-main-box{
         margin: 0px;
     }
-    .cr-plugin-shipping > div, 
+    .cr-plugin-shipping > div,
     .cr-plugin-main-box > div {
         width: 100% !important;
         padding: 0px;
@@ -483,7 +483,7 @@ img {
     .cr-plugin-main-box{
         margin: 0px;
     }
-    .cr-plugin-main-box > .cr-plugin-left, 
+    .cr-plugin-main-box > .cr-plugin-left,
     .cr-plugin-main-box > .cr-plugin-right {
         width: 100%;
         float: none;
@@ -491,7 +491,7 @@ img {
     }
 }
 @media screen and (max-width: 1199px) and (min-width: 992px){
-    .cr-plugin-shipping .cr-plugin-shipping-address, 
+    .cr-plugin-shipping .cr-plugin-shipping-address,
     .cr-plugin-shipping .cr-plugin-billing-address {
         width: 100%;
         padding: 0px;
@@ -514,7 +514,7 @@ img {
     .cr-plugin-billing-box {
         display: block;
     }
-    .cr-plugin-billing-box .cr-plugin-billing-code, 
+    .cr-plugin-billing-box .cr-plugin-billing-code,
     .cr-plugin-billing-box .cr-plugin-billing-amount {
         width: 100%;
         display: block;

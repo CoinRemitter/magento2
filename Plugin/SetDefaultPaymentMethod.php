@@ -1,4 +1,5 @@
 <?php
+
 namespace Coinremitter\Checkout\Plugin;
 
 use Magento\Sales\Model\AdminOrder\Create;
@@ -39,7 +40,7 @@ class SetDefaultPaymentMethod
                 $enabledMethods[] = $code;
             }
         }
-        if(!empty($enabledMethods)) {
+        if (!empty($enabledMethods)) {
             $quote->getPayment()->setMethod($enabledMethods[0]);
         }
 

@@ -2,7 +2,7 @@
 
 namespace Coinremitter\Checkout\Controller\Invoice;
 
-use \Magento\Framework\App\Action\Context;
+use Magento\Framework\App\Action\Context;
 use Coinremitter\Checkout\Model\Wallets\Api;
 
 class Success extends \Magento\Framework\App\Action\Action
@@ -35,7 +35,6 @@ class Success extends \Magento\Framework\App\Action\Action
     {
         $env_mode = $this->_appState->getMode();
         if ($this->getRequest()->getParam('order_id') && is_numeric($this->getRequest()->getParam('order_id'))) {
-
             $orderId = $this->getRequest()->getParam('order_id');
             $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
             $order = $objectManager->create('Magento\Sales\Api\Data\OrderInterface')->load($orderId);
@@ -77,7 +76,6 @@ class Success extends \Magento\Framework\App\Action\Action
                     return $resultRedirect;
                 }
             } else {
-
                 if ($env_mode == 'developer') {
                     $this->_logger->info('Invoice_Success : Invoice Not Found OR Error in getting invoice');
                     $this->_logger->info('Invoice_Success : ' . json_encode($coinremitterOrder));

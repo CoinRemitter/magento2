@@ -33,7 +33,7 @@ class Wallets extends AbstractModel implements WalletsInterface, IdentityInterfa
      */
     // protected $_isOffline = true;
 
-    const CACHE_TAG = 'coinremitter_checkout';
+    public const CACHE_TAG = 'coinremitter_checkout';
 
     protected $_cacheTag = 'coinremitter_checkout';
 

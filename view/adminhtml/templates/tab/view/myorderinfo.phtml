@@ -1,135 +1,127 @@
 <?php
 if ($block->getOrder()->getPayment()->getMethod() == \Coinremitter\Checkout\Model\CoinremitterCheckout::PAYMENT_METHOD_WALLET_CODE) {
-   $resultData = $block->getDetail();
-   if(!empty($resultData)) {
-?>
-   <section class="admin__page-section order-view-account-information">
-      <div class="admin__page-section-title">
-         <span class="title"><?php echo __('Order Detail ( Coinremitter )') ?></span>
-      </div>
-      <div class="admin__table-wrapper">
-         <table class="data-table admin__table-primary edit-order-table">
-            <thead>
-               <tr class="headings">
-                  <?php
-                  if (isset($resultData['invoice_id']) && $resultData['invoice_id'] != "") {
-                  ?>
-                     <th class="col-inv-id"><span>Invoice Id</span></th>
-                  <?php
-                  } else {
-                  ?>
-                     <th class="col-inv-id"><span>Address</span></th>
-                  <?php
-                  }
-                  ?>
-                  <th class="col-base-cur"><span>Base Currency</span></th>
-                  <th class="col-coin"><span>Coin</span></th>
-                  <th class="col-status"><span>Status</span></th>
-                  <?php
-                  if (isset($resultData['address']) && $resultData['address'] != "") {
-                  ?>
-                     <th class="col-status"><span>Created Date</span></th>
-                     <th class="col-status"><span>Expired On</span></th>
-                  <?php } ?>
-               </tr>
-            </thead>
-            <tbody class="even">
-               <tr>
-                  <?php
-                  if (isset($resultData['invoice_id']) && $resultData['invoice_id'] != "") {
-                  ?>
-                     <td class="col-inv-id"><?php echo $resultData['invoice_id'] ?></td>
-                  <?php
-                  } else {
-                  ?>
-                     <td class="col-inv-id"><?php echo $resultData['address'] ?></td>
-                  <?php
-                  }
-                  ?>
-                  <td class="col-base-cur">
-                     <?php echo $resultData['base_currency'] ?>
-                  </td>
-                  <td class="col-base-cur">
-                     <?php echo $resultData['coin'] ?>
-                  </td>
-                  <td class="col-base-cur">
-                     <?php echo $resultData['payment_status']; ?>
-                  </td>
-                  <td class="col-base-cur" id="curr_date">
-                     <?php echo $resultData['created_at'] . ' UTC' ?>
-                  </td>
-                  <td class="col-base-cur">
-                     <?php echo $resultData['expiry_date'] . ' UTC' ?> 
-                  </td>
-               </tr>
-            </tbody>
-         </table>
-      </div>
-      <div class="admin-payment-history-box">
-         <div class="admin__page-section-title">
-            <span class="title">Payment History</span>
-         </div>
-         <div class="admin-payment-history-box-main">
-            <div class="admin-payment-history-left">
-               <table class="data-table admin__table-primary edit-order-table">
-                  <thead>
-                     <tr class="headings">
-                        <th><span>Transaction Id</span></th>
-                        <th><span>Amount</span></th>
-                        <th><span>Confirmation</span></th>
-                        <th><span>Date</span></th>
-                     </tr>
-                  </thead>
-                  <tbody class="even">
-                     <?php
-                     if ($resultData['transactions']) {
-                        foreach ($resultData['transactions'] as $transaction) {
-                           $j = 20; ?>
-                           <tr>
-                              <td>
-                                 <a target="_blank" href="<?php echo $transaction['explorer_url']; ?>"><span class="sub sub-s2"><?php echo substr_replace($transaction['txid'], "...", $j, (strlen($transaction['txid']) - $j)) ?></span></a>
-                              </td>
-                              <td><?php echo number_format($transaction['amount'], 8); ?> <?php echo $resultData['coin'] ?></td>
-                              <td><?= $transaction['confirmations'] ?></td>
-                              <td>
-                                 <?= $transaction['date'] . ' UTC' ?>
-                              </td>
-                           </tr>
-                        <?php }
-                     } else { ?>
-                        <tr>
-                           <td colspan="4" style="text-align: center;">
-                              <h3> Your Payment history will display here</h3>
-                           </td>
+    $resultData = $block->getDetail();
+    if (!empty($resultData)) {
+        ?>
+        <section class="admin__page-section order-view-account-information">
+            <div class="admin__page-section-title">
+                <span class="title"><?= $escaper->escapeHtml('Order Detail ( Coinremitter )') ?></span>
+            </div>
+            <div class="admin__table-wrapper">
+                <table class="data-table admin__table-primary edit-order-table">
+                    <thead>
+                        <tr class="headings">
+                            <?php if (isset($resultData['invoice_id']) && $resultData['invoice_id'] != "") { ?>
+                                <th class="col-inv-id"><span>Invoice Id</span></th>
+                            <?php } else { ?>
+                                <th class="col-inv-id"><span>Address</span></th>
+                            <?php } ?>
+                            <th class="col-base-cur"><span>Base Currency</span></th>
+                            <th class="col-coin"><span>Coin</span></th>
+                            <th class="col-status"><span>Status</span></th>
+                            <?php if (isset($resultData['address']) && $resultData['address'] != "") { ?>
+                                <th class="col-status"><span>Created Date</span></th>
+                                <th class="col-status"><span>Expired On</span></th>
+                            <?php } ?>
                         </tr>
-                     <?php } ?>
-                  </tbody>
-               </table>
+                    </thead>
+                    <tbody class="even">
+                        <tr>
+                            <?php if (isset($resultData['invoice_id']) && $resultData['invoice_id'] != "") { ?>
+                                <td class="col-inv-id"><?= $escaper->escapeHtml($resultData['invoice_id']) ?></td>
+                            <?php } else { ?>
+                                <td class="col-inv-id"><?= $escaper->escapeHtml($resultData['address']) ?></td>
+                            <?php } ?>
+                            <td class="col-base-cur">
+                                <?= $escaper->escapeHtml($resultData['base_currency']) ?>
+                            </td>
+                            <td class="col-base-cur">
+                                <?= $escaper->escapeHtml($resultData['coin']) ?>
+                            </td>
+                            <td class="col-base-cur">
+                                <?= $escaper->escapeHtml($resultData['payment_status']) ?>
+                            </td>
+                            <td class="col-base-cur" id="curr_date">
+                                <?= $escaper->escapeHtml($resultData['created_at'] . ' UTC') ?>
+                            </td>
+                            <td class="col-base-cur">
+                                <?= $escaper->escapeHtml($resultData['expiry_date'] . ' UTC') ?>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
-            <div class="admin-payment-history-right">
-               <div class="admin-panding-amount-box">
-                  <h3>Order Amount</h3>
-                  <h2><?php echo $resultData['crp_amount']; ?> <?php echo $resultData['coin'] ?></h2>
-               </div>
-               <div class="admin-panding-amount-box">
-                  <h3>Paid Amount</h3>
-                  <h2><?php echo $resultData['total_paid']; ?> <?php echo $resultData['coin'] ?></h2>
-               </div>
-               <div class="admin-panding-amount-box">
-                  <h3>Pending Amount</h3>
-                  <h2><?php echo $resultData['total_pending']; ?> <?php echo $resultData['coin'] ?></h2>
-               </div>
+            <div class="admin-payment-history-box">
+                <div class="admin__page-section-title">
+                    <span class="title">Payment History</span>
+                </div>
+                <div class="admin-payment-history-box-main">
+                    <div class="admin-payment-history-left">
+                        <table class="data-table admin__table-primary edit-order-table">
+                            <thead>
+                                <tr class="headings">
+                                    <th><span>Transaction Id</span></th>
+                                    <th><span>Amount</span></th>
+                                    <th><span>Confirmation</span></th>
+                                    <th><span>Date</span></th>
+                                </tr>
+                            </thead>
+                            <tbody class="even">
+                                <?php if ($resultData['transactions']) {
+                                    foreach ($resultData['transactions'] as $transaction) {
+                                        $j = 20; ?>
+                                        <tr>
+                                            <td>
+                                                <a target="_blank" 
+                                                href="<?= $escaper->escapeUrl($transaction['explorer_url']) ?>">
+                                                <span class="sub sub-s2">
+                                                <?= $escaper->escapeHtml(substr_replace($transaction['txid'], "...", $j, (strlen($transaction['txid']) - $j))) ?>
+                                                </span></a>
+                                            </td>
+                                            <td><?= $escaper->escapeHtml(number_format($transaction['amount'], 8)) ?> 
+                                            <?= $escaper->escapeHtml($resultData['coin']) ?></td>
+                                            <td><?= $escaper->escapeHtml($transaction['confirmations']) ?></td>
+                                            <td><?= $escaper->escapeHtml($transaction['date'] . ' UTC') ?></td>
+                                        </tr>
+                                    <?php }
+                                } else { ?>
+                                    <tr>
+                                        <td colspan="4" style="text-align: center;">
+                                            <h3> Your Payment history will display here</h3>
+                                        </td>
+                                    </tr>
+                                <?php } ?>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="admin-payment-history-right">
+                        <div class="admin-panding-amount-box">
+                            <h3>Order Amount</h3>
+                            <h2><?= $escaper->escapeHtml($resultData['crp_amount']) ?> 
+                            <?= $escaper->escapeHtml($resultData['coin']) ?></h2>
+                        </div>
+                        <div class="admin-panding-amount-box">
+                            <h3>Paid Amount</h3>
+                            <h2><?= $escaper->escapeHtml($resultData['total_paid']) ?> 
+                            <?= $escaper->escapeHtml($resultData['coin']) ?></h2>
+                        </div>
+                        <div class="admin-panding-amount-box">
+                            <h3>Pending Amount</h3>
+                            <h2><?= $escaper->escapeHtml($resultData['total_pending']) ?> 
+                            <?= $escaper->escapeHtml($resultData['coin']) ?></h2>
+                        </div>
+                    </div>
+                </div>
             </div>
-         </div>
-      </div>
-   </section>
-   
-<?php
-}} else {
-?>
-   <section class="admin__page-section order-view-account-information">
-      <h2 style="text-align: center;">Wait until payment processed..</h2>
-   </section>
-<?php
+        </section>
+
+        <?php
+    }
+} else {
+    ?>
+    <section class="admin__page-section order-view-account-information">
+        <h2 style="text-align: center;">Wait until payment processed..</h2>
+    </section>
+    <?php
 }
 ?>

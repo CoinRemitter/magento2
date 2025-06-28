@@ -1,4 +1,5 @@
-function showModal(env, response) {
+function showModal(env, response)
+{
 
     if (env == 'test') {
         coinremitter.enableTestMode()
@@ -38,12 +39,14 @@ function showModal(env, response) {
 
 }
 
-function deleteCookie(cname) {
+function deleteCookie(cname)
+{
     document.cookie = cname + '=;expires=Thu, 01 Jan 1970 00:00:01 GMT;path=/;';
 
 }
 
-function getCookie(cname) {
+function getCookie(cname)
+{
     var name = cname + "=";
     var decodedCookie = decodeURIComponent(document.cookie);
     var ca = decodedCookie.split(';');
@@ -62,9 +65,8 @@ if (window.location.href.indexOf("checkout/onepage/success/") > -1 && getCookie(
     setTimeout(function () {
         showModal(getCookie('env'), getCookie('invoicedata'))
     }, 750);
-
 }
-//guest checkout 
+//guest checkout
 //autofill the guest info
 
 

@@ -35,7 +35,7 @@
         Messages,
         layout,
         redirectOnSuccessAction
-        ) {
+    ) {
         'use strict';
 
         return Component.extend({
@@ -45,110 +45,110 @@
         /**
          * After place order callback
          */
-         afterPlaceOrder: function () {
-            // Override this function and put after place order logic here
-        },
+            afterPlaceOrder: function () {
+               // Override this function and put after place order logic here
+            },
 
         /**
          * Initialize view.
          *
          * @return {exports}
          */
-         initialize: function () {
-            var billingAddressCode,
-            billingAddressData,
-            defaultAddressData;
+            initialize: function () {
+                var billingAddressCode,
+                billingAddressData,
+                defaultAddressData;
 
-            this._super().initChildren();
-            quote.billingAddress.subscribe(function (address) {
-                this.isPlaceOrderActionAllowed(address !== null);
-            }, this);
-            checkoutDataResolver.resolveBillingAddress();
+                this._super().initChildren();
+                quote.billingAddress.subscribe(function (address) {
+                    this.isPlaceOrderActionAllowed(address !== null);
+                }, this);
+                checkoutDataResolver.resolveBillingAddress();
 
-            billingAddressCode = 'billingAddress' + this.getCode();
-            registry.async('checkoutProvider')(function (checkoutProvider) {
-                defaultAddressData = checkoutProvider.get(billingAddressCode);
+                billingAddressCode = 'billingAddress' + this.getCode();
+                registry.async('checkoutProvider')(function (checkoutProvider) {
+                    defaultAddressData = checkoutProvider.get(billingAddressCode);
 
-                if (defaultAddressData === undefined) {
-                    // Skip if payment does not have a billing address form
-                    return;
-                }
-                billingAddressData = checkoutData.getBillingAddressFromData();
+                    if (defaultAddressData === undefined) {
+                          // Skip if payment does not have a billing address form
+                          return;
+                    }
+                    billingAddressData = checkoutData.getBillingAddressFromData();
 
-                if (billingAddressData) {
-                    checkoutProvider.set(
-                        billingAddressCode,
-                        $.extend(true, {}, defaultAddressData, billingAddressData)
-                        );
-                }
-                checkoutProvider.on(billingAddressCode, function (providerBillingAddressData) {
-                    checkoutData.setBillingAddressFromData(providerBillingAddressData);
-                }, billingAddressCode);
-            });
+                    if (billingAddressData) {
+                         checkoutProvider.set(
+                             billingAddressCode,
+                             $.extend(true, {}, defaultAddressData, billingAddressData)
+                         );
+                    }
+                    checkoutProvider.on(billingAddressCode, function (providerBillingAddressData) {
+                        checkoutData.setBillingAddressFromData(providerBillingAddressData);
+                    }, billingAddressCode);
+                });
 
-            return this;
-        },
+                return this;
+            },
 
         /**
          * Initialize child elements
          *
          * @returns {Component} Chainable.
          */
-         initChildren: function () {
-            this.messageContainer = new Messages();
-            this.createMessagesComponent();
+            initChildren: function () {
+                this.messageContainer = new Messages();
+                this.createMessagesComponent();
 
-            return this;
-        },
+                return this;
+            },
 
         /**
          * Create child message renderer component
          *
          * @returns {Component} Chainable.
          */
-         createMessagesComponent: function () {
+            createMessagesComponent: function () {
 
-            var messagesComponent = {
-                parent: this.name,
-                name: this.name + '.messages',
-                displayArea: 'messages',
-                component: 'Magento_Ui/js/view/messages',
-                config: {
-                    messageContainer: this.messageContainer
-                }
-            };
+                var messagesComponent = {
+                    parent: this.name,
+                    name: this.name + '.messages',
+                    displayArea: 'messages',
+                    component: 'Magento_Ui/js/view/messages',
+                    config: {
+                        messageContainer: this.messageContainer
+                    }
+                };
 
-            layout([messagesComponent]);
+                layout([messagesComponent]);
 
-            return this;
-        },
+                return this;
+            },
 
         /**
          * Place order.
          */
-         placeOrder: function (data, event) {
-            var self = this;
+            placeOrder: function (data, event) {
+                var self = this;
 
-            if (event) {
-                event.preventDefault();
-            }
+                if (event) {
+                    event.preventDefault();
+                }
 
-            if (this.validate() && additionalValidators.validate()) {
-                this.isPlaceOrderActionAllowed(false);
+                if (this.validate() && additionalValidators.validate()) {
+                    this.isPlaceOrderActionAllowed(false);
 
-                this.getPlaceOrderDeferredObject()
-                .fail(
-                    function () {
-                        self.isPlaceOrderActionAllowed(true);
-                    }
-                    ).done(
-                    function () {
-                        self.afterPlaceOrder();
-
-                        if (self.redirectAfterPlaceOrder) {
-                            redirectOnSuccessAction.execute();
+                    this.getPlaceOrderDeferredObject()
+                    .fail(
+                        function () {
+                            self.isPlaceOrderActionAllowed(true);
                         }
-                    }
+                    ).done(
+                        function () {
+                            self.afterPlaceOrder();
+
+                            if (self.redirectAfterPlaceOrder) {
+                                redirectOnSuccessAction.execute();
+                            }
+                        }
                     );
 
                     return true;
@@ -160,25 +160,25 @@
         /**
          * @return {*}
          */
-         getPlaceOrderDeferredObject: function () {
-            return $.when(
-                placeOrderAction(this.getData(), this.messageContainer)
+            getPlaceOrderDeferredObject: function () {
+                return $.when(
+                    placeOrderAction(this.getData(), this.messageContainer)
                 );
-        },
+            },
 
         /**
          * @return {Boolean}
          */
-         selectPaymentMethod: function () {
-            selectPaymentMethodAction(this.getData());
-            checkoutData.setSelectedPaymentMethod(this.item.method);
-            console.log('selectPaymentMethod');  
-            return true;
-        },
+            selectPaymentMethod: function () {
+                selectPaymentMethodAction(this.getData());
+                checkoutData.setSelectedPaymentMethod(this.item.method);
+                console.log('selectPaymentMethod');
+                return true;
+            },
 
-        isChecked: ko.computed(function () {
-            return quote.paymentMethod() ? quote.paymentMethod().method : null;
-        }),
+            isChecked: ko.computed(function () {
+                return quote.paymentMethod() ? quote.paymentMethod().method : null;
+            }),
 
         isRadioButtonVisible: ko.computed(function () {
             return paymentService.getAvailablePaymentMethods().length !== 1;
@@ -187,7 +187,7 @@
         /**
          * Get payment method data
          */
-         getData: function () {
+        getData: function () {
             return {
                 'method': this.item.method,
                 'po_number': null,
@@ -198,41 +198,41 @@
         /**
          * Get payment method type.
          */
-         getTitle: function () {
-            return this.item.title;
-        },
+            getTitle: function () {
+                return this.item.title;
+            },
 
         /**
          * Get payment method code.
          */
-         getCode: function () {
-            return this.item.method;
-        },
+            getCode: function () {
+                return this.item.method;
+            },
 
         /**
          * @return {Boolean}
          */
-         validate: function () {
-            return true;
-        },
+            validate: function () {
+                return true;
+            },
 
         /**
          * @return {String}
          */
-         getBillingAddressFormName: function () {
-            return 'billing-address-form-' + this.item.method;
-        },
+            getBillingAddressFormName: function () {
+                return 'billing-address-form-' + this.item.method;
+            },
 
         /**
          * Dispose billing address subscriptions
          */
-         disposeSubscriptions: function () {
-            // dispose all active subscriptions
-            var billingAddressCode = 'billingAddress' + this.getCode();
+            disposeSubscriptions: function () {
+               // dispose all active subscriptions
+                var billingAddressCode = 'billingAddress' + this.getCode();
 
-            registry.async('checkoutProvider')(function (checkoutProvider) {
-                checkoutProvider.off(billingAddressCode);
-            });
-        }
+                registry.async('checkoutProvider')(function (checkoutProvider) {
+                    checkoutProvider.off(billingAddressCode);
+                });
+            }
+        });
     });
-});

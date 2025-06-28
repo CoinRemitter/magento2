@@ -1,4 +1,5 @@
 <?php
+
 namespace Coinremitter\Checkout\Block\Adminhtml\Wallets;
 
 class Edit extends \Magento\Backend\Block\Widget\Form\Container
@@ -43,34 +44,32 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
             $this->buttonList->add(
                 "save",
                 [
-                    'label'=>__('Update Wallet'),
+                    'label' => __('Update Wallet'),
                     'class' => 'save primary',
                     'data_attribute' => [
                         'mage-init' => ['button' => ['event' => 'save']],
                         'form-role' => 'save',
                     ],
                     'sort_order' => 90,
-                    'onclick'=>'newWallet()'
+                    'onclick' => 'newWallet()'
                 ],
                 10
             );
-        }else{
-
+        } else {
             $this->buttonList->add(
                 "save",
                 [
-                    'label'=>__('Save Wallet'),
+                    'label' => __('Save Wallet'),
                     'class' => 'save primary',
                     'data_attribute' => [
                         'mage-init' => ['button' => ['event' => 'save']],
                         'form-role' => 'save',
                     ],
                     'sort_order' => 90,
-                    'onclick'=>'newWallet()'
+                    'onclick' => 'newWallet()'
                 ],
                 10
             );
-            
         }
         $this->_formScripts[] = "
 
@@ -146,10 +145,10 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
                 'mage/mage',
                 'knockout'
             ], function ($){
-                
+
             });
-               
+
             ";*/
             return parent::_prepareLayout();
-        }
     }
+}

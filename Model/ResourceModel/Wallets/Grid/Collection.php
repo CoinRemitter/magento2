@@ -1,13 +1,22 @@
 <?php
+
 /**
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Coinremitter\Checkout\Model\ResourceModel\Wallets\Grid;
 
 use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\Search\AggregationInterface;
+use Magento\Framework\Data\Collection\EntityFactoryInterface;
+use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
+use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Api\SearchCriteriaInterface;
+use Psr\Log\LoggerInterface;
 use Coinremitter\Checkout\Model\ResourceModel\Wallets\Collection as WalletsCollection;
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+use Magento\Framework\DB\Adapter\AdapterInterface;
 
 /**
  * Collection for displaying grid of cms blocks
@@ -42,8 +51,8 @@ class Collection extends WalletsCollection implements SearchResultInterface
         $eventObject,
         $resourceModel,
         $model = 'Magento\Framework\View\Element\UiComponent\DataProvider\Document',
-        \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource = null,
-        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null
+        ?\Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource = null,
+        ?\Magento\Framework\DB\Adapter\AdapterInterface $connection = null
     ) {
         parent::__construct(
             $entityFactory,
@@ -107,7 +116,7 @@ class Collection extends WalletsCollection implements SearchResultInterface
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function setSearchCriteria(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria = null)
+    public function setSearchCriteria(?\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria = null)
     {
         return $this;
     }
@@ -141,7 +150,7 @@ class Collection extends WalletsCollection implements SearchResultInterface
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function setItems(array $items = null)
+    public function setItems(?array $items = null)
     {
         return $this;
     }

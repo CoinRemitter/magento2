@@ -8,7 +8,6 @@ use Laminas\Http\Client;
 use Laminas\Http\Request;
 use Magento\Framework\App\ProductMetadataInterface;
 
-
 class Api
 {
     protected $_httpClient;
@@ -16,21 +15,21 @@ class Api
     protected $_debug_logger;
     protected $encryptor;
     protected $pluginVersion;
-    private   $apiVersion = 'v1';
+    private $apiVersion = 'v1';
     protected $storeManager;
     private $currencyFactory;
     protected $magentoVersion;
-    private   $url = 'https://api.coinremitter.com/';
-    public   $orderStatusCode = array(
+    private $url = 'https://api.coinremitter.com/';
+    public $orderStatusCode = [
         'pending' => 0,
         'paid' => 1,
         'under_paid' => 2,
         'over_paid' => 3,
         'expired' => 4,
         'cancelled' => 5,
-    );
+    ];
 
-    public $orderStatus = array('Pending', 'Paid', 'Under Paid', 'Over Paid', 'Expired', 'Cancelled');
+    public $orderStatus = ['Pending', 'Paid', 'Under Paid', 'Over Paid', 'Expired', 'Cancelled'];
     public $truncationValue = 0.5; // in USD
 
     public function __construct(
@@ -55,7 +54,7 @@ class Api
     public function getWalletBalance($param = [], $header = [])
     {
         if (!isset($header['x-api-key']) || !isset($header['x-api-password'])) {
-            return array('success' => 0, 'msg' => 'API key and password is required');
+            return ['success' => 0, 'msg' => 'API key and password is required'];
         }
         $header = [
             'x-api-key:' . $header['x-api-key'],
@@ -66,7 +65,7 @@ class Api
     public function getNewAddress($param = [], $header = [])
     {
         if (!isset($header['x-api-key']) || !isset($header['x-api-password'])) {
-            return array('success' => 0, 'msg' => 'API key and password is required');
+            return ['success' => 0, 'msg' => 'API key and password is required'];
         }
         $header = [
             'x-api-key:' . $header['x-api-key'],
@@ -77,7 +76,7 @@ class Api
     public function getTransactionByAddress($param = [], $header = [])
     {
         if (!isset($header['x-api-key']) || !isset($header['x-api-password'])) {
-            return array('success' => 0, 'msg' => 'API key and password is required');
+            return ['success' => 0, 'msg' => 'API key and password is required'];
         }
         $header = [
             'x-api-key:' . $header['x-api-key'],
@@ -88,7 +87,7 @@ class Api
     public function getTransaction($param = [], $header = [])
     {
         if (!isset($header['x-api-key']) || !isset($header['x-api-password'])) {
-            return array('success' => 0, 'msg' => 'API key and password is required');
+            return ['success' => 0, 'msg' => 'API key and password is required'];
         }
         $header = [
             'x-api-key:' . $header['x-api-key'],
@@ -161,7 +160,6 @@ class Api
             $apiCaller->getPost()->fromArray($param);
         }
         try {
-
             $requestHeader = [
                 'User-Agent:' . $userAgent
             ];
@@ -183,16 +181,15 @@ class Api
 
             if ($statusCode == 200) {
                 if ($apiRes['success'] != 1) {
-                    $apiRes = array('success' => 0, 'msg' => 'Oops, something went wrong. Please contact admin.');
+                    $apiRes = ['success' => 0, 'msg' => 'Oops, something went wrong. Please contact admin.'];
                 }
             } else {
-                $apiRes = array('success' => 0, 'msg' => 'Oops, something went wrong. Please contact admin.');
+                $apiRes = ['success' => 0, 'msg' => 'Oops, something went wrong. Please contact admin.'];
             }
         } catch (\Exception $e) {
-
             $this->_debug_logger->error($e);
             $this->_debug_logger->error('api caller : error while api call, in catch now');
-            $apiRes = array('success' => 0, 'msg' => "Couldn't connect to coinremitter.com. Please check your internet connection");
+            $apiRes = ['success' => 0, 'msg' => "Couldn't connect to coinremitter.com. Please check your internet connection"];
         }
         return $apiRes;
     }

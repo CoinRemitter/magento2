@@ -83,7 +83,6 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
             ['data' => ['id' => 'wallets_form', 'enctype' => 'multipart/form-data', 'action' => $this->getUrl("*/*/save"), 'method' => 'post']]
         );
         if ($model->getId()) {
-
             $fieldset = $form->addFieldset(
                 'base_fieldset',
                 ['legend' => __('Wallet Information'), 'class' => 'fieldset-wide']

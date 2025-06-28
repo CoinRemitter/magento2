@@ -1,4 +1,5 @@
 <?php
+
 namespace Coinremitter\Checkout\Model\ResourceModel;
 
 use Magento\Framework\Model\AbstractModel;

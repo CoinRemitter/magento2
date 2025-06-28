@@ -1,5 +1,7 @@
 <?php
+
 namespace Coinremitter\Checkout\Controller\Adminhtml\Wallets;
+
 use Coinremitter\Checkout\Model\Wallets as Wallets;
 
 class NewAction extends \Magento\Backend\App\Action
@@ -21,15 +23,13 @@ class NewAction extends \Magento\Backend\App\Action
         parent::__construct($context);
     }
     
-	/**
+    /**
      * Authorization level
-     *
-     * @see _isAllowed()
      */
-	protected function _isAllowed()
-	{
-		return $this->_authorization->isAllowed('Coinremitter_Checkout::save');
-	}
+    protected function isAllowed()
+    {
+        return $this->_authorization->isAllowed('Coinremitter_Checkout::save');
+    }
 
     /**
      * Forward to edit

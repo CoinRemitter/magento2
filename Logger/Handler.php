@@ -1,4 +1,5 @@
 <?php
+
 namespace Coinremitter\Checkout\Logger;
 
 use Monolog\Logger;

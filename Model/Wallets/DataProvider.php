@@ -1,4 +1,5 @@
 <?php
+
 namespace Coinremitter\Checkout\Model\Wallets;
 
 use Coinremitter\Checkout\Model\ResourceModel\Wallets\CollectionFactory;
@@ -33,13 +34,12 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         }
 
         $items = $this->collection->getItems();
-        $this->loadedData = array();
+        $this->loadedData = [];
         /** @var Contact $contact */
         foreach ($items as $wallet) {
             // our fieldset is called "contact" or this table so that magento can find its datas:
             $this->loadedData[$wallet->getId()]['wallets'] = $wallet->getData();
         }
         return $this->loadedData;
-
     }
 }

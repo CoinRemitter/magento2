@@ -11,8 +11,8 @@ use Magento\Framework\Module\Dir\Reader;
 class WalletsFields extends Column
 {
 
-    const NAME = 'thumbnail';
-    const ALT_FIELD = 'name';
+    public const NAME = 'thumbnail';
+    public const ALT_FIELD = 'name';
 
     protected $apiCall;
     protected $_assetRepo;
@@ -42,8 +42,6 @@ class WalletsFields extends Column
     {
 
         if (isset($dataSource['data']['items'])) {
-
-            
             $connection  = $this->resource->getConnection();
             $tableName = $connection->getTableName("coinremitter_wallets");
 
@@ -62,17 +60,17 @@ class WalletsFields extends Column
 
 
                 if ($baseFiatCurrency != $items['base_fiat_symbol']) {
-                    $fiatToCryptoConversionParam = array(
+                    $fiatToCryptoConversionParam = [
                         'crypto' => $items['coin_symbol'],
                         'fiat' => $items['base_fiat_symbol'],
                         'fiat_amount' => $items['minimum_invoice_amount']
-                    );
+                    ];
                     $fiatToCryptoConversionRes = $this->apiCall->getFiatToCryptoRate($fiatToCryptoConversionParam);
-                    $cryptoToFiatConversionParam = array(
+                    $cryptoToFiatConversionParam = [
                         'crypto' => $items['coin_symbol'],
                         'crypto_amount' => $fiatToCryptoConversionRes['data'][0]['price'],
                         'fiat' => $baseFiatCurrency
-                    );
+                    ];
                     $cryptoToFiatConversionRes = $this->apiCall->getCryptoToFiatRate($cryptoToFiatConversionParam);
                     
                     if ($cryptoToFiatConversionRes['success']) {
@@ -81,7 +79,7 @@ class WalletsFields extends Column
                         $items['minimum_invoice_amount'] = $minimumInvAmountInFiat;
                         //update table entry
                         
-                        $data = ["minimum_invoice_amount" => $minimumInvAmountInFiat,'base_fiat_symbol'=>$baseFiatCurrency];
+                        $data = ["minimum_invoice_amount" => $minimumInvAmountInFiat,'base_fiat_symbol' => $baseFiatCurrency];
                         $where = ['id' => $items['id']];
                         $connection->update($tableName, $data, $where);
                     }
@@ -96,7 +94,7 @@ class WalletsFields extends Column
                 }
 
                 $filename = strtoupper($items['coin_symbol']) . '.png';
-                $coin_image_path =  $this->getRootPath() . '/view/adminhtml/web/images/'. $filename;
+                $coin_image_path =  $this->getRootPath() . '/view/adminhtml/web/images/' . $filename;
                 if (!$this->fileDriver->isExists($coin_image_path)) {
                     $items['logo_src'] = $this->_assetRepo->getUrl("Coinremitter_Checkout::images/wallet_default.png");
                     $items['logo_orig_src'] = $this->_assetRepo->getUrl("Coinremitter_Checkout::images/wallet_default.png");

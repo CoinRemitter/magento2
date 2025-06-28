@@ -1,8 +1,7 @@
-<?php
-
 /**
  * @var \Coinremitter\Checkout\Block\Cancel $block
  */
 
-echo $block->cancelOrder();?>
-
+<?= // The cancelOrder method returns escaped HTML content, so we can safely output it
+ $block->cancelOrder();
+?>

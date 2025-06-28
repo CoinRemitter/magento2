@@ -10,8 +10,8 @@ use Magento\Framework\UrlInterface;
 class WalletsActions extends Column
 {
     /** Url path */
-    const ROW_EDIT_URL = 'coinremitter/wallets/edit';
-    const ROW_DELETE_URL = 'coinremitter/wallets/delete';
+    public const ROW_EDIT_URL = 'coinremitter/wallets/edit';
+    public const ROW_DELETE_URL = 'coinremitter/wallets/delete';
     /** @var UrlInterface */
     protected $_urlBuilder;
     
@@ -35,8 +35,7 @@ class WalletsActions extends Column
         array $components = [],
         array $data = [],
         $editUrl = self::ROW_EDIT_URL
-    ) 
-    {
+    ) {
         $this->_urlBuilder = $urlBuilder;
         $this->_editUrl = $editUrl;
         parent::__construct($context, $uiComponentFactory, $components, $data);
@@ -57,7 +56,7 @@ class WalletsActions extends Column
                 if (isset($item['id'])) {
                     $item[$name]['edit'] = [
                         'href' => $this->_urlBuilder->getUrl(
-                            $this->_editUrl, 
+                            $this->_editUrl,
                             ['id' => $item['id']]
                         ),
                         'label' => __('Edit'),
@@ -66,13 +65,13 @@ class WalletsActions extends Column
                     $title = $item['wallet_name'];
                     $item[$name]['delete'] = [
                         'href' => $this->_urlBuilder->getUrl(
-                            self::ROW_DELETE_URL, 
+                            self::ROW_DELETE_URL,
                             ['id' => $item['id']]
                         ),
                         'label' => __('Delete'),
-                        'confirm'=>[
-                            'title'=>__('Delete %1', $title),
-                            'message'=>__('Are you sure you want to delete a %1 wallet?', $title)
+                        'confirm' => [
+                            'title' => __('Delete %1', $title),
+                            'message' => __('Are you sure you want to delete a %1 wallet?', $title)
                         ],
                     ];
                 }

@@ -1,4 +1,5 @@
 <?php
+
 namespace Coinremitter\Checkout\Model\ResourceModel\CoinremitterPayment;
 
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection

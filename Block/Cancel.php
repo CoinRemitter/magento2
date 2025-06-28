@@ -1,43 +1,99 @@
 <?php
+
 namespace Coinremitter\Checkout\Block;
-class Cancel extends \Magento\Framework\View\Element\Template
+
+use Magento\Framework\View\Element\Template;
+use Magento\Framework\View\Element\Template\Context;
+use Magento\Sales\Api\OrderRepositoryInterface;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Store\Model\StoreManagerInterface;
+
+/**
+ * Cancel block class for order cancellation
+ */
+class Cancel extends Template
 {
-	protected $orderRepository;
-	public function __construct(
-		\Magento\Framework\View\Element\Template\Context $context,
-		\Magento\Sales\Api\OrderRepositoryInterface $orderRepository
-	)
-	{
-		parent::__construct($context);
-		$this->orderRepository = $orderRepository;
+    /**
+     * @var OrderRepositoryInterface
+     */
+    protected $orderRepository;
 
-	}
+    /**
+     * @var ResourceConnection
+     */
+    protected $resourceConnection;
 
-	public function cancelOrder()
-	{	
-		if ($this->getRequest()->getParam('order_id') && is_numeric($this->getRequest()->getParam('order_id'))) {
-			$order_id = $this->getRequest()->getParam('order_id');
-			$order = $this->orderRepository->get($order_id);
-			$orderIncrementId = $order->getIncrementId();
+    /**
+     * @var StoreManagerInterface
+     */
+    protected $storeManager;
 
-			$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-			$resource = $objectManager->get('Magento\Framework\App\ResourceConnection');
-			$connection = $resource->getConnection();
-			$sql="UPDATE coinremitter_orders SET order_status=4 WHERE order_id=".$order_id;
-			$resultTransaction = $connection->query($sql);
-			
-			$path = $this->getBaseUrl()."sales/order/view/order_id/".$order_id."/";
-			return __('<h3>Your order <a href="'.$path.'">#'.$orderIncrementId.'</a> has been cancelled successfully.</h3>');	
-		}else{
-			return __('<h3>Your order has been cancelled successfully.</h3>');	
-		}
-	}
+    /**
+     * Constructor
+     *
+     * @param Context $context
+     * @param OrderRepositoryInterface $orderRepository
+     * @param ResourceConnection $resourceConnection
+     * @param StoreManagerInterface $storeManager
+     * @param array $data
+     */
+    public function __construct(
+        Context $context,
+        OrderRepositoryInterface $orderRepository,
+        ResourceConnection $resourceConnection,
+        StoreManagerInterface $storeManager,
+        array $data = []
+    ) {
+        parent::__construct($context, $data);
+        $this->orderRepository = $orderRepository;
+        $this->resourceConnection = $resourceConnection;
+        $this->storeManager = $storeManager;
+    }
 
-	public function getBaseUrl(){
+    /**
+     * Cancel order and return success message
+     *
+     * @return \Magento\Framework\Phrase
+     */
+    public function cancelOrder()
+    {
+        $orderId = $this->getRequest()->getParam('order_id');
+        
+        if ($orderId && is_numeric($orderId)) {
+            try {
+                $order = $this->orderRepository->get($orderId);
+                $orderIncrementId = $order->getIncrementId();
 
-		$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-		$storeManager = $objectManager->get('\Magento\Store\Model\StoreManagerInterface');
-		return $storeManager->getStore()->getBaseUrl();
+                // Update order status in custom table using proper prepared statement
+                $connection = $this->resourceConnection->getConnection();
+                $tableName = $this->resourceConnection->getTableName('coinremitter_orders');
+                $connection->update(
+                    $tableName,
+                    ['order_status' => 4],
+                    ['order_id = ?' => $orderId]
+                );
 
-	}
+                $path = $this->getBaseUrl() . "sales/order/view/order_id/" . $orderId . "/";
+                return __(
+                    '<h3>Your order <a href="%1">#%2</a> has been cancelled successfully.</h3>',
+                    $path,
+                    $orderIncrementId
+                );
+            } catch (\Exception $e) {
+                return __('<h3>Error cancelling order. Please try again.</h3>');
+            }
+        } else {
+            return __('<h3>Your order has been cancelled successfully.</h3>');
+        }
+    }
+
+    /**
+     * Get base URL
+     *
+     * @return string
+     */
+    public function getBaseUrl()
+    {
+        return $this->storeManager->getStore()->getBaseUrl();
+    }
 }

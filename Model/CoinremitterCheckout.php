@@ -1,8 +1,10 @@
 <?php
+
 /**
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Coinremitter\Checkout\Model;
 
 use Magento\Framework\DataObject;
@@ -13,7 +15,7 @@ use Magento\Quote\Api\Data\PaymentInterface;
  */
 class CoinremitterCheckout extends \Magento\Payment\Model\Method\AbstractMethod
 {
-    const PAYMENT_METHOD_WALLET_CODE = 'coinremitter_checkout';
+    public const PAYMENT_METHOD_WALLET_CODE = 'coinremitter_checkout';
     /**
      * Payment code
      *
@@ -38,7 +40,7 @@ class CoinremitterCheckout extends \Magento\Payment\Model\Method\AbstractMethod
      * @param \Magento\Framework\DataObject|mixed $data
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
-    */
+     */
     public function assignData(\Magento\Framework\DataObject $data)
     {
         /*$additionalData = $data->getData(PaymentInterface::KEY_ADDITIONAL_DATA);
@@ -53,10 +55,9 @@ class CoinremitterCheckout extends \Magento\Payment\Model\Method\AbstractMethod
         $infoInstance = $this->getInfoInstance();
         
         
-        if(is_array($data->getData('additional_data')))
-        {
+        if (is_array($data->getData('additional_data'))) {
             $additionalData = $data->getData('additional_data');
-            $pickPayLocation = isset($additionalData['transaction_result'])?$additionalData['transaction_result']:"";
+            $pickPayLocation = isset($additionalData['transaction_result']) ? $additionalData['transaction_result'] : "";
             $infoInstance->setAdditionalInformation('transaction_result', $pickPayLocation);
             $data->setTransactionResult($pickPayLocation);
             $infoInstance->setTransactionResult($pickPayLocation);

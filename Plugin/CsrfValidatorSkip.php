@@ -1,5 +1,7 @@
 <?php
+
 namespace Coinremitter\Checkout\Plugin;
+
 class CsrfValidatorSkip
 {
     /**
