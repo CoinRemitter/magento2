@@ -231,7 +231,7 @@ class Save extends \Magento\Backend\App\Action
                 $filename = strtoupper($walletData['coin_symbol']) . '.png';
                 $coin_image_path =  $this->getRootPath() . '/view/adminhtml/web/images/' . $filename;
                 if (!$this->fileDriver->isExists($coin_image_path)) {
-                    $url = "https://coinremitter.com/assets/img/coins/32x32/" . $walletData['coin_symbol'] . '.png';
+                    $url = $walletData['coin_logo'];
                     if (getimagesize($url)) {
                         copy($url, $coin_image_path);
                     }
