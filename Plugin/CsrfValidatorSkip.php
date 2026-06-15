@@ -16,9 +16,16 @@ class CsrfValidatorSkip
         $request,
         $action
     ) {
-        if ($request->getModuleName() == 'coinremitter') {
-            return; // Skip CSRF check
+        /**
+         * whitelist coinremitter/invoice/webhook route
+         */
+        if ($request->getModuleName() == 'coinremitter'
+            && $request->getControllerName() == 'invoice'
+            && $request->getActionName() == 'webhook'
+        ) {
+            return;
         }
-        $proceed($request, $action); // Proceed Magento 2 core functionalities
+
+        return $proceed($request, $action); // Proceed Magento 2 core functionalities
     }
 }

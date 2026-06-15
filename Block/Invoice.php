@@ -39,8 +39,8 @@ class Invoice extends \Magento\Framework\View\Element\Template
             $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
             $resource = $objectManager->get('Magento\Framework\App\ResourceConnection');
             $connection = $resource->getConnection();
-            $sql = "SELECT * FROM coinremitter_orders WHERE `order_id`= '" . $order_id . "'";
-            $result = $connection->fetchAll($sql);
+            $sql = "SELECT * FROM coinremitter_orders WHERE `order_id` = ?";
+            $result = $connection->fetchAll($sql, [$order_id]);
 
             if (!empty($result)) {
                 $orderData = $result[0];

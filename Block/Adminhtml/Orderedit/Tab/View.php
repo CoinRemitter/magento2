@@ -76,8 +76,8 @@ class View extends \Magento\Backend\Block\Template implements \Magento\Backend\B
         $resource = $objectManager->get('Magento\Framework\App\ResourceConnection');
         $connection = $resource->getConnection();
 
-        $sql = "SELECT * FROM `coinremitter_orders` WHERE order_id=" . $orderId;
-        $coinremitterOrder = $connection->fetchAll($sql);
+        $sql = "SELECT * FROM `coinremitter_orders` WHERE order_id = ?";
+        $coinremitterOrder = $connection->fetchAll($sql, [$orderId]);
         if (empty($coinremitterOrder)) {
             return [];
         }
@@ -109,16 +109,16 @@ class View extends \Magento\Backend\Block\Template implements \Magento\Backend\B
          'expiry_date' => $expire_on,
         ];
 
-        $sql = "SELECT * FROM `coinremitter_orders` WHERE `order_id` = '$orderId' LIMIT 1";
-        $coinremitterOrder = $connection->fetchAll($sql);
+        $sql = "SELECT * FROM `coinremitter_orders` WHERE `order_id` = ? LIMIT 1";
+        $coinremitterOrder = $connection->fetchAll($sql, [$orderId]);
         if (empty($coinremitterOrder)) {
             return [];
         }
         $coinremitterOrder = $coinremitterOrder[0];
         $coinremitterOrder['transaction_meta'] = $coinremitterOrder['transaction_meta'] ? json_decode($coinremitterOrder['transaction_meta'], true) : [];
 
-        $sql = "SELECT * FROM `coinremitter_wallets` WHERE `coin_symbol`= '" . $coin . "'";
-        $wallet = $connection->fetchAll($sql);
+        $sql = "SELECT * FROM `coinremitter_wallets` WHERE `coin_symbol` = ?";
+        $wallet = $connection->fetchAll($sql, [$coin]);
         if (empty($wallet)) {
             return $resultData;
         }
@@ -147,8 +147,8 @@ class View extends \Magento\Backend\Block\Template implements \Magento\Backend\B
                 $expiryStatus = $statusCode['expired'];
                 $total_paid = $transactionData['confirm_amount'];
                 $total_fiat_paid = number_format(($total_paid * $coinremitterOrder['fiat_amount']) / $coinremitterOrder['crypto_amount'], 2, '.', '');
-                $sql = "UPDATE `coinremitter_orders` SET `paid_crypto_amount`=" . $transactionData['confirm_amount'] . ",`paid_fiat_amount`=" . $total_fiat_paid . ",`order_status`=" . $expiryStatus . ",`transaction_meta`='" . json_encode($allTrx) . "' WHERE payment_address='" . $coinremitterOrder['payment_address'] . "'";
-                $connection->query($sql);
+                $sql = "UPDATE `coinremitter_orders` SET `paid_crypto_amount` = ?, `paid_fiat_amount` = ?, `order_status` = ?, `transaction_meta` = ? WHERE payment_address = ?";
+                $connection->query($sql, [$transactionData['confirm_amount'], $total_fiat_paid, $expiryStatus, json_encode($allTrx), $coinremitterOrder['payment_address']]);
                 $resultData['payment_status'] = $orderStatus[$expiryStatus];
                 return $resultData;
             }
@@ -234,8 +234,8 @@ class View extends \Magento\Backend\Block\Template implements \Magento\Backend\B
             $this->checkoutSession->clearQuote();
             $status = $statusCode['expired'];
         }
-        $sql = "UPDATE `coinremitter_orders` SET `paid_crypto_amount`=" . $total_paid . ",`paid_fiat_amount`=" . $total_fiat_paid . ",`order_status`=" . $status . ",`transaction_meta`='" . $trxMeta . "' WHERE payment_address='" . $coinremitterOrder['payment_address'] . "'";
-        $connection->query($sql);
+        $sql = "UPDATE `coinremitter_orders` SET `paid_crypto_amount` = ?, `paid_fiat_amount` = ?, `order_status` = ?, `transaction_meta` = ? WHERE payment_address = ?";
+        $connection->query($sql, [$total_paid, $total_fiat_paid, $status, $trxMeta, $coinremitterOrder['payment_address']]);
 
         $resultData['btnShow'] = 0;
         if ($status == $statusCode['under_paid'] || $status == $statusCode['pending']) {
@@ -285,8 +285,8 @@ class View extends \Magento\Backend\Block\Template implements \Magento\Backend\B
             $resource = $objectManager->get('Magento\Framework\App\ResourceConnection');
             $connection = $resource->getConnection();
             $status = \Magento\Downloadable\Model\Link\Purchased\Item::LINK_STATUS_AVAILABLE;
-            $sql = "UPDATE downloadable_link_purchased_item SET status='$status' WHERE purchased_id IN (SELECT purchased_id FROM downloadable_link_purchased WHERE order_id=$orderId)";
-            $result = $connection->query($sql);
+            $sql = "UPDATE downloadable_link_purchased_item SET status = ? WHERE purchased_id IN (SELECT purchased_id FROM downloadable_link_purchased WHERE order_id = ?)";
+            $result = $connection->query($sql, [$status, $orderId]);
         }
     }
 }

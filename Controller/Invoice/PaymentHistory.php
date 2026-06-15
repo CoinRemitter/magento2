@@ -56,8 +56,8 @@ class PaymentHistory extends Action
         $resource = $objectManager->get('Magento\Framework\App\ResourceConnection');
         $connection = $resource->getConnection();
 
-        $sql = "SELECT * FROM `coinremitter_orders` WHERE `payment_address`='" . $address . "'";
-        $orderData = $connection->fetchAll($sql);
+        $sql = "SELECT * FROM `coinremitter_orders` WHERE `payment_address` = ?";
+        $orderData = $connection->fetchAll($sql, [$address]);
 
 
         if (empty($orderData)) {
@@ -100,8 +100,8 @@ class PaymentHistory extends Action
 
         if (empty($orderData['transaction_meta']) && $date_diff < 1 && $expire_on != "") {
             $expireStatus = $this->orderStatusCode['expired'];
-            $sql = "UPDATE `coinremitter_orders` SET `order_status`= $expireStatus WHERE `id`= '" . $orderData['id'] . "'";
-            $connection->query($sql);
+            $sql = "UPDATE `coinremitter_orders` SET `order_status` = ? WHERE `id` = ?";
+            $connection->query($sql, [$expireStatus, $orderData['id']]);
             $returnJson['data']['status'] = $this->orderStatus[$expireStatus];
             $returnJson['data']['status_code'] = $expireStatus;
             $this->orderManagement->cancel($orderData['order_id']);
@@ -110,8 +110,8 @@ class PaymentHistory extends Action
         }
 
 
-        $sql = "SELECT * FROM `coinremitter_wallets` WHERE `coin_symbol`='" . $orderData['coin_symbol'] . "'";
-        $walletData = $connection->fetchAll($sql);
+        $sql = "SELECT * FROM `coinremitter_wallets` WHERE `coin_symbol` = ?";
+        $walletData = $connection->fetchAll($sql, [$orderData['coin_symbol']]);
 
         if (empty($walletData)) {
             $resultJson->setData($returnJson);
@@ -197,8 +197,8 @@ class PaymentHistory extends Action
             }
         }
         $trxMeta = json_encode($trxMeta);
-        $sql = "UPDATE `coinremitter_orders` SET `paid_crypto_amount`=" . $total_paid . ",`paid_fiat_amount`=" . $total_fiat_paid . ",`order_status`=" . $status . ",`transaction_meta`='" . $trxMeta . "' WHERE payment_address='" . $orderData['payment_address'] . "'";
-        $connection->query($sql);
+        $sql = "UPDATE `coinremitter_orders` SET `paid_crypto_amount` = ?, `paid_fiat_amount` = ?, `order_status` = ?, `transaction_meta` = ? WHERE payment_address = ?";
+        $connection->query($sql, [$total_paid, $total_fiat_paid, $status, $trxMeta, $orderData['payment_address']]);
 
         $returnJson['data']['status'] = $this->orderStatus[$status];
         $returnJson['data']['status_code'] = $status;

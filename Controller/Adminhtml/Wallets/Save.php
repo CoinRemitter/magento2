@@ -115,14 +115,15 @@ class Save extends \Magento\Backend\App\Action
             $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
             $resource = $objectManager->get('Magento\Framework\App\ResourceConnection');
             $connection = $resource->getConnection();
-            $sql = "SELECT * FROM `coinremitter_wallets` WHERE `coin_symbol`= '" . $walletData['coin_symbol'] . "'";
+            $sql = "SELECT * FROM `coinremitter_wallets` WHERE `coin_symbol` = ?";
+            $params = [$walletData['coin_symbol']];
 
             if ($data['id'] != null) {
-                $sql = "SELECT * FROM `coinremitter_wallets` WHERE `coin_symbol`= '"
-                    . $walletData['coin_symbol'] . "' AND `id` != '" . $data['id'] . "'";
+                $sql = "SELECT * FROM `coinremitter_wallets` WHERE `coin_symbol` = ? AND `id` != ?";
+                $params = [$walletData['coin_symbol'], $data['id']];
             }
 
-            $checkDuplicateWallet = $connection->fetchAll($sql);
+            $checkDuplicateWallet = $connection->fetchAll($sql, $params);
             if (!empty($checkDuplicateWallet)) {
                 $this->messageManager->addErrorMessage(__('Wallet with this coin already exists.'));
                 $resultRedirect->setRefererUrl('*/*/');

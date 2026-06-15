@@ -47,8 +47,8 @@ class Success extends \Magento\Framework\App\Action\Action
 
             $resource = $objectManager->get('Magento\Framework\App\ResourceConnection');
             $connection = $resource->getConnection();
-            $sql = "SELECT * FROM `coinremitter_orders` WHERE order_id= '" . $orderId . "'";
-            $coinremitterOrder = $connection->fetchAll($sql);
+            $sql = "SELECT * FROM `coinremitter_orders` WHERE order_id = ?";
+            $coinremitterOrder = $connection->fetchAll($sql, [$orderId]);
 
             $this->checkoutSession->clearQuote();  //remove qoute info from session
 

@@ -59,8 +59,8 @@ class Cancel extends \Magento\Framework\App\Action\Action
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
         $resource = $objectManager->get('Magento\Framework\App\ResourceConnection');
         $connection = $resource->getConnection();
-        $getOrderId = "SELECT * FROM `coinremitter_orders` WHERE `order_id`= '" . $orderId . "'";
-        $coinremitterOrder = $connection->fetchAll($getOrderId);
+        $sql = "SELECT * FROM `coinremitter_orders` WHERE `order_id` = ?";
+        $coinremitterOrder = $connection->fetchAll($sql, [$orderId]);
 
         if (empty($coinremitterOrder)) {
             return $resultRedirect;
@@ -83,8 +83,8 @@ class Cancel extends \Magento\Framework\App\Action\Action
 
         $coin = $coinremitterOrder['coin_symbol'];
         $address = $coinremitterOrder['payment_address'];
-        $sql = "SELECT * FROM `coinremitter_wallets` WHERE `coin_symbol`= '" . $coin . "'";
-        $wallet = $connection->fetchAll($sql);
+        $sql = "SELECT * FROM `coinremitter_wallets` WHERE `coin_symbol` = ?";
+        $wallet = $connection->fetchAll($sql, [$coin]);
         if (empty($wallet)) {
             return $resultRedirect;
         }

@@ -30,7 +30,7 @@ class Api
     ];
 
     public $orderStatus = ['Pending', 'Paid', 'Under Paid', 'Over Paid', 'Expired', 'Cancelled'];
-    public $truncationValue = 0.5; // in USD
+    public $truncationValue = 0.05; // in USD
 
     public function __construct(
         ZendClientFactory $httpClient,

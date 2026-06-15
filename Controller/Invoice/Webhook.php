@@ -44,8 +44,8 @@ class Webhook extends \Magento\Framework\App\Action\Action
         $connection = $resource->getConnection();
 
 
-        $sql = "SELECT * FROM `coinremitter_orders` WHERE `payment_address`= '" . $address . "'";
-        $coinremitterOrder = $connection->fetchAll($sql);
+        $sql = "SELECT * FROM `coinremitter_orders` WHERE `payment_address`= ?";
+        $coinremitterOrder = $connection->fetchAll($sql, [$address]);
 
         if (empty($coinremitterOrder)) {
             return $this->getResponse()->setBody('Invalid address');
@@ -73,14 +73,14 @@ class Webhook extends \Magento\Framework\App\Action\Action
                 $this->orderManagement->cancel($orderId);
 
                 $expiryStatus = $statusCode['expired'];
-                $sql = "UPDATE `coinremitter_orders` SET `order_status`= $expiryStatus WHERE `payment_address`= '$address' ";
-                $connection->query($sql);
+                $sql = "UPDATE `coinremitter_orders` SET `order_status` = ? WHERE `payment_address` = ?";
+                $connection->query($sql, [$expiryStatus, $address]);
                 return $this->getResponse()->setBody('Order expired');
             }
         }
 
-        $sql = "SELECT * FROM `coinremitter_wallets` WHERE `coin_symbol`= '" . $coin . "'";
-        $resultWallet = $connection->fetchAll($sql);
+        $sql = "SELECT * FROM `coinremitter_wallets` WHERE `coin_symbol` = ?";
+        $resultWallet = $connection->fetchAll($sql, [$coin]);
         if (empty($resultWallet)) {
             return 'Wallet not found';
         }
@@ -122,8 +122,8 @@ class Webhook extends \Magento\Framework\App\Action\Action
             return $this->getResponse()->setBody('Order amount is less than minimum amount');
         }
 
-        $sql = "SELECT * FROM `coinremitter_orders` WHERE `payment_address`= '" . $address . "' LIMIT 1";
-        $result = $connection->fetchAll($sql);
+        $sql = "SELECT * FROM `coinremitter_orders` WHERE `payment_address` = ? LIMIT 1";
+        $result = $connection->fetchAll($sql, [$address]);
         if (empty($result)) {
             return $this->getResponse()->setBody('Address Not Found');
         }
@@ -186,8 +186,8 @@ class Webhook extends \Magento\Framework\App\Action\Action
         }
 
         $trxMeta = json_encode($trxMeta);
-        $sql = "UPDATE `coinremitter_orders` SET `paid_crypto_amount`=" . $total_paid . ",`paid_fiat_amount`=" . $total_fiat_paid . ",`order_status`=" . $status . ",`transaction_meta`='" . $trxMeta . "' WHERE `payment_address`='" . $coinremitterOrder['payment_address'] . "'";
-        $connection->query($sql);
+        $sql = "UPDATE `coinremitter_orders` SET `paid_crypto_amount` = ?, `paid_fiat_amount` = ?, `order_status` = ?, `transaction_meta` = ? WHERE `payment_address` = ?";
+        $connection->query($sql, [$total_paid, $total_fiat_paid, $status, $trxMeta, $coinremitterOrder['payment_address']]);
         if ($status == $statusCode['paid'] || $status == $statusCode['over_paid']) {
             $this->orderConfirm($orderId);
             return $this->getResponse()->setBody('Order paid');
@@ -218,12 +218,12 @@ class Webhook extends \Magento\Framework\App\Action\Action
         $connection->query($sql, $_data);
         $lastInsertId = $connection->lastInsertId();
 
-        $sql = "SELECT * FROM coinremitter_webhook WHERE transaction_id='" . $_data[1] . "'";
-        $result = $connection->fetchAll($sql);
+        $sql = "SELECT * FROM coinremitter_webhook WHERE transaction_id = ?";
+        $result = $connection->fetchAll($sql, [$_data[1]]);
 
         if (count($result) > 1) {
-            $sql = "DELETE  FROM coinremitter_webhook WHERE id=$lastInsertId";
-            $connection->query($sql);
+            $sql = "DELETE FROM coinremitter_webhook WHERE id = ?";
+            $connection->query($sql, [$lastInsertId]);
         }
     }
 
@@ -276,8 +276,8 @@ class Webhook extends \Magento\Framework\App\Action\Action
             $resource = $objectManager->get('Magento\Framework\App\ResourceConnection');
             $connection = $resource->getConnection();
             $status = \Magento\Downloadable\Model\Link\Purchased\Item::LINK_STATUS_AVAILABLE;
-            $sql = "UPDATE downloadable_link_purchased_item SET status='$status' WHERE purchased_id IN (SELECT purchased_id FROM downloadable_link_purchased WHERE order_id=$orderId)";
-            $result = $connection->query($sql);
+            $sql = "UPDATE downloadable_link_purchased_item SET status = ? WHERE purchased_id IN (SELECT purchased_id FROM downloadable_link_purchased WHERE order_id = ?)";
+            $result = $connection->query($sql, [$status, $orderId]);
         }
     }
 }

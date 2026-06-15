@@ -58,12 +58,12 @@ class CoinremitterRedirect implements ObserverInterface
             $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
             $resource = $objectManager->get('Magento\Framework\App\ResourceConnection');
             $connection = $resource->getConnection();
-            $sql = "SELECT * FROM coinremitter_orders WHERE order_id= '" . $order_id . "'";
-            $result = $connection->fetchAll($sql);
+            $sql = "SELECT * FROM coinremitter_orders WHERE order_id = ?";
+            $result = $connection->fetchAll($sql, [$order_id]);
 
             if (!$result) {
-                $sql = "SELECT * FROM coinremitter_wallets WHERE coin_symbol= '" . $selectcoin . "'";
-                $result = $connection->fetchAll($sql);
+                $sql = "SELECT * FROM coinremitter_wallets WHERE coin_symbol = ?";
+                $result = $connection->fetchAll($sql, [$selectcoin]);
 
                 if (!empty($result)) {
                     $wallet = $result[0];
@@ -259,8 +259,8 @@ class CoinremitterRedirect implements ObserverInterface
             $resource = $objectManager->get('Magento\Framework\App\ResourceConnection');
             $connection = $resource->getConnection();
             $status = \Magento\Downloadable\Model\Link\Purchased\Item::LINK_STATUS_AVAILABLE;
-            $sql = "UPDATE downloadable_link_purchased_item SET status='$status' WHERE purchased_id IN (SELECT purchased_id FROM downloadable_link_purchased WHERE order_id=$orderId)";
-            $result = $connection->query($sql);
+            $sql = "UPDATE downloadable_link_purchased_item SET status = ? WHERE purchased_id IN (SELECT purchased_id FROM downloadable_link_purchased WHERE order_id = ?)";
+            $result = $connection->query($sql, [$status, $orderId]);
         }
     }
 }
