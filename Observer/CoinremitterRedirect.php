@@ -17,6 +17,10 @@ class CoinremitterRedirect implements ObserverInterface
     protected $_messageManager;
     protected $productRepository;
     protected $_url;
+    /**
+     * @var \Magento\Checkout\Model\Session
+     */
+    protected $checkoutSession;
 
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
@@ -26,7 +30,8 @@ class CoinremitterRedirect implements ObserverInterface
         \Coinremitter\Checkout\Model\Wallets\Api $apiCall,
         \Magento\Framework\App\RequestInterface $request,
         \Magento\Framework\Message\ManagerInterface $messageManager,
-        \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
+        \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
+        \Magento\Checkout\Model\Session $checkoutSession
     ) {
 
         $this->_redirect = $redirect;
@@ -37,6 +42,7 @@ class CoinremitterRedirect implements ObserverInterface
         $this->request = $request;
         $this->_messageManager = $messageManager;
         $this->productRepository = $productRepository;
+        $this->checkoutSession = $checkoutSession;
     }
 
     public function execute(\Magento\Framework\Event\Observer $observer)
@@ -148,6 +154,10 @@ class CoinremitterRedirect implements ObserverInterface
                                 'expiry_date' => $expire_on,
                                 ];
                                 $this->dataInsertDB('coinremitter_orders', $db_order);
+                                $this->checkoutSession->setData(
+                                    'coinremitter_order_id_' . $order_id,
+                                    true
+                                );
                                 $redirectUrl = $this->getBaseUrl() . 'coinremitter/invoice/Index/order/' . $order_id;
                                 return $this->_redirect->redirect($this->_response, $redirectUrl);
                             } else {

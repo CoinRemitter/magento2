@@ -176,7 +176,7 @@ class Webhook extends \Magento\Framework\App\Action\Action
             $status = $statusCode['over_paid'];
         } elseif ($total_paid != 0 && $total_paid < $coinremitterOrder['crypto_amount']) {
             $status = $statusCode['under_paid'];
-            if ($totalFiatPaidWithTruncation > $coinremitterOrder['fiat_amount']) {
+            if ($totalFiatPaidWithTruncation >= $coinremitterOrder['fiat_amount']) {
                 $status = $statusCode['paid'];
             }
         }

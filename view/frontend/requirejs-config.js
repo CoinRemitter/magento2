@@ -19,6 +19,9 @@ var config = {
             },
             'Magento_Checkout/js/action/set-payment-information': {
                 'Coinremitter_Checkout/js/model/set-payment-information-mixin': true
+            },
+            'Magento_Multishipping/js/payment': {
+                'Coinremitter_Checkout/js/model/payment-mixin': true
             }
         }
     }

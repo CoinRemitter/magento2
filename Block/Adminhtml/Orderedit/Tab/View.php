@@ -220,7 +220,7 @@ class View extends \Magento\Backend\Block\Template implements \Magento\Backend\B
             $status = $statusCode['over_paid'];
         } elseif ($total_paid != 0 && $total_paid < $coinremitterOrder['crypto_amount']) {
             $status = $statusCode['under_paid'];
-            if ($totalFiatPaidWithTruncation > $coinremitterOrder['fiat_amount']) {
+            if ($totalFiatPaidWithTruncation >= $coinremitterOrder['fiat_amount']) {
                 $status = $statusCode['paid'];
             }
         }

@@ -5,7 +5,6 @@ namespace Coinremitter\Checkout\Block;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Sales\Api\OrderRepositoryInterface;
-use Magento\Framework\App\ResourceConnection;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
@@ -19,11 +18,6 @@ class Cancel extends Template
     protected $orderRepository;
 
     /**
-     * @var ResourceConnection
-     */
-    protected $resourceConnection;
-
-    /**
      * @var StoreManagerInterface
      */
     protected $storeManager;
@@ -33,25 +27,29 @@ class Cancel extends Template
      *
      * @param Context $context
      * @param OrderRepositoryInterface $orderRepository
-     * @param ResourceConnection $resourceConnection
      * @param StoreManagerInterface $storeManager
      * @param array $data
      */
     public function __construct(
         Context $context,
         OrderRepositoryInterface $orderRepository,
-        ResourceConnection $resourceConnection,
         StoreManagerInterface $storeManager,
         array $data = []
     ) {
         parent::__construct($context, $data);
         $this->orderRepository = $orderRepository;
-        $this->resourceConnection = $resourceConnection;
         $this->storeManager = $storeManager;
     }
 
     /**
-     * Cancel order and return success message
+     * Return a translated message describing the cancellation outcome.
+     *
+     * This method is intentionally a pure display helper.  All state mutations
+     * (Magento order cancellation, coinremitter_orders.order_status update) are
+     * performed by Controller\Invoice\Cancel before this block is rendered.
+     * Keeping side-effects out of view blocks prevents the unconditional
+     * UPDATE order_status=4 bypass (CVE-B) where any page render of the cancel
+     * URL could force-expire an order record regardless of authentication.
      *
      * @return \Magento\Framework\Phrase
      */
@@ -63,15 +61,6 @@ class Cancel extends Template
             try {
                 $order = $this->orderRepository->get($orderId);
                 $orderIncrementId = $order->getIncrementId();
-
-                // Update order status in custom table using proper prepared statement
-                $connection = $this->resourceConnection->getConnection();
-                $tableName = $this->resourceConnection->getTableName('coinremitter_orders');
-                $connection->update(
-                    $tableName,
-                    ['order_status' => 4],
-                    ['order_id = ?' => $orderId]
-                );
 
                 $path = $this->getBaseUrl() . "sales/order/view/order_id/" . $orderId . "/";
                 return __(
